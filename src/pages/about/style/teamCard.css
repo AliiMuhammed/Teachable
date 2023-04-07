@@ -1,0 +1,73 @@
+/*========================start Team card Section========================================*/
+.container.team-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    text-align: center;
+}
+
+.teamCard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid #e6e6e6;
+    transition: var(--transition);
+}
+
+.teamCard:hover {
+    border-color: var(--mainColor);
+}
+
+.teamCard-image {
+    margin: 2rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.teamCard-image img {
+    border-radius: 1rem;
+    width: 80%;
+    transition: var(--transition);
+}
+
+.teamCard:hover .teamCard-image img {
+    border-radius: 50%;
+}
+
+.teamCard-content h3 {
+    font-weight: bold;
+    font-size: 1.5rem;
+    transition: var(--transition);
+}
+
+.teamCard:hover:hover h3 {
+    color: var(--mainColor);
+}
+
+.teamCard-content h4 {
+    color: #a8a8a8;
+}
+
+/*========================end Team card Section========================================*/
+
+
+/*=============================Responsive===================================*/
+
+@media (max-width:767px) {
+    .container.team-container {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+@media (min-width:768px) and (max-width:992px) {
+    .container.team-container {
+        grid-template-columns: repeat(2, 1fr0);
+    }
+}

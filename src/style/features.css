@@ -1,0 +1,36 @@
+/*=====================Start features Section =================*/
+.featureComponent-section{
+    margin-bottom: 5rem;
+}
+.features-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.features-card {
+    margin-top: 3rem;
+    margin-bottom: 8rem;
+    margin-inline: 1rem;
+}
+
+
+/*=====================Responsive=================*/
+/*small*/
+@media (max-width:767px) {
+    .features-card {
+        margin-bottom: 0;
+    }
+
+    .features-container {
+        grid-template-columns: 1fr;
+        margin-bottom: 3rem;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 992px) {
+    .features-container {
+        grid-template-columns: repeat(2, 1fr);
+        margin-bottom: 3rem;
+    }
+
+}

@@ -1,0 +1,86 @@
+/*=====================Start main header =================*/
+
+.main-header {
+    background: var(--mainBgColor);
+    height: 100%;
+    margin-top: 6rem;
+}
+
+
+
+.mainHeader-container {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5rem 0 10rem !important;
+}
+
+.mainHeader-left {
+    width: 50%;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.mainHeader-left .btn {
+    margin: 0;
+}
+
+.mainHeader-left h4 {
+    margin-bottom: 1rem;
+    color: var(--mainColor);
+    font-weight: 400;
+}
+
+.mainHeader-left p {
+    margin: 1rem 0 3.5rem;
+    font-size: 1.1rem;
+}
+
+.mainHeader-right {
+    width: 45%;
+}
+
+.bg-doted-img {
+    width: 40%;
+    height: 40%;
+    position: absolute;
+    right: 0;
+
+
+}
+
+.mainHeader-img {
+    position: relative;
+}
+
+.mainHeader-img .landImg {
+    border-radius: 50%;
+    position: relative;
+
+}
+
+/*=====================End main header =================*/
+
+/*=====================Responsive=================*/
+@media (max-width:767px) {
+    .main-header {
+        margin-top: 6rem;
+    }
+
+    .mainHeader-container {
+        flex-direction: column;
+    }
+
+    .mainHeader-left {
+        width: 100%;
+    }
+
+    .mainHeader-right {
+        width: 100%;
+        margin-top: 2rem;
+    }
+
+}

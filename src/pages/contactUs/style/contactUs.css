@@ -1,0 +1,121 @@
+.map-section{
+    margin: 5rem 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+}
+
+.map-container iframe{
+    width: 100%;
+}
+
+.contact-details{
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+}
+.contact-left{
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr;
+    margin-right:3rem ;
+}
+
+.contact-item{
+    width: 100%;
+    margin-bottom: 2rem ;
+    border-bottom: 1px solid #eee;
+}
+.contact-item p{
+    margin-bottom: 7px;
+    line-height: 30px;
+    font-size: 1.2rem;
+}
+.contact-item h4{
+    line-height: 1.4;
+    margin-bottom: 0.5rem;
+    font-size:24px;
+    font-weight: 700;
+}
+
+.contact-right{
+    flex: 2;
+    width: 100%;
+}
+
+
+.contact-right .contact-form form input:not(input[type="submit"]){
+    border-radius: 25px;
+}
+
+
+.form-group.contact-form-group{
+    flex-direction: row;
+}
+
+.form-group.contact-form-group input:first-child{
+    margin-right: 1rem;
+}
+
+.contact-right .contact-form form textarea{
+    height: 150px;
+    background-color:#e8e8e8;
+    width: 100%;
+    border-radius: 20px;
+    transition: all 0.3s ease-in-out;
+   
+}
+.contact-right .contact-form form textarea:focus{
+    border: 1px solid var(--mainColor);
+}
+.contact-right .contact-form form textarea::placeholder{
+    padding: 1rem;
+    font-size: 16px;
+}
+
+
+.btn.contact-btn{
+    align-self: flex-start;
+    margin: 2.5rem  0 0; 
+    width: 25%;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+@media (max-width: 767px) {
+    .contact-details {
+        flex-direction: column;
+    }
+    .form-group.contact-form-group{
+        flex-direction: column;
+    }
+    .btn.contact-btn{
+        width: 100%;
+    }
+     .contact-left{
+        margin-right: 0;
+     }
+    
+    
+}
+
+@media (min-width: 768px) and (max-width: 992px){
+        .contact-details {
+                flex-direction: column;
+            }
+        
+            .form-group.contact-form-group {
+                flex-direction: column;
+            }
+            .contact-left{
+                grid-template-columns: 1fr 1fr;
+                gap: 2rem;
+                margin-right: 0;
+            }
+            
+}

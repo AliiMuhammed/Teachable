@@ -1,0 +1,75 @@
+
+/*========================start Features Section========================================*/
+
+.about-features-container{
+display: grid;
+grid-template-columns: repeat(2,1fr);
+gap: 3rem;
+}
+.about-features{
+    margin: 0;
+}
+
+.about-features-image{
+    width:85%;
+    margin:0 auto;
+}
+
+.about-features .sectionHeader-container{
+    width: 100%;
+}
+.about-features .sectionHeader-container .content{
+    width: 100%;
+    text-align: left;
+}
+.about-features-right{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+.features-adv{
+width: 100%;
+}
+.adv-item{
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    
+}
+
+.adv-item .icon{
+    margin-right: 1rem;
+}
+.about-courses-btn{
+    margin:0;
+}
+/*========================end Features Section========================================*/
+
+
+/*=============================Responsive===================================*/
+
+@media (max-width:767px){
+.about-features-container{
+    grid-template-columns: 1fr;
+}
+.about-features-image{
+    width: 100%;
+}
+.container.team-container{
+    grid-template-columns: 1fr;
+}
+
+}
+
+@media (min-width:768px) and (max-width:992px) {
+    .about-features-container {
+            grid-template-columns: 1fr;
+        }
+    .about-featuresCard{
+    margin-bottom: 0rem;
+}
+.container.team-container {
+    grid-template-columns: repeat(2,1fr0);
+}
+}

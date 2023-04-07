@@ -1,0 +1,35 @@
+
+/*=====================Start Features Section =================*/
+.features-card.card-Feature_home {
+    margin-top: -5rem;
+}
+/*=====================end Features Section =================*/
+
+
+
+
+
+
+/*=============================Responsive===================================*/
+
+
+
+/*=====================Start features Section Responsive =================*/
+/*small*/
+@media (max-width:767px) {
+
+.features-card.card-Feature_home {
+        margin-bottom: 8rem;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
