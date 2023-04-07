@@ -129,5 +129,6 @@ export const team = [
         name: "Hannen Muhamed",
         dep:"Cs Student",
         image:require("../../assests/images/about page imgs/team/test.jpg")
+   
     },
 ]
