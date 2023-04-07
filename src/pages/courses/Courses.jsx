@@ -5,7 +5,7 @@ const Courses = () => {
   return (
     <>
       <div>ali</div>
-      <p>aliii</p>
+      
     </>
   );
 }
