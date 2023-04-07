@@ -15,6 +15,7 @@ const Courses = () => {
               instractor={course.instractor}
               Image={course.Image}
               durations={course.durations}
+              id={course.id}
             />
           );
         });
