@@ -4,8 +4,6 @@ import { useState } from 'react'
 import React from 'react'
 import '../style/NavBar.css'
 import Logo from '../assests/images/h-logo.png'
-import {links} from '../core/data/data'
-
 import {FaBars} from 'react-icons/fa'
 import {AiFillCloseSquare} from 'react-icons/ai'
 
@@ -14,6 +12,28 @@ import {AiFillCloseSquare} from 'react-icons/ai'
 const NavBar = () => {
   const [ isNavShowing,setIsNavShowing]=useState(false)
 
+  const links = [
+    {
+      id: 1,
+      name: "Home",
+      path: "/",
+    },
+    {
+      id: 2,
+      name: "Courses",
+      path: "/courses",
+    },
+    {
+      id: 3,
+      name: "About Us",
+      path: "/about",
+    },
+    {
+      id: 4,
+      name: "Contact Us",
+      path: "/contactUs",
+    },
+  ];
 
   return (
     <nav>

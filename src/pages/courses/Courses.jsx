@@ -6,7 +6,7 @@ const Courses = () => {
   return (
     <>
       <div>ahmed</div>
-      
+
     </>
   );
 }
