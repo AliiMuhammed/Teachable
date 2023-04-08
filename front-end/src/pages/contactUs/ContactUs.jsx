@@ -1,10 +1,33 @@
-import React from "react";
+import React, { useState } from "react";
 import "./style/contactUs.css";
 import PageHeader from "../../shared/PageHeader";
 import { Link } from "react-router-dom";
 import SectionHeader from "../../shared/SectionHeader";
+import { Navigate } from "react-router-dom";
 
 const ContactUs = () => {
+  const [contactUsForm, setContactUsForm] = useState({
+    email: "",
+    subject: "",
+    message: "",
+    name: "",
+  });
+
+  const [errorText, setErrorText] = useState();
+  const ContactUs = (e) => {
+    e.preventDefault();
+    if (
+      contactUsForm.name === "" ||
+      contactUsForm.email === "" ||
+      contactUsForm.subject === "" ||
+      contactUsForm.message === ""
+    ) {
+      setErrorText(true);
+    } else {
+      setErrorText(false);
+    }
+  };
+
   return (
     <>
       <PageHeader header={"Contact Us"}>
@@ -56,15 +79,60 @@ const ContactUs = () => {
             </div>
             <div className="contact-right">
               <div className="contact-form">
-                <form action="POST">
+                <form
+                  action="POST"
+                  onSubmit={(e) => {
+                    ContactUs(e);
+                  }}
+                >
+                  {errorText ? <h1>error</h1> :""}
                   <div className="form-group contact-form-group">
-                    <input type="text" placeholder="Name" />
-                    <input type="email" placeholder="Email" />
+                    <input
+                      type="text"
+                      placeholder="Name"
+                      value={contactUsForm.name}
+                      onChange={(event) =>
+                        setContactUsForm({
+                          ...contactUsForm,
+                          name: event.target.value,
+                        })
+                      }
+                    />
+                    <input
+                      type="email"
+                      placeholder="Email"
+                      value={contactUsForm.email}
+                      onChange={(event) =>
+                        setContactUsForm({
+                          ...contactUsForm,
+                          email: event.target.value,
+                        })
+                      }
+                    />
                   </div>
                   <div className="form-group">
-                    <input type="text" placeholder="Subject" />
+                    <input
+                      type="text"
+                      placeholder="Subject"
+                      value={contactUsForm.subject}
+                      onChange={(event) =>
+                        setContactUsForm({
+                          ...contactUsForm,
+                          subject: event.target.value,
+                        })
+                      }
+                    />
                   </div>
-                  <textarea placeholder="Your Message" />
+                  <textarea
+                    placeholder="Your Message"
+                    value={contactUsForm.message}
+                    onChange={(event) =>
+                      setContactUsForm({
+                        ...contactUsForm,
+                        message: event.target.value,
+                      })
+                    }
+                  />
                   <input
                     type="submit"
                     value={"Send Message"}
