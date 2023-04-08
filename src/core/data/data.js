@@ -5,28 +5,7 @@ import Courses from '../../pages/home/components/TrendCourses'
 
 
 
-export const links = [
-{
-    id:1,
-    name: "Home",
-    path:'/'
-},
-{
-    id:2,
-    name: "Courses",
-    path:'/courses'
-},
-{
-    id:3,
-    name: "About Us",
-    path: '/about'
-},
-{
-    id:4,
-    name: "Contact Us",
-    path: '/contactUs'
-},
-]
+
 
 
 export const features = [
