@@ -5,7 +5,7 @@ const Courses = () => {
   console.log(id);
   return (
     <>
-      <div>ali</div>
+      <div>ahmed</div>
       
     </>
   );
