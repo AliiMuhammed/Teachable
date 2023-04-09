@@ -23,8 +23,16 @@ router.post(
         }
           const checkPassword = await bcrypt.compare(req.body.password, users[0].password);
           if(checkPassword){
+            if(users[0].status === 1){
             delete users[0].password;
-            res.status(200).json(users);
+            res.status(200).json({
+                msg:"Login Success"
+            });
+        }else{
+            res.status(400).json({
+                msg:"Email not active"
+            })
+        }
           }else{
             res.status(404).json({errors: [{
                 msg: 'Email or Password not found!'
@@ -71,3 +79,5 @@ router.post(
         res.status(500).json({err: err});
     }
 })
+
+module.exports = "/login"
