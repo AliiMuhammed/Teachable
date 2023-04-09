@@ -12,7 +12,7 @@ const NewCourses = () => {
           key={course.id}
           title={course.title}
           instractor={course.instractor}
-          Image={course.Image}
+          courseImage={course.Image}
           durations={course.durations}
           className={"newCourses-card"}
         />

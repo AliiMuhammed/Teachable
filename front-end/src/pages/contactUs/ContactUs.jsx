@@ -3,7 +3,7 @@ import "./style/contactUs.css";
 import PageHeader from "../../shared/PageHeader";
 import { Link } from "react-router-dom";
 import SectionHeader from "../../shared/SectionHeader";
-import { Navigate } from "react-router-dom";
+// import { Navigate } from "react-router-dom";
 
 const ContactUs = () => {
   const [contactUsForm, setContactUsForm] = useState({
@@ -46,9 +46,10 @@ const ContactUs = () => {
             width="800"
             height="400"
             style={{ border: 0 }}
-            allowFullScreen={true}
+            allowFullScreen=""
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
+            title="map"
           ></iframe>
         </div>
       </section>
