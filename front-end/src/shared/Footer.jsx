@@ -30,7 +30,7 @@ const Footer = () => {
           <h3>Explore</h3>
           <Link to="/">Home</Link>
           <Link to="/about">About</Link>
-          <Link to="/contact">Contact</Link>
+          <Link to="/contactUs">Contact</Link>
         </article>
         <article>
           <h3>Courses</h3>
@@ -41,7 +41,7 @@ const Footer = () => {
         </article>
         <article>
           <h3>Get In Touch</h3>
-          <Link to="/contact">Contact Us</Link>
+          <Link to="/contactUs">Contact Us</Link>
           <Link to="/Support">Support</Link>
         </article>
       </div>
