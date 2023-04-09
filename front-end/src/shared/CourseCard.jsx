@@ -1,7 +1,6 @@
 import "../style/courseCard.css";
 import { Link } from 'react-router-dom'
 import {SlNotebook} from "react-icons/sl"
-import { courses } from "../core/data/data";
 
 const CourseCard = ({title,id,description,instractor,durations,Image,className}) => {
   return (
