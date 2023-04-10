@@ -80,4 +80,4 @@ router.post(
     }
 })
 
-module.exports = "/login"
+module.exports = router;
