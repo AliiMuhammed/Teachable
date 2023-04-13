@@ -5,6 +5,9 @@ import Courses from "./pages/courses/Courses";
 import About from "./pages/about/About";
 import NotFound from "./pages/notFound/NotFound";
 import ContactUs from "./pages/contactUs/ContactUs";
+ import Profile from "./pages/profile/Profile";
+import MyCourses from "./pages/profile/components/MyCourses";
+import MyGrades from "./pages/profile/components/MyGrades";
 import App from "./App";
 
 export const router = createBrowserRouter([
@@ -29,6 +32,20 @@ export const router = createBrowserRouter([
         element: <Courses />,
       },
       {
+        path: "/profile",
+        element: <Profile />,
+        children: [
+          {
+            path: "/profile/my-courses",
+            element: <MyCourses />,
+          },
+          {
+            path: "/profile/my-grades",
+            element: <MyGrades />,
+          },
+        ],
+      },
+      {
         path: "/login",
         element: <Login />,
       },
@@ -37,5 +54,5 @@ export const router = createBrowserRouter([
         element: <NotFound />,
       },
     ],
-  }
+  },
 ]);
