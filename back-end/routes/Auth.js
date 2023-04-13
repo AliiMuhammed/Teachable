@@ -4,10 +4,12 @@ const {body, validationResult} = require("express-validator");
 const util = require("util");
 const bcrypt = require("bcrypt");
 const crypto = require("crypto");
+
+
 router.post(
     "/login",
      body("email").isEmail().withMessage("please Enter a vaild email!"),
-     body("password").islength({min:8, max:12}).withMessage("Password should be between (8,12)."),
+     body("password").isLength({min:8, max:12}).withMessage("Password should be between (8,12)."),
     async (req, res) => {
     try {
         const errors = validationResult(req);
@@ -51,7 +53,7 @@ router.post(
 router.post(
     "/register",
      body("email").isEmail().withMessage("please Enter a vaild email!"),
-     body("password").islength({min:8, max:12}).withMessage("Password should be between (8,12)."),
+     body("password").isLength({min:8, max:12}).withMessage("Password should be between (8,12)."),
     async (req, res) => {
     try {
         const errors = validationResult(req);
