@@ -1,22 +1,19 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
+const fs = require("fs");
+const path = require("path");
+const bodyparser = require("body-parser");
+const auth = require("./routes/Auth");
+const courses = require("./routes/courses");
 app.use(express.json());
+app.use(express.urlencoded({ extended: true })); // TO ACCESS URL FORM ENCODED
+app.use(express.static("upload"));
 app.use(cors());
 
-// app.post('/login', (req, res) => {
-//     const sql = "SELECT * FROM users WHERE `email` = ? AND `password`=?";
-//     db.query(sql, [req.body.email, req.body.password], (err, data) => {
-//         if(err) return res.json("Login Failed");
-//         if(data.length>0){
-//             return res.json("login successfully")
-//         }else {
-//             return res.json("fail");
-//         }
-            
-//     })
-// })
+app.use("/auth", auth);
+app.use("/courses", courses);
 
-app.listen(4004, ()=>{
+app.listen(4004, "localhost",()=>{
     console.log("listening...");
 })
