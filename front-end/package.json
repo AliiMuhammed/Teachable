@@ -11,6 +11,7 @@
     "axios": "^1.3.5",
     "material-react-table": "^1.9.3",
     "react": "^18.2.0",
+    "react-bootstrap": "^2.7.4",
     "react-countup": "^6.4.2",
     "react-custom-popup": "^1.2.1",
     "react-dom": "^18.2.0",

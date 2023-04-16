@@ -8,8 +8,10 @@ const crypto = require("crypto");
 
 router.post(
     "/login",
-     body("email").isEmail().withMessage("please Enter a vaild email!"),
-     body("password").isLength({min:8, max:12}).withMessage("Password should be between (8,12)."),
+    body("email").isEmail().withMessage("please enter a valid email!"),
+    body("password")
+      .isLength({ min: 8, max: 12 })
+      .withMessage("password should be between (8-12) character"),
     async (req, res) => {
     try {
         const errors = validationResult(req);
@@ -17,29 +19,23 @@ router.post(
             return res.status(400).json({errors: errors.array()});
         }
         const query = util.promisify(conn.query).bind(conn);// transfer query mysql to --> promise to use (await,async)
-        const users = await query("select * from users where email = ?", [req.body.email]);
-        if (users.length == 0) {
+        const user = await query("select * from users where email = ?", [req.body.email]);
+        if (user.length == 0) {
              res.status(404).json({
                 errors: [
                     {msg: "Email or Password not found!"}]});
         }
-          const checkPassword = await bcrypt.compare(req.body.password, users[0].password);
-          if(checkPassword){
-            if(users[0].status === 1){
-            delete users[0].password;
-            res.status(200).json({
-                msg:"Login Success"
-            });
-        }else{
-            res.status(400).json({
-                msg:"Email not active"
-            })
-        }
-          }else{
-            res.status(404).json({errors: [{
-                msg: 'Email or Password not found!'
-            },
-            ],
+          const checkPassword = await bcrypt.compare(req.body.password, user[0].password);
+          if (checkPassword) {
+            delete user[0].password;
+            res.status(200).json(user[0]);
+          } else {
+            res.status(404).json({
+              errors: [
+                {
+                  msg: "email or password not found !",
+                },
+              ],
             });
           }
     } catch (err) {

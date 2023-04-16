@@ -1,9 +1,10 @@
 const router = require("express").Router();
 const conn = require("../db/dbConnection")
-const authorized = require("../middleware/authoriz")
+const authorized = require("../middleware/authorize")
 const admin = require("../middleware/admin");
 const { body, validationResult } = require("express-validator");
 const { query } = require("express");
+const upload = require("../middleware/uploadImages");
 const util = require("util");
 const fs = require("fs");
 
