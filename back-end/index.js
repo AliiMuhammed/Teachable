@@ -6,6 +6,7 @@ const path = require("path");
 const bodyparser = require("body-parser");
 const auth = require("./routes/Auth");
 const courses = require("./routes/courses");
+const instractors = require("./routes/instractors");
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })); // TO ACCESS URL FORM ENCODED
 app.use(express.static("upload"));
@@ -13,6 +14,7 @@ app.use(cors());
 
 app.use("/auth", auth);
 app.use("/courses", courses);
+app.use("/instractors", instractors);
 
 app.listen(4004, "localhost",()=>{
     console.log("listening...");
