@@ -27,7 +27,7 @@ router.post(
         }
           const checkPassword = await bcrypt.compare(req.body.password, user[0].password);
           if (checkPassword) {
-            delete user[0].password;
+            // delete user[0].password;
             res.status(200).json(user[0]);
           } else {
             res.status(404).json({
@@ -62,6 +62,7 @@ router.post(
             return res.status(400).json({errors: [{msg: "Email already exists!"}]});
         }
         const userData = {
+            name:req.body.name,
             email:req.body.email,
             password: await bcrypt.hash(req.body.password,10),
             phone:req.body.phone,
