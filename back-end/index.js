@@ -16,6 +16,10 @@ app.use("/auth", auth);
 app.use("/courses", courses);
 app.use("/instractors", instractors);
 
-app.listen(4004, "localhost",()=>{
+app.listen(4002, "localhost",()=>{
     console.log("listening...");
 })
+
+app.use("/auth", auth);
+app.use("/courses", courses);
+app.use("/instractors", instractors);

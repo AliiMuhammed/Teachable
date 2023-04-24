@@ -4,6 +4,7 @@ const {body, validationResult} = require("express-validator");
 const util = require("util");
 const bcrypt = require("bcrypt");
 const crypto = require("crypto");
+const bodyparser = require("body-parser");
 
 
 router.post(
