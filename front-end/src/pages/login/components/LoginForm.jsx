@@ -4,6 +4,7 @@ import axios from 'axios'
 import Alert from "react-bootstrap/Alert";
 import { setAuthUser } from "../../../helper/Storage";
 import { useNavigate } from "react-router-dom";
+
 const LoginForm = () => {
     //   const displayText = () => {
     //     return<div className="error-Text"> <p className="error-content">Email or Password Wrong!</p></div>;
@@ -20,7 +21,7 @@ const LoginForm = () => {
 function handleSumbit(event){
   event.preventDefault();//to prevent default behavior refreshing when user submitted
   setLogin({...login, loading:true,err:[]});
-  axios.post("http://localhost:4004/auth/login",{
+  axios.post("http://localhost:4002/auth/login",{
     email: login.email,
     password: login.password
   })

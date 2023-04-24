@@ -3,14 +3,12 @@ const conn = require("../db/dbConnection")
 const authorized = require("../middleware/authorize")
 const admin = require("../middleware/admin");
 const { body, validationResult } = require("express-validator");
-const { query } = require("express");
 const upload = require("../middleware/uploadImages");
 const util = require("util");
 const fs = require("fs");
 
 // CREATE  COURSE
 router.post("",
- admin,
  upload.single("image"),
   body("name")
   .isString()
@@ -20,6 +18,8 @@ router.post("",
   .withMessage("Please enter a valid description")
   .isLength({ min: 20 })
   .withMessage("Description must be at least 20 characters"),
+  body("code"),
+  body("status"),
    async (req, res) => {
     try{
     const errors = validationResult(req);
@@ -32,10 +32,12 @@ router.post("",
     const course = {
         name: req.body.name,
         description: req.body.description,
+        code: req.body.code,
+        status: req.body.status,
         image_url: req.file.filename,
     };
     const query = util.promisify(conn.query).bind(conn);// transfer query mysql to --> promise to use (await,async)
-    await query ("insert into courses set ?",course)
+    await query ("insert into courses set ? ", course);
     res.status(200).json({
         msg:"Course created",
     });
@@ -46,7 +48,6 @@ router.post("",
 
 // UPDATE Course
 router.put("/:id",// params
- admin,
  upload.single("image"),
   body("name")
   .isString()
@@ -56,6 +57,8 @@ router.put("/:id",// params
   .withMessage("Please enter a valid description")
   .isLength({ min: 20 })
   .withMessage("Description must be at least 20 characters"),
+  body("code"),
+  body("status"),
    async (req, res) => {
     try{
     const query = util.promisify(conn.query).bind(conn);// transfer query mysql to --> promise to use (await,async)
@@ -72,6 +75,8 @@ router.put("/:id",// params
     const courseObj = {
         name: req.body.name,
         description: req.body.description,
+        code: req.body.code,
+        status: req.body.status
     };
 
     if(req.file){
