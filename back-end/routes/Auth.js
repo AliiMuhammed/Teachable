@@ -5,6 +5,8 @@ const util = require("util");
 const bcrypt = require("bcrypt");
 const crypto = require("crypto");
 const bodyparser = require("body-parser");
+const upload = require("../middleware/uploadImages");
+const fs = require("fs");
 
 
 router.post(
@@ -49,6 +51,7 @@ router.post(
 
 router.post(
     "/register",
+    upload.single("image"),
      body("email").isEmail().withMessage("please Enter a vaild email!"),
      body("password").isLength({min:8, max:12}).withMessage("Password should be between (8,12)."),
     async (req, res) => {
@@ -62,13 +65,17 @@ router.post(
         if (checkEmailExists.length > 0) {
             return res.status(400).json({errors: [{msg: "Email already exists!"}]});
         }
+        if(!req.file){
+          return res.status(400).json({errors: ["Please upload an image"]});
+      }
         const userData = {
             name:req.body.name,
             email:req.body.email,
             password: await bcrypt.hash(req.body.password,10),
             phone:req.body.phone,
             status:req.body.status,
-            type: req.body.type
+            type: req.body.type,
+            image_url: req.file.filename,
         }
         await query("insert into users set ? ",userData);
         delete userData.password;

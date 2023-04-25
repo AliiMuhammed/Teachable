@@ -49,16 +49,12 @@ const fs = require("fs");
 
 // UPDATE Course
 router.put("/:id",// params
- admin,
  upload.single("image"),
   body("name")
   .isString()
   .withMessage("Please enter a valid course name"),
-//   body("description")
-//   .isString()
-//   .withMessage("Please enter a valid description")
-//   .isLength({ min: 20 })
-//   .withMessage("Description must be at least 20 characters"),
+  body("email").isEmail().withMessage("please enter a valid email!"),
+  body("phone"),
    async (req, res) => {
     try{
     const query = util.promisify(conn.query).bind(conn);// transfer query mysql to --> promise to use (await,async)
@@ -75,14 +71,12 @@ router.put("/:id",// params
     const instractorObj = {
         name: req.body.name,
         email: req.body.email,
-        password: req.body.password,
         phone: req.body.phone,
-        type: req.body.type,
     };
 
     if(req.file){
         instractorObj.image_url = req.file.filename;
-        fs.unlinkSync('./upload' + instractor[0].image_url)
+        fs.unlinkSync('./upload/' + instractor[0].image_url)
     }
 
 
@@ -99,7 +93,6 @@ router.put("/:id",// params
 
 // DELETE COURSE
 router.delete("/:id",// params
- admin,
    async (req, res) => {
     try{
     // check if course Exisit
@@ -110,7 +103,7 @@ router.delete("/:id",// params
     }
 
 
-    fs.unlinkSync('./upload' + instractor[0].image_url)
+    fs.unlinkSync('./upload/' + instractor[0].image_url)
 
     await query ("delete from users  where id =?",[instractor[0].id])
     res.status(200).json({
