@@ -3,7 +3,6 @@ const conn = require("../db/dbConnection")
 const authorized = require("../middleware/authorize")
 const admin = require("../middleware/admin");
 const { body, validationResult } = require("express-validator");
-const { query } = require("express");
 const upload = require("../middleware/uploadImages");
 const util = require("util");
 const fs = require("fs");
@@ -48,24 +47,27 @@ const fs = require("fs");
 // });
 
 // UPDATE Course
-router.put("/:id",// params
+router.put(
+"/:id",// params
  upload.single("image"),
   body("name")
   .isString()
   .withMessage("Please enter a valid course name"),
   body("email").isEmail().withMessage("please enter a valid email!"),
   body("phone"),
-   async (req, res) => {
+   async (req, res, next) => {
     try{
-    const query = util.promisify(conn.query).bind(conn);// transfer query mysql to --> promise to use (await,async)
-    const errors = validationResult(req);
+        const query = util.promisify(conn.query).bind(conn);
+        const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            return res.status(400).json({errors: errors.array()});
+          return res.status(400).json({ errors: errors.array() });
         }
     // check if instractor Exisit
-    const instractor = await query ("select * from users where id =?",[req.params.id])
+    const instractor = await query ("select * from users where id =?", [
+        req.params.id
+    ]);
     if(!instractor[0]){
-        return res.status(400).json({errors: ["Instractor not found"]});
+      res.status(400).json({msg: "Instractor not found"});
     }
 
     const instractorObj = {
@@ -76,36 +78,38 @@ router.put("/:id",// params
 
     if(req.file){
         instractorObj.image_url = req.file.filename;
-        fs.unlinkSync('./upload/' + instractor[0].image_url)
+        fs.unlinkSync("./upload/" + instractor[0].image_url);
     }
 
-
     await query ("update users set? where id =?",[instractorObj, instractor[0].id])
-    res.status(200).json({
-        msg:"Instractor updated",
-    });
+        res.send({
+            msg:"Instractor updated",
+        });
+
 
 
 } catch(err){
+    console.log(err);
     res.status(500).json(err);
 }
 });
 
 // DELETE COURSE
 router.delete("/:id",// params
-   async (req, res) => {
+   async (req, res, next) => {
     try{
     // check if course Exisit
     const query = util.promisify(conn.query).bind(conn);// transfer query mysql to --> promise to use (await,async)
     const instractor = await query ("select * from users where id =?",[req.params.id])
+
     if(!instractor[0]){
-        return res.status(400).json({errors: ["Instractor not found"]});
+        return  res.status(400).json({errors: ["Instractor not found"]});
     }
 
 
-    fs.unlinkSync('./upload/' + instractor[0].image_url)
+    fs.unlinkSync("./upload/" + instractor[0].image_url);
+    await query ("delete from users  where id =?",[instractor[0].id]);
 
-    await query ("delete from users  where id =?",[instractor[0].id])
     res.status(200).json({
         msg:"Instractor Delete Success",
     });
@@ -114,11 +118,12 @@ router.delete("/:id",// params
 } catch(err){
     res.status(500).json(err);
 }
+
 });
 
 
 // LIST & SEARCH
-router.get("", async (req, res) => { 
+router.get("", async (req, res, next) => { 
     const query = util.promisify(conn.query).bind(conn);// transfer query mysql to --> promise to use (await,async)
     let search = "";
     if(req.query.search){
@@ -126,7 +131,7 @@ router.get("", async (req, res) => {
     }
     const instractors = await query(`select * from users ${search}`)
     instractors.map(instractor => {
-        instractor.image_url = "http://" + req.hostname + ':4004/' + instractor.image_url;
+        instractor.image_url = "http://" + req.hostname + ":4002/" + instractor.image_url;
     })
     res.status(200).json({
         instractors,
@@ -134,15 +139,20 @@ router.get("", async (req, res) => {
 });
 
 // SHOW COURSE  
-router.get("/:id", async (req, res) => {
-    const query = util.promisify(conn.query).bind(conn);// transfer query mysql to --> promise to use (await,async)
+router.get("/:id", async (req, res, next) => {
+     const query = util.promisify(conn.query).bind(conn);// transfer query mysql to --> promise to use (await,async)
     const instractor = await query ("select * from users where id =?",[req.params.id])
+    next();
     if(!instractor[0]){
         return res.status(400).json({errors: ["Instractor not found"]});
     }
-    instractor[0].image_url = "http://" + req.hostname + ':4004/' + instractor[0].image_url;
+    instractor[0].image_url = "http://" + req.hostname + ":4002/" + instractor[0].image_url;
 
     res.status(200).json(instractor[0]);
 });
+
+router.get('/get', (req, res) => {
+    res.status(500).json("err");
+  });
 
 module.exports = router;

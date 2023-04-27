@@ -12,9 +12,7 @@ app.use(express.urlencoded({ extended: true })); // TO ACCESS URL FORM ENCODED
 app.use(express.static("upload"));
 app.use(cors());
 
-app.use("/auth", auth);
-app.use("/courses", courses);
-app.use("/instractors", instractors);
+
 
 app.listen(4002, "localhost",()=>{
     console.log("listening...");
