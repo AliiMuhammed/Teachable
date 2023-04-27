@@ -9,44 +9,59 @@ const fs = require("fs");
 
 // CREATE  COURSE
 router.post("",
- upload.single("image"),
-  body("name")
+upload.single("image"),
+body("name")
   .isString()
-  .withMessage("Please enter a valid course name"),
-  body("description")
+  .withMessage("please enter a valid movie name")
+  .isLength({ min: 10 })
+  .withMessage("movie name should be at lease 10 characters"),
+
+body("description")
   .isString()
-  .withMessage("Please enter a valid description")
+  .withMessage("please enter a valid description ")
   .isLength({ min: 20 })
-  .withMessage("Description must be at least 20 characters"),
-  body("code"),
-  body("status"),
-   async (req, res) => {
-    try{
+  .withMessage("description name should be at lease 20 characters"),
+
+body("code"),
+body("status"),
+async (req, res) => {
+  try {
+    // 1- VALIDATION REQUEST [manual, express validation]
     const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            return res.status(400).json({errors: errors.array()});
-        }
-    if(!req.file){
-        return res.status(400).json({errors: ["Please upload an image"]});
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
     }
+
+    // 2- VALIDATE THE IMAGE
+    if (!req.file) {
+      return res.status(400).json({
+        errors: [
+          {
+            msg: "Image is Required",
+          },
+        ],
+      });
+    }
+
     const course = {
-        name: req.body.name,
-        description: req.body.description,
-        code: req.body.code,
-        status: req.body.status,
-        image_url: req.file.filename,
+      name: req.body.name,
+      description: req.body.description,
+      code: req.body.code,
+      status: req.body.status,
+      image_url: req.file.filename,
     };
-    const query = util.promisify(conn.query).bind(conn);// transfer query mysql to --> promise to use (await,async)
-    await query ("insert into courses set ? ", course);
+
+
+    const query = util.promisify(conn.query).bind(conn);
+    await query("insert into courses set ? ", course);
     res.status(200).json({
-        msg:"Course created",
+      msg: "course created successfully !",
     });
-} catch(err){
-    console.log(err);
+  } catch (err) {
     res.status(500).json(err);
+  }
 }
-return "course created";
-});
+);
 
 // UPDATE Course
 router.put("/:id",// params
@@ -83,7 +98,7 @@ router.put("/:id",// params
 
     if(req.file){
         courseObj.image_url = req.file.filename;
-        fs.unlinkSync('./upload/' + course[0].image_url)
+        fs.unlinkSync("./upload/" + course[0].image_url)
     }
 
 
@@ -111,7 +126,7 @@ router.delete("/:id",// params
     }
 
 
-    fs.unlinkSync('./upload/' + course[0].image_url)
+    fs.unlinkSync("./upload/" + course[0].image_url)
 
     await query ("delete from courses  where id =?",[course[0].id])
     res.status(200).json({
@@ -134,7 +149,7 @@ router.get("", async (req, res) => {
     }
     const courses = await query(`select * from courses ${search}`)
     courses.map(course => {
-        course.image_url = "http://" + req.hostname + ':4002/' + course.image_url;
+        course.image_url = "http://" + req.hostname + ":4002/" + course.image_url;
     })
     res.status(200).json({
         courses,
@@ -148,7 +163,7 @@ router.get("/:id", async (req, res) => {
     if(!course[0]){
         return res.status(400).json({errors: ["Course not found"]});
     }
-    course[0].image_url = "http://" + req.hostname + ':4002/' + course[0].image_url;
+    course[0].image_url = "http://" + req.hostname + ":4002/" + course[0].image_url;
     
     res.status(200).json(course[0]);
 });
