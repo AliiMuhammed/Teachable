@@ -155,4 +155,42 @@ router.get('/get', (req, res) => {
     res.status(500).json("err");
   });
 
+  router.post(
+    "/setGrades",
+    body("course_id").isNumeric().withMessage("please enter a valid course id"),
+    body("student_id").isNumeric().withMessage("please enter a valid student id"),
+    body("grades").isNumeric().withMessage("please enter a valid Grade"),
+    async (req, res) => {
+      try{
+      const query = util.promisify(conn.query).bind(conn);
+      const errors = validationResult(req);
+          if (!errors.isEmpty()) {
+              return res.status(400).json({errors: errors.array()});
+          }
+      const course = await query ("select * from courses where id =?",[req.body.course_id])
+      if(!course[0]){
+          return res.status(400).json({errors: ["Course not found"]});
+      }
+      const student = await query ("SELECT * FROM users WHERE id =?",[req.body.student_id])
+      if(!student[0]){
+          return res.status(400).json({errors: ["Student Not Found"]});
+      }
+      else if(student[0].type != "student"){
+        return res.status(400).json({errors: ["User is not Student"]});
+      }
+      const gradesObj = {
+        student_id: student[0].id,
+        course_id: course[0].id,
+        grades: req.body.grades,
+      }
+      await query("update users_courses set grades =? where student_id =? and course_id = ?", [req.body.grades, student[0].id, course[0].id])
+      res.status(200).json({
+        msg: "Grades Added"
+      })
+    }catch(err){
+      console.log(err);
+      res.status(500).json(err)
+    }
+    }
+  )
 module.exports = router;
