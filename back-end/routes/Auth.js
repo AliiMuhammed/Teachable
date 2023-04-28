@@ -11,10 +11,8 @@ const fs = require("fs");
 
 router.post(
   "/login",
-  body("email").isEmail().withMessage("please enter a valid email!"),
-  body("password")
-    .isLength({ min: 8, max: 12 })
-    .withMessage("password should be between (8-12) character"),
+  body("email"),
+  body("password"),
   async (req, res) => {
     try {
       // 1- VALIDATION REQUEST [manual, express validation]
@@ -70,8 +68,7 @@ router.post(
      body("email").isEmail().withMessage("please Enter a vaild email!"),
      body("name")
      .isString()
-     .withMessage("please enter a valid name")
-     .isLength({ min: 10, max: 20 }),
+     .withMessage("please enter a valid name"),
      body("password").isLength({min:8, max:12}).withMessage("Password should be between (8,12)."),
      body("phone"),
      body("status"),
@@ -107,7 +104,6 @@ router.post(
         res.status(201).json({msg: "success"});
         
     } catch (err) {
-        console.log(err);
         res.status(500).json(err);
     }
 })

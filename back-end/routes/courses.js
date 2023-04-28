@@ -12,9 +12,7 @@ router.post("",
 upload.single("image"),
 body("name")
   .isString()
-  .withMessage("please enter a valid movie name")
-  .isLength({ min: 10 })
-  .withMessage("movie name should be at lease 10 characters"),
+  .withMessage("please enter a valid movie name"),
 
 body("description")
   .isString()
@@ -167,5 +165,42 @@ router.get("/:id", async (req, res) => {
     
     res.status(200).json(course[0]);
 });
+
+router.post(
+  "/assign",
+  body("course_id").isNumeric().withMessage("please enter a valid course id"),
+  body("instractor_id").isNumeric().withMessage("please enter a valid Instractor id"),
+  async (req, res) => {
+    try{
+    const query = util.promisify(conn.query).bind(conn);
+    const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({errors: errors.array()});
+        }
+    const course = await query ("select * from courses where id =?",[req.body.course_id])
+    if(!course[0]){
+        return res.status(400).json({errors: ["Course not found"]});
+    }
+    const instractor = await query ("SELECT * FROM users WHERE id =?",[req.body.instractor_id])
+    if(!instractor[0]){
+        return res.status(400).json({errors: ["Instractor Not Found"]});
+    }
+    else if(instractor[0].type != "instractor"){
+      return res.status(400).json({errors: ["User is not Instractor"]});
+    }
+    const assignObj = {
+      instractor_id: instractor[0].id,
+      course_id: course[0].id,
+    }
+    await query("insert into instractors_courses set?", assignObj)
+    res.status(200).json({
+      msg: "instractor Assign successfully"
+    })
+  }catch(err){
+    console.log(err);
+    res.status(500).json(err)
+  }
+  }
+)
 
 module.exports = router;
