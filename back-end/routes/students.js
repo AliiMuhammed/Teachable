@@ -44,15 +44,29 @@ router.post(
     }
   )
 
+
 router.get("/:id", async (req, res) => {
-    const query = util.promisify(conn.query).bind(conn);// transfer query mysql to --> promise to use (await,async)
-    const student = await query ("select * from users_courses where student_id =?",[req.params.id])
+  try{
+  const stud_id = req.params.id;  
+  let courses=[];
+  const query = util.promisify(conn.query).bind(conn);// transfer query mysql to --> promise to use (await,async)
+    const student = await query ("select * from users_courses where student_id =?",[stud_id])
+    
     if(!student[0]){
         return res.status(400).json({errors: ["Student not found"]});
     }
-    // course[0].image_url = "http://" + req.hostname + ":4002/" + course[0].image_url;
-    
-    res.status(200).json(student[0]);
+    for(let i = 0; i < student.length; i++){
+        courses[i] = await query("SELECT DISTINCT name, description, image_url, grades from courses, users_courses where id =? and student_id  = ?", [student[i].course_id, stud_id])
+        courses.map(course => {
+          course[0].image_url = "http://" + req.hostname + ":4002/" + course[0].image_url;
+      })
+      }
+
+    res.status(200).json(courses)
+  }catch(err){
+    console.log(err);
+    res.status(500).json(err);
+  }
 });
 
   module.exports = router;
