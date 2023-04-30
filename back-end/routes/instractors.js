@@ -151,8 +151,32 @@ router.get("/:id", async (req, res, next) => {
     res.status(200).json(instractor[0]);
 });
 
-router.get('/get', (req, res) => {
-    res.status(500).json("err");
+router.get('/view/:id', async(req, res) => {
+    try{
+        let students = [];
+        let stud_name = [];
+    const query = util.promisify(conn.query).bind(conn);// transfer query mysql to --> promise to use (await,async)
+    const instractor = await query ("select course_id from instractors_courses where instractor_id =?",[req.params.id])
+
+    if(!instractor[0]){
+        return res.status(400).json({errors: ["Instractor not found"]});
+    }
+
+    for(let i = 0; i < instractor.length; i++){
+        students[i] = await query("SELECT name, student_id from courses, users_courses where id =? and course_id  = ?", [instractor[i].course_id, instractor[i].course_id])
+        // stud_name[i] = await query("select name from users where id = ?",[students[i].student_id])
+        // students[i] = students[i] + stud_name[i];
+    //     students.map(course => {
+    //       course[0].image_url = "http://" + req.hostname + ":4002/" + course[0].image_url;
+    //   })
+    }
+
+    res.status(200).json(students)
+}catch(err){
+    console.log(err);
+     res.status(500).json(err);
+}
+   
   });
 
   router.post(
