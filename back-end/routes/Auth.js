@@ -41,6 +41,7 @@ router.post(
         req.body.password,
         user[0].password
       );
+      user[0].image_url = "http://" + req.hostname + ":4002/" + user[0].image_url;
       if (checkPassword) {
         delete user[0].password;
         res.status(200).json(user[0]);
