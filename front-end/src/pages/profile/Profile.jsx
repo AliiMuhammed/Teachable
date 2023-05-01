@@ -2,6 +2,8 @@ import React from 'react'
 import './style/profile.css'
 import Sidebar from './components/Sidebar';
 import { Outlet } from 'react-router';
+// import arr from '../login/components/LoginForm'
+// const arr = require('../login/components/LoginForm')
 const Profile = () => {
   return (
     <div>

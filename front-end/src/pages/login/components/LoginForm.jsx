@@ -12,8 +12,9 @@ const LoginForm = () => {
     // let x=true
     const navigate = useNavigate();
     const [login, setLogin] = useState({
-      email: '',
-      password: '',
+      email: "",
+      password: "",
+      type: "",
       loading: false,
       err: []
   })
@@ -23,15 +24,24 @@ function handleSumbit(event){
   setLogin({...login, loading:true,err:[]});
   axios.post("http://localhost:4002/auth/login",{
     email: login.email,
-    password: login.password
+    password: login.password,
+    type: login.type,
   })
   .then(resp => {
+    
     setLogin({ ...login, loading: false, err: [] });
     setAuthUser(resp.data);
+    if(resp.data.type === "student"){
     navigate("/profile");
+    }else if(resp.data.type === "instractor"){
+      navigate("/");
+    }
+    else{
+      navigate("/contactUs");
+    }
   })
   .catch((errors) => {
-    setLogin({...login,loading: false, err:errors.response.data.errors})
+    setLogin({...login,loading: false, err:errors.response.data})
   })
   
   

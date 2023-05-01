@@ -56,10 +56,10 @@ router.get("/:id", async (req, res) => {
         return res.status(400).json({errors: ["Student not found"]});
     }
     for(let i = 0; i < student.length; i++){
-        courses[i] = await query("SELECT DISTINCT name, description, image_url, grades from courses, users_courses where id =? and student_id  = ?", [student[i].course_id, stud_id])
-        courses.map(course => {
-          course[0].image_url = "http://" + req.hostname + ":4002/" + course[0].image_url;
-      })
+        courses[i] = await query("SELECT DISTINCT name, grades from courses, users_courses where id =? and student_id  = ?", [student[i].course_id, stud_id])
+      //   courses.map(course => {
+      //     course[0].image_url = "http://" + req.hostname + ":4002/" + course[0].image_url;
+      // })
       }
 
     res.status(200).json(courses)
