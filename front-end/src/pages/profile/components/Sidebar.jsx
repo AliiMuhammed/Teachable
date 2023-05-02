@@ -18,7 +18,7 @@ const Sidebar = () => {
                     isActive ? "active-sideBar" : ""
                   }
                 >
-                  <BsJournalBookmark /> My Courses
+                  <BsJournalBookmark /> My Course
                 </NavLink>
               </li>
               <li>
