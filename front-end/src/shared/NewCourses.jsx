@@ -1,19 +1,20 @@
-import SectionHeader from "../../../shared/SectionHeader"
-import CourseCard from "../../../shared/CourseCard"
-import { courses } from "../../../core/data/data";
+import SectionHeader from "./SectionHeader"
+import CourseCard from "./CourseCard"
+import { courses } from "../core/data/data";
 import "../style/newCourses.css"
 
-const NewCourses = () => {
+const NewCourses = ({className,coursesArray}) => {
 
   const displayCourses = () => { 
-    return courses.map((course) => {
+    return coursesArray.map((course) => {
       return (
         <CourseCard
           key={course.id}
-          title={course.title}
-          instractor={course.instractor}
-          courseImage={course.Image}
+          title={course.name}
+          code={course.code}
+          courseImage={course.image_url}
           durations={course.durations}
+          description={course.description}
           className={"newCourses-card"}
         />
       );
@@ -22,7 +23,7 @@ const NewCourses = () => {
 
 
   return (
-    <section>
+    <section className={`NewCourses ${className}`}>
       <SectionHeader
         title="Discover New Opportunities for Learning and Growth with Our Latest Courses!"
         smTilte="NEW COURSES"

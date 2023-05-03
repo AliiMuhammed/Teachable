@@ -1,7 +1,6 @@
 import {AiOutlineFlag} from 'react-icons/ai'
 import {SlLayers} from 'react-icons/sl'
 import {RiVidiconLine} from 'react-icons/ri'
-import Courses from '../../pages/home/components/TrendCourses'
 
 
 

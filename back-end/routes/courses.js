@@ -148,15 +148,14 @@ router.get("", async (req, res) => {
     courses.map(course => {
         course.image_url = "http://" + req.hostname + ":4002/" + course.image_url;
     })
-    res.status(200).json({
-        courses,
-    });
+    res.status(200).json(
+        courses,);
 });
 
 // SHOW COURSE  
 router.get("/:id", async (req, res) => {
     const query = util.promisify(conn.query).bind(conn);// transfer query mysql to --> promise to use (await,async)
-    const course = await query ("select * from courses where id =?",[req.params.id])
+    const course = await query ("select * ,from courses where id =?",[req.params.id])
     if(!course[0]){
         return res.status(400).json({errors: ["Course not found"]});
     }

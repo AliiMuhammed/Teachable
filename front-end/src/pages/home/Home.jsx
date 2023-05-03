@@ -1,8 +1,8 @@
 import './style/home.css'
 import MainHeader from './components/MainHeader'
 import Features from '../../shared/Features'
-import TrendCourses from './components/TrendCourses'
-import NewCourses from './components/NewCourses'
+import TrendCourses from '../../shared/TrendCourses'
+import NewCourses from '../../shared/NewCourses'
 import Statistics from '../../shared/Statistics'
 
 const Home = () => {

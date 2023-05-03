@@ -49,8 +49,8 @@ function handleSumbit(event){
   return (
       <div className="login-form">
         {login.err.map((error, index) => (
-          <Alert key={index} variant="danger" className="p-2">
-            {error.msg}
+          <Alert key={index} variant="danger" className="p-0">
+            this is simple msg
           </Alert>
         ))}
             <form onSubmit={handleSumbit} method="post">
