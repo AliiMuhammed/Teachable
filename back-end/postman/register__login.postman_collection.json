@@ -1,0 +1,99 @@
+{
+	"info": {
+		"_postman_id": "5e1e2649-59a9-48bc-9f3e-c618aee2803b",
+		"name": "register , login",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "27019112"
+	},
+	"item": [
+		{
+			"name": "register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "azzet",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "abdo124@gmail.com",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "012345678",
+							"type": "text"
+						},
+						{
+							"key": "phone",
+							"value": "012345566",
+							"type": "text"
+						},
+						{
+							"key": "status",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "type",
+							"value": "student",
+							"type": "text"
+						},
+						{
+							"key": "image",
+							"type": "file",
+							"src": "/E:/photo/pexels-aphiwat-chuangchoem-364308.jpg"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:4002/auth/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4002",
+					"path": [
+						"auth",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"abdo1955@gmail.com\",\r\n    \"password\": \"012345678\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4002/auth/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4002",
+					"path": [
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

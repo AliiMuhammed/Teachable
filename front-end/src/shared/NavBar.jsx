@@ -11,7 +11,7 @@ import {AiFillCloseSquare} from 'react-icons/ai'
 
 const NavBar = () => {
   const [ isNavShowing,setIsNavShowing]=useState(false)
-
+  const [responseReceived, setResponseReceived] = useState(false);
   const links = [
     {
       id: 1,
@@ -33,6 +33,13 @@ const NavBar = () => {
       name: "Contact Us",
       path: "/contactUs",
     },
+
+    responseReceived?{
+      id: 4,
+      name: "My Profile",
+      path: "/profile",
+    }:"test"
+
   ];
 
   return (
@@ -56,13 +63,23 @@ const NavBar = () => {
             );
           })}
           <li>
-            <NavLink
+
+            {
+              responseReceived?<NavLink
+              className="login-btn bordered-btn"
+              to="/login"
+              onClick={() => setIsNavShowing((prev) => !prev)}
+            >
+              log out
+            </NavLink>:<NavLink
               className="login-btn bordered-btn"
               to="/login"
               onClick={() => setIsNavShowing((prev) => !prev)}
             >
               log in
             </NavLink>
+            }
+
           </li>
         </ul>
         <button

@@ -38,7 +38,6 @@ router.post(
         msg: "Course registered successfully"
       })
     }catch(err){
-      console.log(err);
       res.status(500).json(err)
     }
     }
@@ -64,8 +63,7 @@ router.get("/:id", async (req, res) => {
 
     res.status(200).json(courses)
   }catch(err){
-    console.log(err);
-    res.status(500).json(err);
+        res.status(500).json(err);
   }
 });
 
