@@ -55,7 +55,7 @@ router.post(
         });
       }
     } catch (err) {
-      res.status(500).json(err);
+      // res.status(500).json(err);
     }
   }
 );
@@ -104,7 +104,7 @@ router.post(
         res.status(201).json({msg: "success"});
         
     } catch (err) {
-        res.status(500).json(err);
+        // res.status(500).json(err);
     }
 })
 

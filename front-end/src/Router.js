@@ -1,4 +1,4 @@
-import { Router, createBrowserRouter, Navigate} from "react-router-dom";
+import {  createBrowserRouter, Navigate} from "react-router-dom";
 import Home from "./pages/home/Home";
 import Login from "./pages/login/Login";
 import Courses from "./pages/courses/Courses";
@@ -48,17 +48,10 @@ export const router = createBrowserRouter([
       {
         path: "/login",
         element: <Login />,
-      },
-      {
-        path: "*",
-        element: <NotFound />,
-      },
+      }
     ],
-  },
-  {
-    path: "*",
-    element: <Navigate to={"/"} />,
-  },
+    errorElement:<NotFound />
+  }
 ]);
 
 export default router

@@ -1,0 +1,178 @@
+{
+	"info": {
+		"_postman_id": "be7a0c45-bf68-4205-99e9-5f4c2d97407e",
+		"name": "instractors",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "27019112"
+	},
+	"item": [
+		{
+			"name": "Update instractor",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "abdo",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "abdelrahman199@gmail.com",
+							"type": "text"
+						},
+						{
+							"key": "phone",
+							"value": "01210201342",
+							"type": "text"
+						},
+						{
+							"key": "image",
+							"type": "file",
+							"src": "/E:/photo/5a1cee094b2b64.6496628715118453853079.png"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:4002/instractors/10",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4002",
+					"path": [
+						"instractors",
+						"10"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "setGrades",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"course_id\":\"13\",\r\n    \"student_id\": \"15\",\r\n    \"grades\":\"75\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4002/instractors/setGrades",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4002",
+					"path": [
+						"instractors",
+						"setGrades"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete instractor",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response time is less than 200ms\", function (){",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4002/instractors/9",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4002",
+					"path": [
+						"instractors",
+						"9"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "show instractor",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4002/instractors/10",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4002",
+					"path": [
+						"instractors",
+						"10"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "View Enrolled Students",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4002/instractors/10",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4002",
+					"path": [
+						"instractors",
+						"10"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "show instractors",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		}
+	]
+}

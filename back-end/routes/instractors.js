@@ -42,7 +42,7 @@ const fs = require("fs");
 //         msg:"Instractor created",
 //     });
 // } catch(err){
-//     res.status(500).json(err);
+//          res.status(500).json(err);
 // }
 // });
 
@@ -55,7 +55,7 @@ router.put(
   .withMessage("Please enter a valid course name"),
   body("email").isEmail().withMessage("please enter a valid email!"),
   body("phone"),
-   async (req, res, next) => {
+   async (req, res, ) => {
     try{
         const query = util.promisify(conn.query).bind(conn);
         const errors = validationResult(req);
@@ -90,13 +90,13 @@ router.put(
 
 } catch(err){
     console.log(err);
-    res.status(500).json(err);
+         res.status(500).json(err);
 }
 });
 
 // DELETE COURSE
 router.delete("/:id",// params
-   async (req, res, next) => {
+   async (req, res, ) => {
     try{
     // check if course Exisit
     const query = util.promisify(conn.query).bind(conn);// transfer query mysql to --> promise to use (await,async)
@@ -116,14 +116,14 @@ router.delete("/:id",// params
 
 
 } catch(err){
-    res.status(500).json(err);
+// res.status(500).json(err);
 }
 
 });
 
 
 // LIST & SEARCH
-router.get("", async (req, res, next) => { 
+router.get("", async (req, res, ) => { 
     const query = util.promisify(conn.query).bind(conn);// transfer query mysql to --> promise to use (await,async)
     let search = "";
     if(req.query.search){
@@ -138,17 +138,23 @@ router.get("", async (req, res, next) => {
     });
 });
 
-// SHOW COURSE  
-router.get("/:id", async (req, res, next) => {
+// SHOW instractor  
+
+router.get("/:id", async (req, res, ) => {
+    try{
      const query = util.promisify(conn.query).bind(conn);// transfer query mysql to --> promise to use (await,async)
     const instractor = await query ("select * from users where id =?",[req.params.id])
-    next();
+    
     if(!instractor[0]){
         return res.status(400).json({errors: ["Instractor not found"]});
     }
     instractor[0].image_url = "http://" + req.hostname + ":4002/" + instractor[0].image_url;
 
     res.status(200).json(instractor[0]);
+}
+catch(err){
+
+}
 });
 
 router.get('/view/:id', async(req, res) => {
@@ -173,8 +179,7 @@ router.get('/view/:id', async(req, res) => {
 
     res.status(200).json(students)
 }catch(err){
-    console.log(err);
-     res.status(500).json(err);
+          res.status(500).json(err);
 }
    
   });
@@ -212,7 +217,7 @@ router.get('/view/:id', async(req, res) => {
         msg: "Grades Added"
       })
     }catch(err){
-      console.log(err);
+      
       res.status(500).json(err)
     }
     }

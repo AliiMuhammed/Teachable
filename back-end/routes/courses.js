@@ -56,7 +56,7 @@ async (req, res) => {
       msg: "course created successfully !",
     });
   } catch (err) {
-    res.status(500).json(err);
+        // res.status(500).json(err);
   }
 }
 );
@@ -107,8 +107,7 @@ router.put("/:id",// params
 
 
 } catch(err){
-    console.log(err);
-    res.status(500).json(err);
+        // res.status(500).json(err);
 }
 });
 
@@ -133,7 +132,7 @@ router.delete("/:id",// params
 
 
 } catch(err){
-    res.status(500).json(err);
+        // res.status(500).json(err);
 }
 });
 
