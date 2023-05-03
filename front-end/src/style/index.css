@@ -61,6 +61,7 @@ h2{
 
 a{
     color: var(--mainFontColor);
+    text-decoration: none;
 }
 img{
     display: block;
@@ -81,6 +82,19 @@ img{
     width: 25px;
 }
 
+/*===================================spinner ==========================================*/
+
+.pageSpinner{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+.spinner{
+    color: var(--mainColor);
+    width: 5rem;
+    height: 5rem;
+}
 
 /*==========================navigation links in page header======================================*/
 

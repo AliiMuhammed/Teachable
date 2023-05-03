@@ -1,10 +1,9 @@
-import '../style/home.css';
 import { Link } from 'react-router-dom';
-import CourseCard from '../../../shared/CourseCard';
+import CourseCard from './CourseCard';
 import "../style/trendCourses.css";
-import { courses } from "../../../core/data/data";
+import { courses } from "../core/data/data";
 
-const Courses = () => {
+const TrendCourses = ({className}) => {
 
     const displayCourses = () => {
         return courses.map((course) => {
@@ -22,7 +21,7 @@ const Courses = () => {
 }
     return (
       <>
-        <section>
+        <section className={`TrendCourses ${className}`}>
           <div className="container courses-container">
             <div className="courses-top">
               <div className="courses-top-left">
@@ -49,4 +48,4 @@ const Courses = () => {
     );
 }
 
-export default Courses
+export default TrendCourses
