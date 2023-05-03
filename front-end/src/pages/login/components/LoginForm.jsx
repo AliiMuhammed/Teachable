@@ -27,10 +27,10 @@ function handleSumbit(event){
     password: login.password,
     type: login.type,
   })
-  .then(resp => {
-    
+  .then((resp) => {
     setLogin({ ...login, loading: false, err: [] });
     setAuthUser(resp.data);
+    navigate("/");
     if(resp.data.type === "student"){
     navigate("/profile");
     }else if(resp.data.type === "instractor"){
@@ -41,18 +41,21 @@ function handleSumbit(event){
     }
   })
   .catch((errors) => {
-    setLogin({...login,loading: false, err:errors.response.data})
-  })
-  
+    setLogin({
+      ...login,
+      loading: false,
+      err: errors.response.data.errors,
+    });
+  });
   
 }
   return (
       <div className="login-form">
         {login.err.map((error, index) => (
-          <Alert key={index} variant="danger" className="p-2">
-            {error.msg}
-          </Alert>
-        ))}
+        <Alert key={index} variant="danger" className="p-2">
+          {error.msg}
+        </Alert>
+      ))}
             <form onSubmit={handleSumbit} method="post">
           <div className="form-group">
             <label htmlFor="email">Email address</label>

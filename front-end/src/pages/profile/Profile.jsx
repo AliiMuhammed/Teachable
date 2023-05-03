@@ -1,10 +1,19 @@
-import React from 'react'
+import React, {useState} from 'react'
 import './style/profile.css'
 import Sidebar from './components/Sidebar';
 import { Outlet } from 'react-router';
+
 // import arr from '../login/components/LoginForm'
 // const arr = require('../login/components/LoginForm')
 const Profile = () => {
+//   const [profile, setProfile] = useState({
+//     id: '',
+//     name: '',
+//     image_url: '',
+//     loading: false,
+//     err: []
+// })
+
   return (
     <div>
       <section className="profile-section">
