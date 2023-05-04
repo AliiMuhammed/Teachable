@@ -7,6 +7,7 @@ const crypto = require("crypto");
 const bodyparser = require("body-parser");
 const upload = require("../middleware/uploadImages");
 const fs = require("fs");
+const { query } = require("express");
 
 
 router.post(
@@ -23,7 +24,7 @@ router.post(
 
       // 2- CHECK IF EMAIL EXISTS
       const query = util.promisify(conn.query).bind(conn); // transform query mysql --> promise to use [await/async]
-      const user = await query("select * from users where email = ?", [
+      let user = await query("select * from users where email = ?", [
         req.body.email,
       ]);
       if (user.length == 0) {
@@ -36,15 +37,19 @@ router.post(
         });
       }
 
+       await query("update users set status = 'active' where id = ?", [user[0].id]);
+       
+      user = await query("select * from users where id = ?", [user[0].id]);
       // 3- COMPARE HASHED PASSWORD
       const checkPassword = await bcrypt.compare(
         req.body.password,
         user[0].password
       );
       user[0].image_url = "http://" + req.hostname + ":4002/" + user[0].image_url;
+      
       if (checkPassword) {
         delete user[0].password;
-        res.status(200).json(user[0]);
+        res.status(200).json(user[0]);       
       } else {
         res.status(404).json({
           errors: [
@@ -54,13 +59,25 @@ router.post(
           ],
         });
       }
+
+      
     } catch (err) {
-      // res.status(500).json(err);
+
     }
   }
 );
 
-
+router.get('/showData', async(req, res) => {
+  // const id = res.locals.user[0].id;
+  try{
+    const query = util.promisify(conn.query).bind(conn);
+  const person = await query("select * from users where id = ?",[req.locals.user.id]);
+  res.status(200).json(person[0]);
+  }catch(err){
+    console.log(err);
+    res.status(404).json(err)
+  }
+});
 
 router.post(
     "/register",
@@ -106,6 +123,20 @@ router.post(
     } catch (err) {
         // res.status(500).json(err);
     }
+})
+
+router.post('/logout/:id', async(req, res) => {
+try{
+  const query = util.promisify(conn.query).bind(conn);
+  const user = await query("update users set status = 'in-active' where id =?",[req.params.id]);
+  if(user[0] ==0){
+    return res.status(400).json({errors: ["user not found"]});
+}else{
+  res.status(200).json({msg: "success"});}
+}catch(err){
+  console.log(err);
+  res.status(500).json(err)
+}
 })
 
 module.exports = router;
