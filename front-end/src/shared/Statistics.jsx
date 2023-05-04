@@ -43,7 +43,7 @@ const Statistics = () => {
   useEffect(() => {
     setInstractor({ ...instractor, loading: true });
     axios
-      .get("http://localhost:4002/courses")
+      .get("http://localhost:4002/instractors")
       .then((resp) => {
         setInstractor({
           ...instractor,

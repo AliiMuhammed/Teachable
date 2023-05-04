@@ -93,7 +93,9 @@ router.put("/:id",// params
         name: req.body.name,
         description: req.body.description,
         code: req.body.code,
-        status: req.body.status
+        status: req.body.status,
+        durations:req.body.durations
+
     };
 
     if(req.file){

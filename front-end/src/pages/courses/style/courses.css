@@ -1,3 +1,9 @@
 .NewCourses.courses-NewCourses{
     margin-top:5rem ;
 }
+.allCourses-btn{
+    margin: 5rem auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

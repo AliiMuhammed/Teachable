@@ -73,13 +73,13 @@ router.get("", async (req, res, ) => {
   if(req.query.search){
       search = `where name like '%${req.query.search}%' or id like '%${req.query.id}%'`
   }
-  const instractors = await query(`select * from users ${search} where type='student'`)
-  instractors.map(instractor => {
-      instractor.image_url = "http://" + req.hostname + ":4002/" + instractor.image_url;
+  const students = await query(`select * from users ${search} where type='student'`)
+  students.map(student => {
+      student.image_url = "http://" + req.hostname + ":4002/" + student.image_url;
   })
-  res.status(200).json({
-      instractors,
-  });
+  res.status(200).json(
+      students,
+  );
 });
 
   module.exports = router;
