@@ -62,6 +62,20 @@
 }
 
 
+/*=============================V-card===================================*/
+
+.v-card.course-card {
+    flex-direction: column;
+    text-align: center;
+}
+
+.v-card.course-card .course-card-image img {
+    border-radius: 5px;
+
+}
+
+
+
 /*=============================Responsive===================================*/
 
 @media (max-width:992px) {
