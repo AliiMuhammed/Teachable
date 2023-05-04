@@ -6,9 +6,9 @@ import CoursesSection_V from "../../shared/CoursesSection_V";
 import Statistics from "../../shared/Statistics";
 import axios from "axios";
 import Spinner from "react-bootstrap/Spinner";
+import Alert from "react-bootstrap/Alert";
 import { useState, useEffect } from "react";
 import CourseCard from "../../shared/CourseCard";
-import NotAvailable from "../../shared/NotAvailable";
 
 const Home = () => {
   const [course, setCourses] = useState({
@@ -31,7 +31,11 @@ const Home = () => {
         });
       })
       .catch((err) => {
-        setCourses({ ...course, loading: false, err: "error" });
+        setCourses({
+          ...course,
+          loading: false,
+          err: "Error can't load Courses",
+        });
       });
   }, [setCourses]);
 
@@ -92,10 +96,7 @@ const Home = () => {
 
   return (
     <>
-      <MainHeader />
-      <Features className={"card-Feature_home"} />
       {/* Loader */}
-
       {course.loading === true && (
         <div className="pageSpinner">
           <Spinner animation="border" role="status" className="spinner">
@@ -103,20 +104,25 @@ const Home = () => {
           </Spinner>
         </div>
       )}
-      {course.loading === false && (
+
+      {/* displayCourses */}
+      {course.loading === false && course.err === null && (
         <>
-          {slicedCourses.length != 0 ? (
-            displayTrendCourses()
-          ) : (
-            <NotAvailable title={"Courses"} />
-          )}
+          <MainHeader />
+          <Features className={"card-Feature_home"} />
+          {displayTrendCourses()}
           <Statistics />
-          {slicedCourses.length != 0 ? (
-            displayNewCourses()
-          ) : (
-            <NotAvailable title={"Courses"} />
-          )}
+          {displayNewCourses()}
         </>
+      )}
+
+      {/* errors handling */}
+      {course.loading === false && course.err != null && (
+        <div className="err-alert">
+          <Alert variant="danger" className="alret">
+            {course.err}
+          </Alert>
+        </div>
       )}
     </>
   );

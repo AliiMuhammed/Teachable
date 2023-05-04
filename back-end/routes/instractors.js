@@ -133,9 +133,9 @@ router.get("", async (req, res, ) => {
     instractors.map(instractor => {
         instractor.image_url = "http://" + req.hostname + ":4002/" + instractor.image_url;
     })
-    res.status(200).json({
+    res.status(200).json(
         instractors,
-    });
+    );
 });
 
 // SHOW instractor  

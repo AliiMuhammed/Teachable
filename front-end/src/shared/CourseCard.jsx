@@ -19,7 +19,8 @@ const CourseCard = ({title,id,description,code,durations,courseImage,className})
           </span>
           <span className="course-lessons">
             <SlNotebook />
-            {durations}
+            <strong> {durations}</strong>
+            lecture
           </span>
         </div>
       </div>

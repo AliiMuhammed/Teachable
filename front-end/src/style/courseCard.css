@@ -60,7 +60,9 @@
     font-size: 14px;
     margin-right: 7px;
 }
-
+.course-lessons strong{
+    margin-right:5px;
+}
 
 /*=============================V-card===================================*/
 
