@@ -127,7 +127,7 @@ router.get("", async (req, res, ) => {
     const query = util.promisify(conn.query).bind(conn);// transfer query mysql to --> promise to use (await,async)
     let search = "";
     if(req.query.search){
-        search = `where name like '%${req.query.search}%' or description like '%${req.query.description}%'`
+        search = `where name like '%${req.query.search}%' or id like '%${req.query.id}%'`
     }
     const instractors = await query(`select * from users ${search} where type='instractor'`)
     instractors.map(instractor => {
