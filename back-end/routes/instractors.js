@@ -129,7 +129,7 @@ router.get("", async (req, res, ) => {
     if(req.query.search){
         search = `where name like '%${req.query.search}%' or description like '%${req.query.description}%'`
     }
-    const instractors = await query(`select * from users ${search}`)
+    const instractors = await query(`select * from users ${search} where type='instractor'`)
     instractors.map(instractor => {
         instractor.image_url = "http://" + req.hostname + ":4002/" + instractor.image_url;
     })

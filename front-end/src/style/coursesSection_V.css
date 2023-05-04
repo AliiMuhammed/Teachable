@@ -1,0 +1,16 @@
+/*=====================start New Courses Section =================*/
+
+.coursesSection-V-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3rem;
+
+}
+
+/*=====================Responsive =================*/
+@media (max-width: 767px) {
+    .container.coursesSection-V-container {
+        grid-template-columns: 1fr;
+        width: 80%;
+    }
+}

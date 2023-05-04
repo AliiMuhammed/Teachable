@@ -83,6 +83,17 @@ img{
 }
 
 /*===================================spinner ==========================================*/
+.notFound{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 80%;
+    margin: 5rem auto;
+}
+.notFound h1{
+    padding: 2rem;
+}
+/*===================================notFound ==========================================*/
 
 .pageSpinner{
     display: flex;

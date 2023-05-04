@@ -22,6 +22,7 @@ body("description")
 
 body("code"),
 body("status"),
+body("durations"),
 async (req, res) => {
   try {
     // 1- VALIDATION REQUEST [manual, express validation]
@@ -47,6 +48,7 @@ async (req, res) => {
       code: req.body.code,
       status: req.body.status,
       image_url: req.file.filename,
+      durations:req.body.durations
     };
 
 
