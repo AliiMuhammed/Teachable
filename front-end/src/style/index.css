@@ -108,11 +108,12 @@ img{
 }
 
 /*==========================alert======================================*/
-.err-alert{
-        height: 90vh;
+.alert-container{
+        
             display: flex;
             align-items: center;
             justify-content: center;
+            flex-direction: column;
             width: 60%;
             margin: 0 auto;
 }

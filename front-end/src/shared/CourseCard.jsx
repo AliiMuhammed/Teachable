@@ -10,7 +10,7 @@ const CourseCard = ({title,id,description,code,durations,courseImage,className})
       </div>
       <div className="course-card-content">
         <h3>
-          <Link to={"/courses/" + id}>{title}</Link>
+          <Link to={"/courses/" + id+"/"+code}>{title}</Link>
         </h3>
         <p>{description}</p>
         <div className="course-meta">

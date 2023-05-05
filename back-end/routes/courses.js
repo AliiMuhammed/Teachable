@@ -157,9 +157,9 @@ router.get("", async (req, res) => {
 });
 
 // SHOW COURSE  
-router.get("/:id", async (req, res) => {
+router.get("/:id/:code", async (req, res) => {
     const query = util.promisify(conn.query).bind(conn);// transfer query mysql to --> promise to use (await,async)
-    const course = await query ("select * ,from courses where id =?",[req.params.id])
+    const course = await query ("select * from courses where id =? and code=?",[req.params.id , req.params.code] )
     if(!course[0]){
         return res.status(400).json({errors: ["Course not found"]});
     }

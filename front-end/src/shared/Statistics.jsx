@@ -8,6 +8,7 @@ import { BsFillPersonPlusFill } from "react-icons/bs";
 import "../style/statistics.css";
 
 const Statistics = () => {
+  // Courses Api's
   const [counterOn, SetCounterOn] = useState(false);
   const [course, setCourses] = useState({
     loading: true,
@@ -31,8 +32,9 @@ const Statistics = () => {
       .catch((err) => {
         setCourses({ ...course, loading: false, err: "error" });
       });
-  }, [setCourses]);
+  }, []);
 
+  // instractors Api's
   const [instractor, setInstractor] = useState({
     loading: true,
     results: [],
@@ -55,9 +57,34 @@ const Statistics = () => {
       .catch((err) => {
         setInstractor({ ...instractor, loading: false, err: "error" });
       });
-  }, [setInstractor]);
+  }, []);
 
-  console.log(instractor.results);
+  // students Api's
+  const [student, setStudent] = useState({
+    loading: true,
+    results: [],
+    err: null,
+    reload: 0,
+  });
+
+  useEffect(() => {
+    setStudent({ ...student, loading: true });
+    axios
+      .get("http://localhost:4002/students")
+      .then((resp) => {
+        setStudent({
+          ...student,
+          results: resp.data,
+          loading: false,
+          err: null,
+        });
+      })
+      .catch((err) => {
+        setStudent({ ...student, loading: false, err: "error" });
+      });
+  }, []);
+
+  const studentNumber = student.results.length;
   const instractorNumber = instractor.results.length;
   const coursesNumber = course.results.length;
   return (
@@ -100,7 +127,7 @@ const Statistics = () => {
             </div>
             <h1>
               {counterOn && (
-                <CountUp start={0} end={900} duration={3} delay={0} />
+                <CountUp start={0} end={studentNumber} duration={3} delay={0} />
               )}
             </h1>
             <span className="stats-type">Registered Enrolls</span>
