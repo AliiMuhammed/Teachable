@@ -1,17 +1,22 @@
-import {Link,NavLink} from 'react-router-dom'
-import { useState } from 'react'
+import { Link, NavLink } from "react-router-dom";
+import { useState } from "react";
 
-import React from 'react'
-import '../style/NavBar.css'
-import Logo from '../assests/images/h-logo.png'
-import {FaBars} from 'react-icons/fa'
-import {AiFillCloseSquare} from 'react-icons/ai'
-
-
+import React from "react";
+import "../style/NavBar.css";
+import Logo from "../assests/images/h-logo.png";
+import { FaBars } from "react-icons/fa";
+import { AiFillCloseSquare } from "react-icons/ai";
+import { getAuthUser, removeAuthUser } from "../helper/Storage";
+import { useNavigate } from "react-router-dom";
 
 const NavBar = () => {
-  const [ isNavShowing,setIsNavShowing]=useState(false)
-  const [responseReceived, setResponseReceived] = useState(false);
+  const [isNavShowing, setIsNavShowing] = useState(false);
+  const navigate = useNavigate();
+  const auth = getAuthUser();
+  const LogOut = () => {
+    removeAuthUser();
+    navigate("/");
+  };
   const links = [
     {
       id: 1,
@@ -33,13 +38,6 @@ const NavBar = () => {
       name: "Contact Us",
       path: "/contactUs",
     },
-
-    responseReceived?{
-      id: 5,
-      name: "My Profile",
-      path: "/profile",
-    }:"test"
-
   ];
 
   return (
@@ -62,24 +60,40 @@ const NavBar = () => {
               </li>
             );
           })}
+
           <li>
-
-            {
-              responseReceived?<NavLink
-              className="login-btn bordered-btn"
-              to="/login"
-              onClick={() => setIsNavShowing((prev) => !prev)}
-            >
-              log out
-            </NavLink>:<NavLink
-              className="login-btn bordered-btn"
-              to="/login"
-              onClick={() => setIsNavShowing((prev) => !prev)}
-            >
-              log in
-            </NavLink>
-            }
-
+            {/* Authenticated Routes */}
+            {auth && (
+              <NavLink
+                to="/profile"
+                className={({ isActive }) => (isActive ? "active-nav" : "")}
+                onClick={() => setIsNavShowing((prev) => !prev)}
+              >
+                My Profile
+              </NavLink>
+            )}
+          </li>
+          <li>
+            {/* Authenticated Routes */}
+            {auth && (
+              <NavLink
+                className="login-btn bordered-btn"
+                onClick={(() => setIsNavShowing((prev) => !prev), LogOut)}
+                to={"/"}
+              >
+                log out
+              </NavLink>
+            )}
+            {/* unAuthenticated Routes */}
+            {!auth && (
+              <NavLink
+                className="login-btn bordered-btn"
+                to="/login"
+                onClick={() => setIsNavShowing((prev) => !prev)}
+              >
+                log in
+              </NavLink>
+            )}
           </li>
         </ul>
         <button
@@ -91,6 +105,6 @@ const NavBar = () => {
       </div>
     </nav>
   );
-}
+};
 
-export default NavBar
+export default NavBar;

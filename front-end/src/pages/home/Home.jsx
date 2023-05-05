@@ -34,7 +34,7 @@ const Home = () => {
         setCourses({
           ...course,
           loading: false,
-          err: "Error can't load Courses",
+           err: "Error can't load Courses",
         });
       });
   }, [setCourses]);
@@ -54,6 +54,7 @@ const Home = () => {
           return (
             <CourseCard
               key={course.id}
+              id={course.id}
               title={course.name}
               code={course.code}
               courseImage={course.image_url}
@@ -82,6 +83,7 @@ const Home = () => {
           return (
             <CourseCard
               key={course.id}
+              id={course.id}
               title={course.name}
               code={course.code}
               courseImage={course.image_url}
@@ -105,11 +107,11 @@ const Home = () => {
         </div>
       )}
 
+      <MainHeader />
+      <Features className={"card-Feature_home"} />
       {/* displayCourses */}
       {course.loading === false && course.err === null && (
         <>
-          <MainHeader />
-          <Features className={"card-Feature_home"} />
           {displayTrendCourses()}
           <Statistics />
           {displayNewCourses()}
@@ -118,7 +120,7 @@ const Home = () => {
 
       {/* errors handling */}
       {course.loading === false && course.err != null && (
-        <div className="err-alert">
+        <div className="alert-container">
           <Alert variant="danger" className="alret">
             {course.err}
           </Alert>

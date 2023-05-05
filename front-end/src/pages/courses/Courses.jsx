@@ -46,9 +46,9 @@ const Courses = () => {
       });
   }, [course.reload]);
 
-const handleButtonClick=()=>{
-  window.location.reload();
-}
+  const handleButtonClick = () => {
+    window.location.reload();
+  };
   const displayCourses = () => {
     return (
       <>
@@ -62,6 +62,7 @@ const handleButtonClick=()=>{
             return (
               <CourseCard
                 key={course.id}
+                id={course.id}
                 title={course.name}
                 code={course.code}
                 courseImage={course.image_url}
@@ -73,7 +74,9 @@ const handleButtonClick=()=>{
           })}
         </CoursesSection_V>
         <div className="allCourses-btn">
-          <button  className="btn all-courses" onClick={handleButtonClick}>All Courses</button>
+          <button className="btn all-courses" onClick={handleButtonClick}>
+            All Courses
+          </button>
         </div>
       </>
     );
@@ -88,6 +91,30 @@ const handleButtonClick=()=>{
   };
   return (
     <>
+      <PageHeader header={"Our Courses"}>
+        <ul className="navigate-links">
+          <li>
+            <Link to={"/"}>Home</Link>
+          </li>
+          <li>/</li>
+          <li>Courses</li>
+        </ul>
+      </PageHeader>
+      {/* filter */}
+      <Form className="filter-search " onSubmit={searchCourses}>
+        <Form.Group className="mb-3 " />
+        <Form.Control
+          type="text"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          required
+          placeholder="Search Course..."
+        />
+        <button className="btn search-btn ">
+          <ImSearch />
+        </button>
+      </Form>
+
       {/* Loader */}
       {course.loading === true && (
         <div className="pageSpinner">
@@ -98,43 +125,33 @@ const handleButtonClick=()=>{
       )}
 
       {/* displayCourses */}
-      {course.loading === false && course.err === null && (
-        <>
-          <PageHeader header={"Our Courses"}>
-            <ul className="navigate-links">
-              <li>
-                <Link to={"/"}>Home</Link>
-              </li>
-              <li>/</li>
-              <li>Courses</li>
-            </ul>
-          </PageHeader>
-          {/* filter */}
-          <Form className="filter-search " onSubmit={searchCourses}>
-            <Form.Group className="mb-3 " />
-            <Form.Control
-              type="text"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              required
-              placeholder="Search Course..."
-            />
-            <button className="btn search-btn ">
-              <ImSearch />
-            </button>
-          </Form>
-          {displayCourses()}
-        </>
-      )}
+      {course.loading === false &&
+        course.err === null &&
+        course.results.length != 0 && <>{displayCourses()}</>}
 
       {/* errors handling */}
       {course.loading === false && course.err != null && (
-        <div className="err-alert">
+        <div className="alert-container container">
           <Alert variant="danger" className="alret">
             {course.err}
           </Alert>
         </div>
       )}
+      
+      {course.loading === false &&
+        course.err == null &&
+        course.results.length === 0 && (
+          <div className="alert-container container">
+            <Alert variant="success" className="alret">
+              There is no Course in this name "{search}"
+            </Alert>
+            <div className="allCourses-btn">
+              <button className="btn all-courses" onClick={handleButtonClick}>
+                All Courses
+              </button>
+            </div>
+          </div>
+        )}
     </>
   );
 };

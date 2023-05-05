@@ -2,6 +2,7 @@ import {  createBrowserRouter, Navigate} from "react-router-dom";
 import Home from "./pages/home/Home";
 import Login from "./pages/login/Login";
 import Courses from "./pages/courses/Courses";
+import CouresDetails from "./pages/couresDetails/CouresDetails"
 import About from "./pages/about/About";
 import NotFound from "./pages/notFound/NotFound";
 import ContactUs from "./pages/contactUs/ContactUs";
@@ -30,6 +31,10 @@ export const router = createBrowserRouter([
       {
         path: "/courses",
         element: <Courses />,
+      },
+      {
+        path: "/courses/:id/:code",
+        element: <CouresDetails />,
       },
       {
         path: "/profile",
