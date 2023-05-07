@@ -5,12 +5,83 @@ const admin = require("../middleware/admin");
 const { body, validationResult } = require("express-validator");
 const util = require("util");
 const fs = require("fs");
+const upload = require("../middleware/uploadImages");
+
+router.put(
+  "/update/:id",// params
+   upload.single("image"),
+    body("name")
+    .isString()
+    .withMessage("Please enter a valid instarctor name"),
+    body("email").isEmail().withMessage("please enter a valid email!"),
+    body("phone"),
+     async (req, res, ) => {
+      try{
+          const query = util.promisify(conn.query).bind(conn);
+          const errors = validationResult(req);
+          if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+          }
+      // check if instractor Exisit
+      const student = await query ("select * from users where id =?", [
+          req.params.id
+      ]);
+      if(!student[0] || student[0].type !== "student"){
+        res.status(400).json({msg: "Student not found"});
+      }
+  
+      const studentObj = {
+          name: req.body.name,
+          email: req.body.email,
+          phone: req.body.phone,
+      };
+  
+      if(req.file){
+        studentObj.image_url = req.file.filename;
+          fs.unlinkSync("./upload/" + student[0].image_url);
+      }
+  
+      await query ("update users set? where id =?",[studentObj, student[0].id])
+          res.send({
+              msg:"Student updated",
+          });
+  
+  
+  
+  } catch(err){
+  
+  }
+  });
+
+router.delete("/delete/:id",// params
+  async (req, res, ) => {
+   try{
+   // check if course Exisit
+   const query = util.promisify(conn.query).bind(conn);// transfer query mysql to --> promise to use (await,async)
+   const student = await query ("select * from users where id =?",[req.params.id])
+
+   if(!student[0] || student[0].type !== "student"){
+       return  res.status(400).json({errors: ["Student not found"]});
+   }
+
+
+   fs.unlinkSync("./upload/" + student[0].image_url);
+   await query ("delete from users  where id =?",[student[0].id]);
+
+   res.status(200).json({
+       msg:"Student Delete Success",
+   });
+
+
+} catch(err){
+// res.status(500).json(err);
+}
+
+});
 
 
 router.post(
-    "/registerCourses",
-    body("course_id").isNumeric().withMessage("please enter a valid course id"),
-    body("student_id").isNumeric().withMessage("please enter a valid student id"),
+    "/registerCourses/:student_id/:course_id",
     async (req, res) => {
       try{
       const query = util.promisify(conn.query).bind(conn);
@@ -18,25 +89,28 @@ router.post(
           if (!errors.isEmpty()) {
               return res.status(400).json({errors: errors.array()});
           }
-      const course = await query ("select * from courses where id =?",[req.body.course_id])
+      const course = await query ("select * from courses where id =?",[req.params.course_id])
       if(!course[0]){
           return res.status(400).json({errors: ["Course not found"]});
       }
-      const student = await query ("SELECT * FROM users WHERE id =?",[req.body.student_id])
-      if(!student[0]){
+      const student = await query ("SELECT * FROM users WHERE id =?",[req.params.student_id])
+      if(!student[0] || student[0].type !== "student"){
           return res.status(400).json({errors: ["Student Not Found"]});
       }
-      else if(student[0].type != "student"){
-        return res.status(400).json({errors: ["User is not Student"]});
+
+      const students = await query ("SELECT * FROM users_courses where student_id =? and course_id =?",[student[0].id, course[0].id])
+      if(students.length > 0) {
+        res.status(400).json("student already registered")
+      }else{
+        const registerObj = {
+          student_id: student[0].id,
+          course_id: course[0].id,
+        }
+        await query("insert into users_courses set?", registerObj)
+        res.status(200).json({
+          msg: "Course registered successfully"
+        })
       }
-      const registerObj = {
-        student_id: student[0].id,
-        course_id: course[0].id,
-      }
-      await query("insert into users_courses set?", registerObj)
-      res.status(200).json({
-        msg: "Course registered successfully"
-      })
     }catch(err){
       res.status(500).json(err)
     }
@@ -44,7 +118,7 @@ router.post(
   )
 
 
-router.get("/:id", async (req, res) => {
+router.get("/showGrades/:id", async (req, res) => {
   try{
   const stud_id = req.params.id;  
   let courses=[];
@@ -55,10 +129,10 @@ router.get("/:id", async (req, res) => {
         return res.status(400).json({errors: ["Student not found"]});
     }
     for(let i = 0; i < student.length; i++){
-        courses[i] = await query("SELECT DISTINCT name, grades from courses, users_courses where id =? and student_id  = ?", [student[i].course_id, stud_id])
-      //   courses.map(course => {
-      //     course[0].image_url = "http://" + req.hostname + ":4002/" + course[0].image_url;
-      // })
+        courses[i] = await query("SELECT DISTINCT name,  image_url, code, durations, grades from courses, users_courses where id =? and student_id  = ?", [student[i].course_id, stud_id])
+        courses.map(course => {
+          course[0].image_url = "http://" + req.hostname + ":4002/" + course[0].image_url;
+      })
       }
 
     res.status(200).json(courses)
@@ -81,5 +155,8 @@ router.get("", async (req, res, ) => {
       students,
   );
 });
+
+
+
 
   module.exports = router;
