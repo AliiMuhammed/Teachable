@@ -46,13 +46,13 @@ const fs = require("fs");
 // }
 // });
 
-// UPDATE Course
+// UPDATE instarctor    
 router.put(
 "/:id",// params
  upload.single("image"),
   body("name")
   .isString()
-  .withMessage("Please enter a valid course name"),
+  .withMessage("Please enter a valid instarctor name"),
   body("email").isEmail().withMessage("please enter a valid email!"),
   body("phone"),
    async (req, res, ) => {
@@ -89,8 +89,7 @@ router.put(
 
 
 } catch(err){
-    console.log(err);
-         res.status(500).json(err);
+
 }
 });
 

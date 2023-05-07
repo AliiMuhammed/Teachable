@@ -183,7 +183,7 @@ border-bottom-right-radius: 0;
     border-color: var(--mainFontColor);
 }
 
-.bordered-btn{
+.login-btn.bordered-btn{
         color: var(--mainFontColor);
         width: fit-content;
         margin: 0 auto;

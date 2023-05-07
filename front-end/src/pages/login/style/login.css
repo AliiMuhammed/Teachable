@@ -71,8 +71,7 @@ form a:hover{
 }
 .form-remember{
     margin-top: 1rem;
-    display: flex;
-    align-items: center;
+
 }
 .form-remember label{
     margin-left: 5px;
