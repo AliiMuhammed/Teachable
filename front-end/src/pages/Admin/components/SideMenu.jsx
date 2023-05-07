@@ -9,7 +9,7 @@ import { ImBooks } from "react-icons/im";
 import { IoIosPeople } from "react-icons/io";
 import { MdSchool } from "react-icons/md";
 import { RiDashboardFill } from "react-icons/ri";
-
+import axios from "axios";
 function SideMenu({ name, ...props }) {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
@@ -18,12 +18,15 @@ function SideMenu({ name, ...props }) {
   const navigate = useNavigate();
   const auth = getAuthUser();
   const LogOut = () => {
+    axios
+      .post("http://localhost:4002/auth/logout/" + auth.id)
+      .then((resp) => {})
+      .catch((err) => {});
     removeAuthUser();
     navigate("/");
   };
 
   const admin = getAuthUser();
-  console.log(admin);
 
   return (
     <>

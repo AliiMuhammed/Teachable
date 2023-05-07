@@ -5,6 +5,7 @@ import BarChart from "./Charts/BarChart";
 import Doughnut from "./Charts/DoughnutChart";
 import LineChart from "./Charts/LineChart";
 import SectionHeader from "../../../shared/SectionHeader";
+import Statistics from "../../../shared/Statistics";
 
 const MainAdmin = () => {
   const admin = getAuthUser();
@@ -18,6 +19,7 @@ const MainAdmin = () => {
           className={"AdminWelcome-header"}
         />
       </section>
+      <Statistics/>
       <section className="charts-sectoin">
         <div className="container charts-container">
           <div className="lineCharts">

@@ -1,5 +1,6 @@
 .sideMenu-icon{
     width: 2.5rem;
+    color: var(--mainColor);
         /* font-size: 2rem; */
         display: flex;
         align-items: center;
@@ -8,7 +9,7 @@
         transition: var(--transition);
 }
 .sideMenu-icon:hover{
-    color: var(--mainColor);
+    color: var(--mainFontColor);
 }
 
 .sideMenu-header.offcanvas-title.h5{

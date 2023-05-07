@@ -4,7 +4,7 @@
 
 }
 .sectionHeader.AdminWelcome-header{
-    margin: 0;
+    margin-top: 4rem;
 }
 .container.welcome-container{
     padding: 3rem 0;
@@ -41,7 +41,9 @@ gap: 1rem;
 
 }
 
-
+.btn.admin-btn{
+    margin-top: 2rem;
+}
 
 
 /*=============================Responsive===================================*/

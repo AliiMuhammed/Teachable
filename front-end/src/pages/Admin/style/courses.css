@@ -6,5 +6,35 @@
     padding: 4rem 0;
 }
 .sectionHeader.adminCourse-header{
-    margin-top: 0;
+    margin-top: 4rem;
+    margin-bottom: 3rem;
+}
+.courseTable{
+    overflow: auto;
+}
+/*=====================Add course==============================*/
+
+.addCourse-section{
+    margin-top: 6rem;
+        padding: 3rem 0;
+}
+.addCourse-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.addCourse-container h1{
+    margin: 2rem 0;
+}
+
+.AddCourse-form{
+    width: 100%;
+}
+.input-addCourse{
+    width: 100%;
+}
+.AlertAddCoures{
+    width: 100%;
 }
