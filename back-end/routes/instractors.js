@@ -123,7 +123,7 @@ router.get('/view/:id', async(req, res) => {
     const query = util.promisify(conn.query).bind(conn);// transfer query mysql to --> promise to use (await,async)
     const instractor = await query ("select course_id from instractors_courses where instractor_id =?",[req.params.id])
 
-    if(!instractor[0] || instractor[0].type !== "instractor"){
+    if(!instractor[0]){
         return res.status(400).json({errors: ["Instractor not found"]});
     }
 
