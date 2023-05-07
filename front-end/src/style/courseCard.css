@@ -86,4 +86,8 @@
         text-align: center;
 
     }
+        .v-card.course-card{
+            width: 80%;
+            margin: 0 auto;
+        }
 }

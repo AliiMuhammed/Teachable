@@ -59,19 +59,6 @@ router.post("/login", body("email"), body("password"), async (req, res) => {
   } catch (err) {}
 });
 
-router.get("/showData", async (req, res) => {
-  // const id = res.locals.user[0].id;
-  try {
-    const query = util.promisify(conn.query).bind(conn);
-    const person = await query("select * from users where id = ?", [
-      req.locals.user.id,
-    ]);
-    res.status(200).json(person[0]);
-  } catch (err) {
-    console.log(err);
-    res.status(404).json(err);
-  }
-});
 
 router.post(
   "/register",

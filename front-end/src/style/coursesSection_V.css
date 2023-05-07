@@ -14,3 +14,9 @@
         width: 80%;
     }
 }
+@media (min-width: 768px)and (max-width:992px) {
+.container.coursesSection-V-container {
+        grid-template-columns: 1fr 1fr;
+       gap: 2rem;
+    }
+}

@@ -1,5 +1,7 @@
 /*=====================Start trend Courses Section =================*/
-
+.CoursesSection-H{
+    margin-bottom: 6rem;
+}
 .courses-container {
     display: flex;
     flex-direction: column;

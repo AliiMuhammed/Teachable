@@ -1,6 +1,6 @@
 import { Link, NavLink } from "react-router-dom";
 import { useState } from "react";
-
+import axios from "axios";
 import React from "react";
 import "../style/NavBar.css";
 import Logo from "../assests/images/h-logo.png";
@@ -13,7 +13,12 @@ const NavBar = () => {
   const [isNavShowing, setIsNavShowing] = useState(false);
   const navigate = useNavigate();
   const auth = getAuthUser();
+
   const LogOut = () => {
+    axios
+      .post("http://localhost:4002/auth/logout/" + auth.id,)
+      .then((resp) => {})
+      .catch((err) => {});
     removeAuthUser();
     navigate("/");
   };

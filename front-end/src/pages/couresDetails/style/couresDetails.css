@@ -67,10 +67,22 @@ transition: var(--transition);
 .course-metaData h5 {
     justify-content: center;
 }
+.course-metaData h1{
+    font-size: 2rem;
+}
 }
 
 @media (min-width:768px) and (max-width:992px) {
 .course-details_container {
         flex-direction: column;
+        text-align: center;
     }
+        .course-metaData h5 {
+            justify-content: center;
+        }
+        .course-img {
+            margin: 0;
+            margin-bottom: 2rem;
+            width: 70%;
+        }
 }
