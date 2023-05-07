@@ -1,0 +1,71 @@
+.welcome-Section{
+    margin-top: 6rem;
+    padding: 3rem 0;
+
+}
+.sectionHeader.AdminWelcome-header{
+    margin: 0;
+}
+.container.welcome-container{
+    padding: 3rem 0;
+    font-size: 3rem;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+}
+.container.welcome-container span{
+    font-size: 1.5rem;
+    color: var(--mainColor);
+}
+.container.charts-container .f-row{
+    margin-bottom: 5rem;
+}
+.container.charts-container .s-row{
+display: grid;
+grid-template-columns: repeat(2,1fr);
+gap: 1rem;
+}
+
+.barCharts , .doughnutCharts {
+    margin-top: 5rem;
+    margin-inline: auto;
+
+}
+.doughnutCharts{
+    width: 50%;
+}
+.barChart, .lineChart , .doughnutChart{
+   width:100% !important;
+   height: 100% !important;
+
+}
+
+
+
+
+/*=============================Responsive===================================*/
+
+@media (max-width:767px) {
+.container.charts-container .s-row{
+   grid-template-columns: 1fr;
+}
+.container.welcome-container{
+    font-size: 2rem;
+}
+.doughnutCharts {
+    width: 100%;
+}
+
+
+}
+
+@media (min-width:768px) and (max-width:991px) {
+.container.charts-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (min-width:992px) {
+
+}

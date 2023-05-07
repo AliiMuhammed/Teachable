@@ -66,7 +66,6 @@ const NavBar = () => {
             {auth && (
               <NavLink
                 to="/profile"
-                className={({ isActive }) => (isActive ? "active-nav" : "")}
                 onClick={() => setIsNavShowing((prev) => !prev)}
               >
                 My Profile
@@ -74,7 +73,6 @@ const NavBar = () => {
             )}
           </li>
           <li>
-            {/* Authenticated Routes */}
             {auth && (
               <NavLink
                 className="login-btn bordered-btn"

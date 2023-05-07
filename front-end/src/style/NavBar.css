@@ -152,14 +152,14 @@ nav{
             transform:rotateX(0);
         }
     }
-    .login-btn{
+        .login-btn.bordered-btn{
         color: #fff;
-        border-color: transparent !important;
+        border-color: transparent;
         
         }
-    .login-btn:hover{
+        .login-btn:hover{
         color: var(--mainFontColor);
-        background-color: transparent !important;
+        background-color: transparent ;
     }
 }
 

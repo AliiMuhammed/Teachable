@@ -1,0 +1,74 @@
+.sideMenu-icon{
+    width: 2.5rem;
+        /* font-size: 2rem; */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3rem;
+        transition: var(--transition);
+}
+.sideMenu-icon:hover{
+    color: var(--mainColor);
+}
+
+.sideMenu-header.offcanvas-title.h5{
+    font-size: 2rem;
+}
+.links-sideMenu{
+    font-size: 1.5rem;
+    display: flex;
+        align-items: flex-start;
+        flex-direction: column;
+        margin-bottom: 3rem;
+}
+.links-sideMenu a{
+        display: flex;
+            align-items: center;
+            padding: 1rem;
+            transition: var(--transition);
+            margin-top: 1rem;
+            width: 100%;
+}
+.links-sideMenu a:hover{
+color: var(--mainColor);
+
+}
+.links-sideMenu .icon{
+    margin-right: 1rem;
+}
+.login-btn.bordered-btn.admin-LogoutBtn {
+    display: flex;
+    margin: 0 auto;
+
+}
+
+/*=============================Responsive===================================*/
+
+@media (max-width:767px) {
+    .links-sideMenu{
+        margin-bottom: 2rem;
+    }
+    .admin-data.sideMenu-adminData{
+        display: flex;
+        flex-direction: column;
+        padding: 3rem;
+        margin: 0 auto;
+        font-size: 1.5rem;
+    }
+    .admin-data.sideMenu-adminData .admin-img{
+        margin: 0;
+        margin-bottom: 1.5rem;
+        width: 8rem;
+    }
+}
+
+@media (min-width:768px) and (max-width:991px) {
+    .admin-data.sideMenu-adminData{
+        display: none;
+    }
+}
+@media (min-width:992px){
+    .admin-data.sideMenu-adminData {
+            display: none;
+        }
+}

@@ -32,7 +32,7 @@ const LoginForm = () => {
         } else if (resp.data.type === "instractor") {
           navigate("/");
         } else {
-          navigate("/contactUs");
+          navigate("/admin");
         }
       })
       .catch((errors) => {
@@ -46,7 +46,7 @@ const LoginForm = () => {
   return (
     <div className="login-form">
       {login.err.map((error, index) => (
-        <Alert key={index} variant="danger" >
+        <Alert key={index} variant="danger">
           {error.msg}
         </Alert>
       ))}
