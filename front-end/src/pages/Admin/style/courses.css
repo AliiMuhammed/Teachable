@@ -38,3 +38,11 @@
 .AlertAddCoures{
     width: 100%;
 }
+
+.imgCourse-update{
+    width: 30%;
+    margin: 0 auto;
+    border-radius: 10px;
+    margin-bottom: 2rem;
+
+}

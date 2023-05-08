@@ -1,8 +1,8 @@
-import React from 'react'
+import { Outlet } from 'react-router'
 
 const AdminInstractors = () => {
   return (
-    <div>AdminInstractors</div>
+    <Outlet/>
   )
 }
 

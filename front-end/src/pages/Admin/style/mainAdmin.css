@@ -5,6 +5,7 @@
 }
 .sectionHeader.AdminWelcome-header{
     margin-top: 4rem;
+    margin-bottom: 0;
 }
 .container.welcome-container{
     padding: 3rem 0;
@@ -18,23 +19,17 @@
     font-size: 1.5rem;
     color: var(--mainColor);
 }
-.container.charts-container .f-row{
-    margin-bottom: 5rem;
-}
-.container.charts-container .s-row{
-display: grid;
-grid-template-columns: repeat(2,1fr);
-gap: 1rem;
+
+.container.charts-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.barCharts , .doughnutCharts {
-    margin-top: 5rem;
+.barCharts , .doughnutCharts,.lineCharts {
     margin-inline: auto;
+}
 
-}
-.doughnutCharts{
-    width: 50%;
-}
 .barChart, .lineChart , .doughnutChart{
    width:100% !important;
    height: 100% !important;
@@ -49,13 +44,16 @@ gap: 1rem;
 /*=============================Responsive===================================*/
 
 @media (max-width:767px) {
-.container.charts-container .s-row{
-   grid-template-columns: 1fr;
+.container.charts-container{
+    flex-direction: column;
 }
 .container.welcome-container{
     font-size: 2rem;
 }
-.doughnutCharts {
+.barCharts,
+.doughnutCharts,
+.lineCharts {
+    margin: 2rem 0;
     width: 100%;
 }
 
@@ -64,8 +62,14 @@ gap: 1rem;
 
 @media (min-width:768px) and (max-width:991px) {
 .container.charts-container {
-        grid-template-columns: 1fr;
+       flex-direction: column;
     }
+        .barCharts,
+        .doughnutCharts,
+        .lineCharts {
+            margin: 2rem 0;
+            width: 100%;
+        }
 }
 
 @media (min-width:992px) {

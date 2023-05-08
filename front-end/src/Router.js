@@ -20,6 +20,9 @@ import AdminStudents from "./pages/Admin/components/Students/AdminStudents";
 import AddCourses from "./pages/Admin/components/Courses/AddCourses";
 import UpdateCoures from "./pages/Admin/components/Courses/UpdateCoures";
 import CoursesTable from "./pages/Admin/components/Courses/CoursesTable";
+import InstractorTable from "./pages/Admin/components/Instractors/InstractorTable";
+import UpdateInstractor from "./pages/Admin/components/Instractors/UpdateInstractor";
+import AddUser from "./pages/Admin/components/AddUser";
 
 export const router = createBrowserRouter([
   {
@@ -98,7 +101,7 @@ export const router = createBrowserRouter([
                 element: <CoursesTable />,
               },
               {
-                path: "/admin/courses/update/:id",
+                path: "/admin/courses/update/:id/:code",
                 element: <UpdateCoures />,
               },
               {
@@ -110,6 +113,20 @@ export const router = createBrowserRouter([
           {
             path: "/admin/instractors",
             element: <AdminInstractors />,
+            children: [
+              {
+                path: "",
+                element: <InstractorTable />,
+              },
+              {
+                path: "/admin/instractors/update/:id",
+                element:<UpdateInstractor/>
+              },
+              {
+                path: "/admin/instractors/add",
+                element:<AddUser/>
+              },
+            ],
           },
           {
             path: "/admin/students",
