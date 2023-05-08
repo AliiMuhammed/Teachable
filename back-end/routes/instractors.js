@@ -118,25 +118,40 @@ catch(err){
 });
 
 router.get('/view/:id', async(req, res) => {
-    try{
+    try {
         let students = [];
-    const query = util.promisify(conn.query).bind(conn);// transfer query mysql to --> promise to use (await,async)
-    const instractor = await query ("select course_id from instractors_courses where instractor_id =?",[req.params.id])
+        const query = util.promisify(conn.query).bind(conn);
+        const instructor = await query("SELECT course_id FROM instractors_courses WHERE instractor_id =?", [req.params.id])
 
-    if(!instractor[0]){
-        return res.status(400).json({errors: ["Instractor not found"]});
+        if (!instructor[0]) {
+            return res.status(400).json({errors: ["Instructor not found"]});
+        }
+
+        for (let i = 0; i < instructor.length; i++) {
+            const result = await query("SELECT name, student_id FROM courses, users_courses WHERE id = ? AND course_id = ?", [instructor[i].course_id, instructor[i].course_id]);
+            students.push(result);
+        }
+
+        // Flatten the array of arrays of objects
+        students = students.flat();
+
+        // Remove duplicate course names
+        students = students.reduce((uniqueStudents, student) => {
+            const courseIndex = uniqueStudents.findIndex(s => s.name === student.name);
+            if (courseIndex === -1) {
+                uniqueStudents.push(student);
+            } else {
+                // Merge the student IDs for the duplicate course name
+                uniqueStudents[courseIndex].student_id += ", " + student.student_id;
+            }
+            return uniqueStudents;
+        }, []);
+
+        res.status(200).json(students);
+    } catch (err) {
+        res.status(500).json(err);
     }
-
-    for(let i = 0; i < instractor.length; i++){
-        students[i] = await query("SELECT name, student_id from courses, users_courses where id =? and course_id  = ?", [instractor[i].course_id, instractor[i].course_id])
-    }
-
-    res.status(200).json(students)
-}catch(err){
-          res.status(500).json(err);
-}
-   
-  });
+});
 
   router.post(
     "/setGrades",
