@@ -7,7 +7,7 @@ import { useState, useRef, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 
-const UpdateInstractor = () => {
+const UpdateInstructor = () => {
   let { id } = useParams();
   const image = useRef(null);
   const admin = getAuthUser();
@@ -22,7 +22,7 @@ const UpdateInstractor = () => {
     reload: false,
   });
 
-  const UpdateInstractor = (e) => {
+  const UpdateInstructor = (e) => {
     e.preventDefault();
     setUser({ ...user, loading: true });
     const formData = new FormData();
@@ -42,7 +42,7 @@ const UpdateInstractor = () => {
       .then((resp) => {
         setUser({
           ...user,
-          success: "Instractor Updated Successfully !",
+          success: "Instructor Updated Successfully !",
           loading: false,
         });
       })
@@ -83,7 +83,7 @@ const UpdateInstractor = () => {
     <>
       <section className="addUser-section">
         <div className="container addUser-container">
-          <h1>Update Instractor</h1>
+          <h1>Update Instructor</h1>
 
           {/* add action handeling */}
           {user.err == null && user.success != null && (
@@ -101,7 +101,7 @@ const UpdateInstractor = () => {
             </>
           )}
 
-          <Form className="AddUser-form " onSubmit={UpdateInstractor}>
+          <Form className="AddUser-form " onSubmit={UpdateInstructor}>
             <img src={user.image_url} className="imgCourse-update" alt="" />
             <FloatingLabel label="User Name" className="mb-3 input-addUser">
               <Form.Control
@@ -137,7 +137,7 @@ const UpdateInstractor = () => {
                 required
               />
             </FloatingLabel>
-            <button className="btn sm-btn admin-btn">Update Instractor</button>
+            <button className="btn sm-btn admin-btn">Update Instructor</button>
           </Form>
         </div>
       </section>
@@ -145,4 +145,4 @@ const UpdateInstractor = () => {
   );
 };
 
-export default UpdateInstractor;
+export default UpdateInstructor;

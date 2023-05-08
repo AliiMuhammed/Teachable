@@ -61,11 +61,11 @@ function SideMenu({ name, ...props }) {
               </div>
               Courses
             </Link>
-            <Link to={"/admin/instractors"} onClick={handleClose}>
+            <Link to={"/admin/instructors"} onClick={handleClose}>
               <div className="icon">
                 <IoIosPeople />
               </div>
-              Instractors
+              Instructors
             </Link>
             <Link to={"/admin/students"} onClick={handleClose}>
               <div className="icon">

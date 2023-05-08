@@ -6,7 +6,7 @@ import { useState, useRef, useEffect } from "react";
 import axios from "axios";
 const AssignInstarctorToCourse = () => {
   const admin = getAuthUser();
-  const [instractor, setInstractor] = useState({
+  const [instructor, setInstructor] = useState({
     id: null,
     loading: false,
     results: [],
@@ -23,22 +23,22 @@ const AssignInstarctorToCourse = () => {
   });
 
   useEffect(() => {
-    setInstractor({ ...instractor, loading: true });
+    setInstructor({ ...instructor, loading: true });
     axios
       .get("http://localhost:4002/instractors")
       .then((resp) => {
-        setInstractor({
-          ...instractor,
+        setInstructor({
+          ...instructor,
           results: resp.data,
           loading: false,
           err: [],
         });
       })
       .catch((err) => {
-        setInstractor({
-          ...instractor,
+        setInstructor({
+          ...instructor,
           loading: false,
-          err: "Error can't load instractors",
+          err: "Error can't load instructors",
         });
       });
   }, []);
@@ -74,10 +74,10 @@ const AssignInstarctorToCourse = () => {
   const Assgin = (e) => {
     e.preventDefault();
     setCourse({ ...course, loading: true });
-    setInstractor({ ...instractor, loading: true });
+    setInstructor({ ...instructor, loading: true });
     const formData = new FormData();
     formData.append("course_id", course.id);
-    formData.append("instractor_id", instractor.id);
+    formData.append("instructor_id", instructor.id);
     axios
       .post("http://localhost:4002/courses/assign", formData, {
         headers: {
@@ -91,10 +91,10 @@ const AssignInstarctorToCourse = () => {
           id: "",
           loading: false,
           err: [],
-          success: "Instractor Assigned Successfully",
+          success: "Instructor Assigned Successfully",
         });
-        setInstractor({
-          ...instractor,
+        setInstructor({
+          ...instructor,
           id: "",
           loading: false,
           err: [],
@@ -107,8 +107,8 @@ const AssignInstarctorToCourse = () => {
           success: [],
           err: err.response.data.errors,
         });
-        setInstractor({
-          ...instractor,
+        setInstructor({
+          ...instructor,
           loading: false,
           success: [],
           err: err.response.data.errors,
@@ -122,21 +122,21 @@ const AssignInstarctorToCourse = () => {
     <>
       <section className="assign-section">
         <div className="container assgin-container">
-          <h1>Assgin instractors to courses</h1>
+          <h1>Assgin instructors to courses</h1>
 
           {/* add action handeling */}
           {course.err.length === 0 &&
-            instractor.err.length === 0 &&
+            instructor.err.length === 0 &&
             course.success.length !== 0 && (
               <Alert variant="success" className="AlertAssign">
                 {course.success}
               </Alert>
             )}
           {course.err.length !== 0 &&
-            instractor.err.length !== 0 &&
+            instructor.err.length !== 0 &&
             course.success.length === 0 && (
               <>
-                {instractor.err.map((error, index) => (
+                {instructor.err.map((error, index) => (
                   <Alert key={index} variant="danger" className="AlertAssign">
                     {error.msg}
                   </Alert>
@@ -145,19 +145,19 @@ const AssignInstarctorToCourse = () => {
             )}
 
           <Form className="assign-form" onSubmit={Assgin}>
-            <Form.Label className="mb-2">Instractors</Form.Label>
+            <Form.Label className="mb-2">Instructors</Form.Label>
 
             <Form.Select
               className="mb-3"
               onChange={(e) =>
-                setInstractor({ ...instractor, id: parseInt(e.target.value) })
+                setInstructor({ ...instructor, id: parseInt(e.target.value) })
               }
             >
-              <option defaultChecked>Select Instractor</option>
-              {instractor.results.map((Instractor) => {
+              <option defaultChecked>Select Instructor</option>
+              {instructor.results.map((Instructor) => {
                 return (
-                  <option key={Instractor.id} value={Instractor.id}>
-                    {Instractor.name}
+                  <option key={Instructor.id} value={Instructor.id}>
+                    {Instructor.name}
                   </option>
                 );
               })}

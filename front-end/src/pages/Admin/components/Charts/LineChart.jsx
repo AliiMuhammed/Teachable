@@ -29,8 +29,8 @@ const LineChart = () => {
       });
   }, []);
 
-  // instractors Api's
-  const [instractor, setInstractor] = useState({
+  // instructors Api's
+  const [instructor, setInstructor] = useState({
     loading: true,
     results: [],
     err: null,
@@ -38,19 +38,19 @@ const LineChart = () => {
   });
 
   useEffect(() => {
-    setInstractor({ ...instractor, loading: true });
+    setInstructor({ ...instructor, loading: true });
     axios
       .get("http://localhost:4002/instractors")
       .then((resp) => {
-        setInstractor({
-          ...instractor,
+        setInstructor({
+          ...instructor,
           results: resp.data,
           loading: false,
           err: null,
         });
       })
       .catch((err) => {
-        setInstractor({ ...instractor, loading: false, err: "error" });
+        setInstructor({ ...instructor, loading: false, err: "error" });
       });
   }, []);
 
@@ -80,15 +80,15 @@ const LineChart = () => {
   }, []);
 
   const studentNumber = student.results.length;
-  const instractorNumber = instractor.results.length;
+  const instructorNumber = instructor.results.length;
   const coursesNumber = course.results.length;
 
   const data = {
-    labels: ["Instractor", "Studens", "Courses"],
+    labels: ["Instructor", "Studens", "Courses"],
     datasets: [
       {
         label: "Count",
-        data: [instractorNumber, studentNumber, coursesNumber],
+        data: [instructorNumber, studentNumber, coursesNumber],
         fill: true,
         borderColor: "#20ad96",
         tension: 0.5,

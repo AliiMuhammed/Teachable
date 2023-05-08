@@ -10,7 +10,7 @@ const MyCourses = () => {
         <CourseCard
           key={course.id}
           title={course.title}
-          instractor={course.instractor}
+          instructor={course.instructor}
           courseImage={course.Image}
           durations={course.durations}
           className={"myCourses-card"}

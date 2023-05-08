@@ -34,8 +34,8 @@ const Statistics = () => {
       });
   }, []);
 
-  // instractors Api's
-  const [instractor, setInstractor] = useState({
+  // instructors Api's
+  const [instructor, setInstructor] = useState({
     loading: true,
     results: [],
     err: null,
@@ -43,19 +43,19 @@ const Statistics = () => {
   });
 
   useEffect(() => {
-    setInstractor({ ...instractor, loading: true });
+    setInstructor({ ...instructor, loading: true });
     axios
       .get("http://localhost:4002/instractors")
       .then((resp) => {
-        setInstractor({
-          ...instractor,
+        setInstructor({
+          ...instructor,
           results: resp.data,
           loading: false,
           err: null,
         });
       })
       .catch((err) => {
-        setInstractor({ ...instractor, loading: false, err: "error" });
+        setInstructor({ ...instructor, loading: false, err: "error" });
       });
   }, []);
 
@@ -92,7 +92,7 @@ const Statistics = () => {
   });
 
   const studentNumber = student.results.length;
-  const instractorNumber = instractor.results.length;
+  const instructorNumber = instructor.results.length;
   const coursesNumber = activeCourses.length;
   return (
     <ScrollTrigger
@@ -101,7 +101,7 @@ const Statistics = () => {
     >
       <section className="stats-section">
         <div className="container stats-container">
-          <div className="instractor-stats">
+          <div className="instructor-stats">
             <div className="stats-icon">
               <GiTeacher />
             </div>
@@ -109,13 +109,13 @@ const Statistics = () => {
               {counterOn && (
                 <CountUp
                   start={0}
-                  end={instractorNumber}
+                  end={instructorNumber}
                   duration={3}
                   delay={0}
                 />
               )}
             </h1>
-            <span className="stats-type">Instractors</span>
+            <span className="stats-type">Instructors</span>
           </div>
           <div className="courses-stats">
             <div className="stats-icon">

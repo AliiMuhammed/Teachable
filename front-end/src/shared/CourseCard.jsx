@@ -23,7 +23,7 @@ const CourseCard = ({
         <p>{description}</p>
         <div className="course-meta">
           <span>
-            Course Code: <span className="course-instractor">{code}</span>
+            Course Code: <span className="course-instructor">{code}</span>
           </span>
           <span className="course-lessons">
             <SlNotebook />
