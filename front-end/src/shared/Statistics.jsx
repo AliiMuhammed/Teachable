@@ -84,9 +84,18 @@ const Statistics = () => {
       });
   }, []);
 
+
+    const activeCourses = [];
+    course.results.map((course) => {
+      if (course.status === 1) {
+        activeCourses.push(course);
+      }
+    });
+
+
   const studentNumber = student.results.length;
   const instractorNumber = instractor.results.length;
-  const coursesNumber = course.results.length;
+  const coursesNumber = activeCourses.length;
   return (
     <ScrollTrigger
       onEnter={() => SetCounterOn(true)}

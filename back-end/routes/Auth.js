@@ -69,7 +69,6 @@ router.post(
     .isLength({ min: 8, max: 12 })
     .withMessage("Password should be between (8,12)."),
   body("phone"),
-  body("status"),
   body("type"),
   async (req, res) => {
     try {
@@ -96,7 +95,6 @@ router.post(
           email: req.body.email,
           password: await bcrypt.hash(req.body.password, 10),
           phone: req.body.phone,
-          status: req.body.status,
           type: req.body.type,
           image_url: img,
         };

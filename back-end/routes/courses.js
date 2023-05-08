@@ -72,7 +72,7 @@ router.post(
 
 // UPDATE Course
 router.put(
-  "/:id", // params
+  "/:id/:code", // params
   upload.single("image"),
   body("name").isString().withMessage("Please enter a valid course name"),
   body("description")
@@ -198,19 +198,25 @@ router.post(
       const instractor = await query("SELECT * FROM users WHERE id =?", [
         req.body.instractor_id,
       ]);
-      if (!instractor[0]) {
+      if (!instractor[0] || instractor[0].type != "instractor") {
         return res.status(400).json({ errors: ["Instractor Not Found"] });
-      } else if (instractor[0].type != "instractor") {
-        return res.status(400).json({ errors: ["User is not Instractor"] });
       }
       const assignObj = {
         instractor_id: instractor[0].id,
         course_id: course[0].id,
       };
-      await query("insert into instractors_courses set?", assignObj);
-      res.status(200).json({
-        msg: "instractor Assign successfully",
-      });
+      const instarctors = await query(
+        "SELECT * FROM instractors_courses where instractor_id =? and course_id =?",
+        [instractor[0].id, course[0].id]
+      );
+      if (instarctors.length > 0) {
+        res.status(400).json("instarctor already assigned");
+      } else {
+        await query("insert into instractors_courses set?", assignObj);
+        res.status(200).json({
+          msg: "instractor Assign successfully",
+        });
+      }
     } catch (err) {
       console.log(err);
       res.status(500).json(err);

@@ -3,7 +3,7 @@ import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Form from "react-bootstrap/Form";
 import { getAuthUser } from "../../../../helper/Storage";
 import Alert from "react-bootstrap/Alert";
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 import axios from "axios";
 
 const AddCourses = () => {
@@ -52,7 +52,7 @@ const AddCourses = () => {
           addErr: null,
           addSuccess: "Course Added Successfully",
         });
-        image.current.files = null;
+        image.current.value = null;
       })
       .catch((err) => {
         setCourse({

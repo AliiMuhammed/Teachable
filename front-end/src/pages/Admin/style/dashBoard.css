@@ -51,9 +51,40 @@
     justify-content: center;
     height: 100%;
 }
-/* td{
+/*==========================add user==================================*/
+
+.addUser-section {
+    margin-top: 6rem;
+    padding: 3rem 0;
+}
+
+.addUser-container {
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-direction: row;
-} */
+    flex-direction: column;
+}
+
+.addUser-container h1 {
+    margin: 2rem 0;
+}
+
+.AddUser-form {
+    width: 100%;
+}
+
+.input-addUser {
+    width: 100%;
+}
+
+.AlertAddUser {
+    width: 100%;
+}
+
+.imgUser-update {
+    width: 30%;
+    margin: 0 auto;
+    border-radius: 10px;
+    margin-bottom: 2rem;
+
+}

@@ -59,18 +59,20 @@ const Courses = () => {
           sectionDes="We are excited to offer a range of new courses that cater to various interests and skill levels."
         >
           {course.results.map((course) => {
-            return (
-              <CourseCard
-                key={course.id}
-                id={course.id}
-                title={course.name}
-                code={course.code}
-                courseImage={course.image_url}
-                durations={course.durations}
-                description={course.description}
-                className={"v-card"}
-              />
-            );
+            if (course.status === 1) {
+              return (
+                <CourseCard
+                  key={course.id}
+                  id={course.id}
+                  title={course.name}
+                  code={course.code}
+                  courseImage={course.image_url}
+                  durations={course.durations}
+                  description={course.description}
+                  className={"v-card"}
+                />
+              );
+            }
           })}
         </CoursesSection_V>
         <div className="allCourses-btn">
@@ -137,7 +139,7 @@ const Courses = () => {
           </Alert>
         </div>
       )}
-      
+
       {course.loading === false &&
         course.err == null &&
         course.results.length === 0 && (

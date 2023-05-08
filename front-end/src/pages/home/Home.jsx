@@ -34,13 +34,19 @@ const Home = () => {
         setCourses({
           ...course,
           loading: false,
-           err: "Error can't load Courses",
+          err: "Error can't load Courses",
         });
       });
   }, [setCourses]);
 
-  const randomIndex = Math.floor(Math.random() * (course.results.length - 4));
-  const slicedCourses = course.results.slice(randomIndex, randomIndex + 4);
+  const activeCourses = [];
+  course.results.map((course) => {
+    if (course.status === 1) {
+      activeCourses.push(course);
+    }
+  });
+
+
 
   const displayNewCourses = () => {
     return (
@@ -50,19 +56,22 @@ const Home = () => {
         smSectionTitle="NEW COURSES"
         sectionDes="We are excited to offer a range of new courses that cater to various interests and skill levels."
       >
-        {slicedCourses.map((course) => {
-          return (
-            <CourseCard
-              key={course.id}
-              id={course.id}
-              title={course.name}
-              code={course.code}
-              courseImage={course.image_url}
-              durations={course.durations}
-              description={course.description}
-              className={"v-card"}
-            />
-          );
+        {
+        activeCourses.slice(0,4).map((course) => {
+          if (course.status === 1) {
+            return (
+              <CourseCard
+                key={course.id}
+                id={course.id}
+                title={course.name}
+                code={course.code}
+                courseImage={course.image_url}
+                durations={course.durations}
+                description={course.description}
+                className={"v-card"}
+              />
+            );
+          }
         })}
       </CoursesSection_V>
     );
@@ -79,18 +88,23 @@ const Home = () => {
           "A wide range of educational opportunities for individuals seeking to enhance their skills and knowledge."
         }
       >
-        {slicedCourses.map((course) => {
-          return (
-            <CourseCard
-              key={course.id}
-              id={course.id}
-              title={course.name}
-              code={course.code}
-              courseImage={course.image_url}
-              durations={course.durations}
-              description={course.description}
-            />
-          );
+        {activeCourses.slice(0,4).map((course) => {
+          let showCourse = 4;
+          if (course.status === 1 && showCourse >= 0) {
+            showCourse = showCourse - 1;
+            return (
+              <CourseCard
+                key={course.id}
+                id={course.id}
+                title={course.name}
+                code={course.code}
+                courseImage={course.image_url}
+                durations={course.durations}
+                description={course.description}
+                className={"h-card"}
+              />
+            );
+          }
         })}
       </CoursesSection_H>
     );

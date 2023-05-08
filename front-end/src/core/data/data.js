@@ -72,41 +72,40 @@ export const courses = [
 
 
 export const team = [
-    {
-        id:1,
-        name: "Ali Muhammed",
-        dep:"Cs Student",
-        image:require("../../assests/images/about page imgs/team/ali.jpg")
-    },
-    {
-        id:2,
-        name: "Shahdan Hegazy",
-        dep:"Cs Student",
-        image:require("../../assests/images/about page imgs/team/test.jpg")
-    },
-    {
-        id:3,
-        name: "Abdelrahman Hassan",
-        dep:"Cs Student",
-        image:require("../../assests/images/about page imgs/team/abdo.jpg")
-    },
-    {
-        id:4,
-        name: "Dina Ziada",
-        dep:"Cs Student",
-        image:require("../../assests/images/about page imgs/team/test.jpg")
-    },
-    {
-        id:5,
-        name: "Ahmed Ezzat",
-        dep:"Cs Student",
-        image:require("../../assests/images/about page imgs/team/ezzat.jpg")
-    },
-    {
-        id:6,
-        name: "Hannen Muhamed",
-        dep:"Cs Student",
-        image:require("../../assests/images/about page imgs/team/test.jpg")
-   
-    },
-]
+  {
+    id: 1,
+    name: "Ali Muhammed",
+    dep: "Cs Student",
+    image: require("../../assests/images/about page imgs/team/ali.jpg"),
+  },
+  {
+    id: 2,
+    name: "Shahdan Hegazy",
+    dep: "Cs Student",
+    image: require("../../assests/images/about page imgs/team/test.jpg"),
+  },
+  {
+    id: 3,
+    name: "Abdelrahman Hassan",
+    dep: "Cs Student",
+    image: require("../../assests/images/about page imgs/team/abdo.jpg"),
+  },
+  {
+    id: 4,
+    name: "Dina Ziada",
+    dep: "Cs Student",
+    image: require("../../assests/images/about page imgs/team/test.jpg"),
+  },
+  {
+    id: 5,
+    name: "Ahmed Ezzat",
+    dep: "Cs Student",
+    image: require("../../assests/images/about page imgs/team/ezzat.jpg"),
+  },
+  {
+    id: 6,
+    name: "Hannen Muhamed",
+    dep: "Cs Student",
+    image: require("../../assests/images/about page imgs/team/haneen.jpg"),
+  },
+];
