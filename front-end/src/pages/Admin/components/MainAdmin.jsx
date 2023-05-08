@@ -15,7 +15,7 @@ const MainAdmin = () => {
         <SectionHeader
           title={`${admin.name}`}
           smTilte={"Welcome"}
-          description={"Here you can manage courses, instractors, and students"}
+          description={"Here you can manage courses, instructors, and students"}
           className={"AdminWelcome-header"}
         />
       </section>

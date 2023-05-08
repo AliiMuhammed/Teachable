@@ -1,0 +1,25 @@
+.instructors-dataSection {
+  margin-top: 6rem;
+  padding: 3rem 0;
+}
+
+.container.instructors-table-containerr {
+  padding: 4rem 0;
+}
+
+.sectionHeader.adminInstructor-header {
+  margin-top: 4rem;
+  margin-bottom: 3rem;
+}
+.instructorTable {
+  overflow: auto;
+}
+
+/*=====================update instructor==============================*/
+
+.imgCourse-update {
+  width: 30%;
+  margin: 0 auto;
+  border-radius: 10px;
+  margin-bottom: 2rem;
+}

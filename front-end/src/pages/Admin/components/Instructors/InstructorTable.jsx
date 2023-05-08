@@ -1,5 +1,5 @@
 import SectionHeader from "../../../../shared/SectionHeader";
-import "../../style/instractors.css";
+import "../../style/instructors.css";
 import Table from "react-bootstrap/Table";
 import { getAuthUser } from "../../../../helper/Storage";
 import { Link } from "react-router-dom";
@@ -9,9 +9,9 @@ import Alert from "react-bootstrap/Alert";
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-const InstractorTable = () => {
+const InstructorTable = () => {
   const admin = getAuthUser();
-  const [instractor, setinstractors] = useState({
+  const [instructor, setinstructors] = useState({
     loading: true,
     results: [],
     err: null,
@@ -21,30 +21,30 @@ const InstractorTable = () => {
   });
 
   useEffect(() => {
-    setinstractors({ ...instractor, loading: true });
+    setinstructors({ ...instructor, loading: true });
     axios
       .get("http://localhost:4002/instractors")
       .then((resp) => {
-        setinstractors({
-          ...instractor,
+        setinstructors({
+          ...instructor,
           results: resp.data,
           loading: false,
           err: null,
         });
       })
       .catch((err) => {
-        setinstractors({
-          ...instractor,
+        setinstructors({
+          ...instructor,
           loading: false,
-          err: "Error can't load instractors",
+          err: "Error can't load instructors",
         });
       });
-  }, [instractor.reload]);
+  }, [instructor.reload]);
 
-  const displayinstractors = () => {
+  const displayinstructors = () => {
     return (
       <>
-        <div className="instractorTable">
+        <div className="instructorTable">
           <Table bordered striped hover>
             <thead>
               <tr>
@@ -58,16 +58,16 @@ const InstractorTable = () => {
               </tr>
             </thead>
             <tbody>
-              {instractor.results.map((instractor) => {
+              {instructor.results.map((instructor) => {
                 return (
-                  <tr key={instractor.id}>
-                    <td>{instractor.id}</td>
-                    <td>{instractor.name}</td>
-                    <td>{instractor.email}</td>
-                    <td>{instractor.phone}</td>
-                    <td>{instractor.status}</td>
+                  <tr key={instructor.id}>
+                    <td>{instructor.id}</td>
+                    <td>{instructor.name}</td>
+                    <td>{instructor.email}</td>
+                    <td>{instructor.phone}</td>
+                    <td>{instructor.status}</td>
                     <td className="table-img">
-                      <img src={instractor.image_url} alt="" />
+                      <img src={instructor.image_url} alt="" />
                     </td>
                     <td>
                       <div className="table-btns">
@@ -75,13 +75,13 @@ const InstractorTable = () => {
                           to={"delete"}
                           className="btn btn-sm btn-delete"
                           onClick={(e) => {
-                            deleteinstractor(instractor.id);
+                            deleteinstructor(instructor.id);
                           }}
                         >
                           Delete
                         </button>
                         <Link
-                          to={"update/" + instractor.id}
+                          to={"update/" + instructor.id}
                           className="btn btn-sm btn-Update"
                         >
                           Update
@@ -94,7 +94,7 @@ const InstractorTable = () => {
             </tbody>
           </Table>
           <Link
-            to={"/admin/instractors/assgin"}
+            to={"/admin/instructors/assgin"}
             className="btn sm-btn assgin-btn"
           >
             Assgin to courses
@@ -103,7 +103,7 @@ const InstractorTable = () => {
       </>
     );
   };
-  const deleteinstractor = (id) => {
+  const deleteinstructor = (id) => {
     axios
       .delete("http://localhost:4002/instractors/" + id, {
         headers: {
@@ -111,49 +111,49 @@ const InstractorTable = () => {
         },
       })
       .then((resp) => {
-        setinstractors({
-          ...instractor,
-          reload: instractor.reload + 1,
-          delSuccess: "instractor deleted Successfully",
+        setinstructors({
+          ...instructor,
+          reload: instructor.reload + 1,
+          delSuccess: "instructor deleted Successfully",
         });
       })
       .catch((err) => {
-        setinstractors({
-          ...instractor,
+        setinstructors({
+          ...instructor,
           loading: false,
-          delErr: "Error can't Delete instractors",
+          delErr: "Error can't Delete instructors",
         });
       });
   };
 
   return (
     <>
-      <section className="instractors-dataSection">
+      <section className="instructors-dataSection">
         <SectionHeader
           title={"Instructors Section"}
           smTilte={`Hi ${admin.name}`}
-          description={"Here you can add, update, and delete instractors"}
+          description={"Here you can add, update, and delete instructors"}
           className={"adminInstructor-header"}
         />
-        <div className="container instractors-table-container">
+        <div className="container instructors-table-container">
           {/* delete action handeling */}
-          {instractor.loading === false &&
-            instractor.delErr == null &&
-            instractor.delSuccess != null && (
+          {instructor.loading === false &&
+            instructor.delErr == null &&
+            instructor.delSuccess != null && (
               <Alert variant="success" className="AlertAddCoures">
-                {instractor.delSuccess}
+                {instructor.delSuccess}
               </Alert>
             )}
-          {instractor.loading === false &&
-            instractor.delErr != null &&
-            instractor.delSuccess === null && (
+          {instructor.loading === false &&
+            instructor.delErr != null &&
+            instructor.delSuccess === null && (
               <Alert variant="danger" className="AlertAddCoures">
-                {instractor.delErr}
+                {instructor.delErr}
               </Alert>
             )}
 
           {/* Loader */}
-          {instractor.loading === true && (
+          {instructor.loading === true && (
             <div className="pageSpinner">
               <Spinner animation="border" role="status" className="spinner">
                 <span className="visually-hidden">Loading...</span>
@@ -161,21 +161,21 @@ const InstractorTable = () => {
             </div>
           )}
           <div className="table-header">
-            <h3>All instractors</h3>
+            <h3>All instructors</h3>
             <Link to={"add"} className="btn sm-btn Add-btn">
-              Add instractor <AiOutlinePlusSquare />
+              Add instructor <AiOutlinePlusSquare />
             </Link>
           </div>
-          {/* displayinstractors */}
-          {instractor.loading === false &&
-            instractor.err === null &&
-            instractor.results.length != 0 && <>{displayinstractors()}</>}
+          {/* displayinstructors */}
+          {instructor.loading === false &&
+            instructor.err === null &&
+            instructor.results.length != 0 && <>{displayinstructors()}</>}
 
           {/* errors handling */}
-          {instractor.loading === false && instractor.err != null && (
+          {instructor.loading === false && instructor.err != null && (
             <div className="alert-container container">
               <Alert variant="danger" className="alret">
-                {instractor.err}
+                {instructor.err}
               </Alert>
             </div>
           )}
@@ -185,4 +185,4 @@ const InstractorTable = () => {
   );
 };
 
-export default InstractorTable;
+export default InstructorTable;

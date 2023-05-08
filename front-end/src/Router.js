@@ -15,13 +15,13 @@ import Admin from "./middleware/Admin";
 import DashBoard from "./pages/Admin/DashBoard";
 import AdminCourses from "./pages/Admin/components/Courses/AdminCourses";
 import MainAdmin from "./pages/Admin/components/MainAdmin";
-import AdminInstractors from "./pages/Admin/components/Instractors/AdminInstractors";
+import AdminInstructors from "./pages/Admin/components/Instructors/AdminInstructors";
 import AdminStudents from "./pages/Admin/components/Students/AdminStudents";
 import AddCourses from "./pages/Admin/components/Courses/AddCourses";
 import UpdateCoures from "./pages/Admin/components/Courses/UpdateCoures";
 import CoursesTable from "./pages/Admin/components/Courses/CoursesTable";
-import InstractorTable from "./pages/Admin/components/Instractors/InstractorTable";
-import UpdateInstractor from "./pages/Admin/components/Instractors/UpdateInstractor";
+import InstructorTable from "./pages/Admin/components/Instructors/InstructorTable";
+import UpdateInstructor from "./pages/Admin/components/Instructors/UpdateInstructor";
 import AddUser from "./pages/Admin/components/AddUser";
 import AssignInstarctorToCourse from "./pages/Admin/components/AssignInstarctorToCourse";
 import StudentsTable from "./pages/Admin/components/Students/StudentsTable";
@@ -118,23 +118,23 @@ export const router = createBrowserRouter([
             ],
           },
           {
-            path: "/admin/instractors",
-            element: <AdminInstractors />,
+            path: "/admin/instructors",
+            element: <AdminInstructors />,
             children: [
               {
                 path: "",
-                element: <InstractorTable />,
+                element: <InstructorTable />,
               },
               {
-                path: "/admin/instractors/update/:id",
-                element: <UpdateInstractor />,
+                path: "/admin/instructors/update/:id",
+                element: <UpdateInstructor />,
               },
               {
-                path: "/admin/instractors/add",
+                path: "/admin/instructors/add",
                 element: <AddUser />,
               },
               {
-                path: "/admin/instractors/assgin",
+                path: "/admin/instructors/assgin",
                 element: <AssignInstarctorToCourse />,
               },
             ],

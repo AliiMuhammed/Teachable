@@ -17,7 +17,7 @@ const Footer = () => {
           </Link>
           <p>
             Teachable is a website that offers an easy-to-use platform for
-            instractors to create and sell their courses, and for students to
+            instructors to create and sell their courses, and for students to
             access them from anywhere.
           </p>
           <div className="footer-socials">
