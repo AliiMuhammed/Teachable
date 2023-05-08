@@ -1,9 +1,7 @@
-import { Outlet } from 'react-router'
+import { Outlet } from "react-router";
 
 const AdminInstractors = () => {
-  return (
-    <Outlet/>
-  )
-}
+  return <Outlet />;
+};
 
-export default AdminInstractors
+export default AdminInstractors;

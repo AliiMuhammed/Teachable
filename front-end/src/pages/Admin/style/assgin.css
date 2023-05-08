@@ -1,0 +1,18 @@
+.assign-section{
+    margin-top: 6rem;
+    padding: 4rem 0;
+}
+
+.container.assgin-container{
+        display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+}
+
+.assgin-container h1 {
+    margin: 2rem 0;
+}
+.assign-form{
+    width: 80%;
+}

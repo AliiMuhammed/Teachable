@@ -1,9 +1,7 @@
-import {Bar} from 'react-chartjs-2'
-import {Chart as ChartJS} from "chart.js/auto"
+import { Bar } from "react-chartjs-2";
+import { Chart as ChartJS } from "chart.js/auto";
 import axios from "axios";
 import { useState, useEffect } from "react";
-
-
 
 const BarChart = () => {
   // Courses Api's
@@ -85,13 +83,12 @@ const BarChart = () => {
   const instractorNumber = instractor.results.length;
   const coursesNumber = course.results.length;
 
-
   const data = {
     labels: ["Instractor", "Studens", "Courses"],
     datasets: [
       {
         label: "Count",
-        data: [instractorNumber, studentNumber, coursesNumber     ],
+        data: [instractorNumber, studentNumber, coursesNumber],
         backgroundColor: "#20ad96",
         borderColor: "#20ad96",
         hoverBackgroundColor: "#3f3a64",
@@ -101,7 +98,7 @@ const BarChart = () => {
       },
     ],
   };
-  return <Bar className='barChart' data={data} />;
-}
+  return <Bar className="barChart" data={data} />;
+};
 
-export default BarChart
+export default BarChart;

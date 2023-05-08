@@ -1,5 +1,5 @@
 import SectionHeader from "../../../../shared/SectionHeader";
-import "../../style/courses.css";
+import "../../style/students.css";
 import Table from "react-bootstrap/Table";
 import { getAuthUser } from "../../../../helper/Storage";
 import { Link } from "react-router-dom";
@@ -8,9 +8,10 @@ import Spinner from "react-bootstrap/Spinner";
 import Alert from "react-bootstrap/Alert";
 import { useState, useEffect } from "react";
 import axios from "axios";
-const CoursesTable = () => {
+
+const StudentsTable = () => {
   const admin = getAuthUser();
-  const [course, setCourses] = useState({
+  const [student, setstudents] = useState({
     loading: true,
     results: [],
     err: null,
@@ -20,55 +21,53 @@ const CoursesTable = () => {
   });
 
   useEffect(() => {
-    setCourses({ ...course, loading: true });
+    setstudents({ ...student, loading: true });
     axios
-      .get("http://localhost:4002/courses")
+      .get("http://localhost:4002/students")
       .then((resp) => {
-        setCourses({
-          ...course,
+        setstudents({
+          ...student,
           results: resp.data,
           loading: false,
           err: null,
         });
       })
       .catch((err) => {
-        setCourses({
-          ...course,
+        setstudents({
+          ...student,
           loading: false,
-          err: "Error can't load Courses",
+          err: "Error can't load students",
         });
       });
-  }, [course.reload]);
+  }, [student.reload]);
 
-  const displayCourses = () => {
+  const displaystudents = () => {
     return (
       <>
-        <div className="courseTable">
+        <div className="studentTable">
           <Table bordered striped hover>
             <thead>
               <tr>
                 <th>Id</th>
                 <th>Name</th>
-                <th>Description</th>
-                <th>Code</th>
-                <th>Durations</th>
+                <th>Email</th>
+                <th>Phone</th>
                 <th>Status</th>
                 <th>Image</th>
                 <th>Action</th>
               </tr>
             </thead>
             <tbody>
-              {course.results.map((course) => {
+              {student.results.map((student) => {
                 return (
-                  <tr key={course.id}>
-                    <td>{course.id}</td>
-                    <td>{course.name}</td>
-                    <td>{course.description}</td>
-                    <td>{course.code}</td>
-                    <td>{course.durations}</td>
-                    <td>{course.status}</td>
+                  <tr key={student.id}>
+                    <td>{student.id}</td>
+                    <td>{student.name}</td>
+                    <td>{student.email}</td>
+                    <td>{student.phone}</td>
+                    <td>{student.status}</td>
                     <td className="table-img">
-                      <img src={course.image_url} alt="" />
+                      <img src={student.image_url} alt="" />
                     </td>
                     <td>
                       <div className="table-btns">
@@ -76,22 +75,16 @@ const CoursesTable = () => {
                           to={"delete"}
                           className="btn btn-sm btn-delete"
                           onClick={(e) => {
-                            deleteCourse(course.id);
+                            deletestudent(student.id);
                           }}
                         >
                           Delete
                         </button>
                         <Link
-                          to={"update/" + course.id + "/" + course.code}
+                          to={"update/" + student.id}
                           className="btn btn-sm btn-Update"
                         >
                           Update
-                        </Link>
-                        <Link
-                          to={"/courses/" + course.id + "/" + course.code}
-                          className="btn btn-sm btn-show"
-                        >
-                          Show
                         </Link>
                       </div>
                     </td>
@@ -100,65 +93,61 @@ const CoursesTable = () => {
               })}
             </tbody>
           </Table>
-          <Link to={"/admin/courses/assgin"} className="btn sm-btn assgin-btn">
-            Assgin to instractors
-          </Link>
         </div>
       </>
     );
   };
-
-  const deleteCourse = (id) => {
+  const deletestudent = (id) => {
     axios
-      .delete("http://localhost:4002/courses/" + id, {
+      .delete("http://localhost:4002/students/delete/" + id, {
         headers: {
           token: admin.token,
         },
       })
       .then((resp) => {
-        setCourses({
-          ...course,
-          reload: course.reload + 1,
-          delSuccess: "Course deleted Successfully",
+        setstudents({
+          ...student,
+          reload: student.reload + 1,
+          delSuccess: "Student deleted Successfully",
         });
       })
       .catch((err) => {
-        setCourses({
-          ...course,
+        setstudents({
+          ...student,
           loading: false,
-          delErr: "Error can't Delete Courses",
+          delErr: "Error can't Delete Student",
         });
       });
   };
 
   return (
     <>
-      <section className="courses-dataSection">
+      <section className="students-dataSection">
         <SectionHeader
-          title={"Courses Section"}
+          title={"Students Section"}
           smTilte={`Hi ${admin.name}`}
-          description={"Here you can add, update, and delete courses"}
-          className={"adminCourse-header"}
+          description={"Here you can add, update, and delete students"}
+          className={"adminstudent-header"}
         />
-        <div className="container courses-table-container">
+        <div className="container students-table-container">
           {/* delete action handeling */}
-          {course.loading === false &&
-            course.delErr == null &&
-            course.delSuccess != null && (
+          {student.loading === false &&
+            student.delErr === null &&
+            student.delSuccess != null && (
               <Alert variant="success" className="AlertAddCoures">
-                {course.delSuccess}
+                {student.delSuccess}
               </Alert>
             )}
-          {course.loading === false &&
-            course.delErr != null &&
-            course.delSuccess === null && (
+          {student.loading === false &&
+            student.delErr != null &&
+            student.delSuccess === null && (
               <Alert variant="danger" className="AlertAddCoures">
-                {course.delErr}
+                {student.delErr}
               </Alert>
             )}
 
           {/* Loader */}
-          {course.loading === true && (
+          {student.loading === true && (
             <div className="pageSpinner">
               <Spinner animation="border" role="status" className="spinner">
                 <span className="visually-hidden">Loading...</span>
@@ -166,21 +155,21 @@ const CoursesTable = () => {
             </div>
           )}
           <div className="table-header">
-            <h3>All Courses</h3>
+            <h3>All students</h3>
             <Link to={"add"} className="btn sm-btn Add-btn">
-              Add Course <AiOutlinePlusSquare />
+              Add student <AiOutlinePlusSquare />
             </Link>
           </div>
-          {/* displayCourses */}
-          {course.loading === false &&
-            course.err === null &&
-            course.results.length != 0 && <>{displayCourses()}</>}
+          {/* displaystudents */}
+          {student.loading === false &&
+            student.err === null &&
+            student.results.length != 0 && <>{displaystudents()}</>}
 
           {/* errors handling */}
-          {course.loading === false && course.err != null && (
+          {student.loading === false && student.err != null && (
             <div className="alert-container container">
               <Alert variant="danger" className="alret">
-                {course.err}
+                {student.err}
               </Alert>
             </div>
           )}
@@ -190,4 +179,4 @@ const CoursesTable = () => {
   );
 };
 
-export default CoursesTable;
+export default StudentsTable;

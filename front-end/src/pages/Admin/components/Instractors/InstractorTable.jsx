@@ -44,7 +44,6 @@ const InstractorTable = () => {
   const displayinstractors = () => {
     return (
       <>
-
         <div className="instractorTable">
           <Table bordered striped hover>
             <thead>
@@ -87,17 +86,6 @@ const InstractorTable = () => {
                         >
                           Update
                         </Link>
-                        <Link
-                          to={
-                            "/instractors/" +
-                            instractor.id +
-                            "/" +
-                            instractor.code
-                          }
-                          className="btn btn-sm btn-show"
-                        >
-                          Show
-                        </Link>
                       </div>
                     </td>
                   </tr>
@@ -105,6 +93,12 @@ const InstractorTable = () => {
               })}
             </tbody>
           </Table>
+          <Link
+            to={"/admin/instractors/assgin"}
+            className="btn sm-btn assgin-btn"
+          >
+            Assgin to courses
+          </Link>
         </div>
       </>
     );
@@ -136,10 +130,10 @@ const InstractorTable = () => {
     <>
       <section className="instractors-dataSection">
         <SectionHeader
-          title={"Instractors Section"}
+          title={"Instructors Section"}
           smTilte={`Hi ${admin.name}`}
           description={"Here you can add, update, and delete instractors"}
-          className={"adminInstractor-header"}
+          className={"adminInstructor-header"}
         />
         <div className="container instractors-table-container">
           {/* delete action handeling */}

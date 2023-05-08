@@ -1,9 +1,7 @@
-import React from 'react'
+import { Outlet } from "react-router";
 
 const AdminStudents = () => {
-  return (
-    <div>AdminStudents</div>
-  )
-}
+  return <Outlet />;
+};
 
-export default AdminStudents
+export default AdminStudents;
