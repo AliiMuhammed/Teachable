@@ -1,8 +1,16 @@
 import "../style/courseCard.css";
-import { Link } from 'react-router-dom'
-import {SlNotebook} from "react-icons/sl"
+import { Link } from "react-router-dom";
+import { SlNotebook } from "react-icons/sl";
 
-const CourseCard = ({title,id,description,code,durations,courseImage,className}) => {
+const CourseCard = ({
+  title,
+  id,
+  description,
+  code,
+  durations,
+  courseImage,
+  className,
+}) => {
   return (
     <div className={`course-card ${className}`}>
       <div className="course-card-image">
@@ -10,7 +18,7 @@ const CourseCard = ({title,id,description,code,durations,courseImage,className})
       </div>
       <div className="course-card-content">
         <h3>
-          <Link to={"/courses/" + id+"/"+code}>{title}</Link>
+          <Link to={"/courses/" + id + "/" + code}>{title}</Link>
         </h3>
         <p>{description}</p>
         <div className="course-meta">
@@ -26,6 +34,6 @@ const CourseCard = ({title,id,description,code,durations,courseImage,className})
       </div>
     </div>
   );
-}
+};
 
-export default CourseCard
+export default CourseCard;

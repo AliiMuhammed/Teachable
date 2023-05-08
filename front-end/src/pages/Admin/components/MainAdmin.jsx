@@ -19,7 +19,7 @@ const MainAdmin = () => {
           className={"AdminWelcome-header"}
         />
       </section>
-      <Statistics/>
+      <Statistics />
       <section className="charts-sectoin">
         <div className="container charts-container">
           <div className="lineCharts">

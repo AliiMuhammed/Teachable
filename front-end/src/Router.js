@@ -1,4 +1,4 @@
-import { createBrowserRouter, Navigate } from "react-router-dom";
+import { createBrowserRouter } from "react-router-dom";
 import Home from "./pages/home/Home";
 import Login from "./pages/login/Login";
 import Courses from "./pages/courses/Courses";
@@ -13,7 +13,7 @@ import App from "./App";
 import Guest from "./middleware/Guest";
 import Admin from "./middleware/Admin";
 import DashBoard from "./pages/Admin/DashBoard";
-import AdminCourses from "./pages/Admin/components/Courses/AdminCourses"
+import AdminCourses from "./pages/Admin/components/Courses/AdminCourses";
 import MainAdmin from "./pages/Admin/components/MainAdmin";
 import AdminInstractors from "./pages/Admin/components/Instractors/AdminInstractors";
 import AdminStudents from "./pages/Admin/components/Students/AdminStudents";
@@ -23,6 +23,9 @@ import CoursesTable from "./pages/Admin/components/Courses/CoursesTable";
 import InstractorTable from "./pages/Admin/components/Instractors/InstractorTable";
 import UpdateInstractor from "./pages/Admin/components/Instractors/UpdateInstractor";
 import AddUser from "./pages/Admin/components/AddUser";
+import AssignInstarctorToCourse from "./pages/Admin/components/AssignInstarctorToCourse";
+import StudentsTable from "./pages/Admin/components/Students/StudentsTable";
+import UpdateStudent from "./pages/Admin/components/Students/UpdateStudent";
 
 export const router = createBrowserRouter([
   {
@@ -108,6 +111,10 @@ export const router = createBrowserRouter([
                 path: "/admin/courses/add",
                 element: <AddCourses />,
               },
+              {
+                path: "/admin/courses/assgin",
+                element: <AssignInstarctorToCourse />,
+              },
             ],
           },
           {
@@ -120,17 +127,35 @@ export const router = createBrowserRouter([
               },
               {
                 path: "/admin/instractors/update/:id",
-                element:<UpdateInstractor/>
+                element: <UpdateInstractor />,
               },
               {
                 path: "/admin/instractors/add",
-                element:<AddUser/>
+                element: <AddUser />,
+              },
+              {
+                path: "/admin/instractors/assgin",
+                element: <AssignInstarctorToCourse />,
               },
             ],
           },
           {
             path: "/admin/students",
             element: <AdminStudents />,
+            children: [
+              {
+                path: "",
+                element: <StudentsTable />,
+              },
+              {
+                path: "/admin/students/add",
+                element: <AddUser />,
+              },
+              {
+                path: "/admin/students/update/:id",
+                element: <UpdateStudent />,
+              },
+            ],
           },
         ],
       },

@@ -1,0 +1,27 @@
+.students-dataSection {
+    margin-top: 6rem;
+    padding: 3rem 0;
+
+}
+
+.container.students-table-containerr {
+    padding: 4rem 0;
+}
+
+.sectionHeader.adminstudent-header {
+    margin-top: 4rem;
+    margin-bottom: 3rem;
+}
+
+.studentTable {
+    overflow: auto;
+}
+
+/*=====================update student==============================*/
+
+.imgCourse-update {
+    width: 30%;
+    margin: 0 auto;
+    border-radius: 10px;
+    margin-bottom: 2rem;
+}

@@ -1,11 +1,9 @@
-import React from 'react'
+import React from "react";
 import CourseCard from "../../../shared/CourseCard";
 import { courses } from "../../../core/data/data";
 import "../style/myCourses.css";
 
-
 const MyCourses = () => {
-
   const displayCourses = () => {
     return courses.map((course) => {
       return (
@@ -26,6 +24,6 @@ const MyCourses = () => {
       <div className="container myCourses-container">{displayCourses()}</div>
     </article>
   );
-}
+};
 
-export default MyCourses
+export default MyCourses;

@@ -1,38 +1,39 @@
-import "../style/dashBoard.css";
+import "../../style/dashBoard.css";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Form from "react-bootstrap/Form";
-import { getAuthUser } from "../../../helper/Storage";
+import { getAuthUser } from "../../../../helper/Storage";
 import Alert from "react-bootstrap/Alert";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import axios from "axios";
-const AddUser = () => {
+
+const UpdateStudent = () => {
+  let { id } = useParams();
+  const image = useRef(null);
   const admin = getAuthUser();
   const [user, setUser] = useState({
     name: "",
     email: "",
-    password: "",
     phone: "",
-    type: "",
+    image_url: null,
     loading: false,
-    addErr: [],
-    addSuccess: null,
+    err: null,
+    success: null,
+    reload: false,
   });
-  const image = useRef(null);
 
-  const AddUser = (e) => {
+  const UpdateStudent = (e) => {
     e.preventDefault();
     setUser({ ...user, loading: true });
     const formData = new FormData();
     formData.append("name", user.name);
     formData.append("email", user.email);
-    formData.append("password", user.password);
-    formData.append("type", user.type);
     formData.append("phone", user.phone);
     if (image.current.files && image.current.files[0]) {
       formData.append("image", image.current.files[0]);
     }
     axios
-      .post("http://localhost:4002/auth/register", formData, {
+      .put("http://localhost:4002/students/" + id, formData, {
         headers: {
           token: admin.token,
           "Content-Type": "multipart/form-data",
@@ -41,42 +42,58 @@ const AddUser = () => {
       .then((resp) => {
         setUser({
           ...user,
-          name: "",
-          email: "",
-          password: "",
-          type: "",
-          phone: "",
+          success: "Student Updated Successfully !",
           loading: false,
-          addErr: null,
-          addSuccess: "User Added Successfully",
         });
-        image.current.value = null;
       })
       .catch((err) => {
         setUser({
           ...user,
           loading: false,
-          addSuccess: null,
-          addErr: err.response.data.errors,
+          success: null,
+          err: err.response.data.errors,
         });
       });
   };
+  useEffect(() => {
+    axios
+      .get("http://localhost:4002/students/" + id)
+      .then((resp) => {
+        setUser({
+          ...user,
+          name: resp.data.name,
+          email: resp.data.email,
+          image_url: resp.data.image_url,
+          phone: resp.data.phone,
+        });
+      })
+      .catch((error) => {
+        setUser({
+          ...user,
+          loading: false,
+          success: null,
+          err: error.response.data.errors,
+        });
+      });
+  }, [user.reload]);
+
+  console.log(user.err);
 
   return (
     <>
       <section className="addUser-section">
         <div className="container addUser-container">
-          <h1>Add New User</h1>
+          <h1>Update Student</h1>
 
           {/* add action handeling */}
-          {user.addErr == null && user.addSuccess != null && (
+          {user.err == null && user.success != null && (
             <Alert variant="success" className="AlertAddCoures">
-              {user.addSuccess}
+              {user.success}
             </Alert>
           )}
-          {user.addErr != null && user.addSuccess === null && (
+          {user.err != null && user.success === null && (
             <>
-              {user.addErr.map((error, index) => (
+              {user.err.map((error, index) => (
                 <Alert key={index} variant="danger" className="AlertAddCoures">
                   {error.msg}
                 </Alert>
@@ -84,7 +101,8 @@ const AddUser = () => {
             </>
           )}
 
-          <Form className="AddUser-form " onSubmit={AddUser}>
+          <Form className="AddUser-form " onSubmit={UpdateStudent}>
+            <img src={user.image_url} className="imgCourse-update" alt="" />
             <FloatingLabel label="User Name" className="mb-3 input-addUser">
               <Form.Control
                 value={user.name}
@@ -103,18 +121,9 @@ const AddUser = () => {
                 required
               />
             </FloatingLabel>
-            <FloatingLabel label="Password" className="mb-3 input-addUser">
-              <Form.Control
-                value={user.password}
-                onChange={(e) => setUser({ ...user, password: e.target.value })}
-                type="password"
-                placeholder="Password"
-                required
-              />
-            </FloatingLabel>
 
             <Form.Group className="mb-3 input-addUser">
-              <Form.Control ref={image} type="file" required />
+              <Form.Control ref={image} type="file" />
               <Form.Text className="text-muted">
                 Upload user image in .png, or .jpg.
               </Form.Text>
@@ -128,17 +137,7 @@ const AddUser = () => {
                 required
               />
             </FloatingLabel>
-            <Form.Select
-              className="mb-3 input-addUser"
-              required
-              value={user.type}
-              onChange={(e) => setUser({ ...user, type: e.target.value })}
-            >
-              <option defaultChecked>Select Type</option>
-              <option>student</option>
-              <option>instractor</option>
-            </Form.Select>
-            <button className="btn sm-btn admin-btn">Add User</button>
+            <button className="btn sm-btn admin-btn">Update Student</button>
           </Form>
         </div>
       </section>
@@ -146,4 +145,4 @@ const AddUser = () => {
   );
 };
 
-export default AddUser;
+export default UpdateStudent;

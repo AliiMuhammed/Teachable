@@ -178,6 +178,7 @@ router.get("/:id/:code", async (req, res) => {
 
 router.post(
   "/assign",
+  upload.single(),
   body("course_id").isNumeric().withMessage("please enter a valid course id"),
   body("instractor_id")
     .isNumeric()
@@ -210,17 +211,20 @@ router.post(
         [instractor[0].id, course[0].id]
       );
       if (instarctors.length > 0) {
-        res.status(400).json("instarctor already assigned");
+        res.status(400).json({
+          errors: [
+            {
+              msg: "Instarctor already assigned",
+            },
+          ],
+        });
       } else {
         await query("insert into instractors_courses set?", assignObj);
         res.status(200).json({
           msg: "instractor Assign successfully",
         });
       }
-    } catch (err) {
-      console.log(err);
-      res.status(500).json(err);
-    }
+    } catch (err) {}
   }
 );
 

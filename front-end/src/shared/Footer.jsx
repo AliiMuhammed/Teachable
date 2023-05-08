@@ -1,11 +1,11 @@
-import Logo from '../assests/images/h-logo-white.png'
-import { Link } from 'react-router-dom'
-import {AiFillFacebook} from 'react-icons/ai'
-import {AiFillTwitterSquare} from 'react-icons/ai'
-import {AiFillLinkedin} from 'react-icons/ai'
-import { GiEarthAfricaEurope } from 'react-icons/gi'
+import Logo from "../assests/images/h-logo-white.png";
+import { Link } from "react-router-dom";
+import { AiFillFacebook } from "react-icons/ai";
+import { AiFillTwitterSquare } from "react-icons/ai";
+import { AiFillLinkedin } from "react-icons/ai";
+import { GiEarthAfricaEurope } from "react-icons/gi";
 
-import '../style/footer.css'
+import "../style/footer.css";
 
 const Footer = () => {
   return (
@@ -16,14 +16,35 @@ const Footer = () => {
             <img src={Logo} alt="logo" className="logo" />
           </Link>
           <p>
-            Teachable is a website that offers an easy-to-use platform for instructors to create and sell
-            their courses, and for students to access them from anywhere.
+            Teachable is a website that offers an easy-to-use platform for
+            instractors to create and sell their courses, and for students to
+            access them from anywhere.
           </p>
           <div className="footer-socials">
-            <a href="https://www.facebook.com/FCIH12" target='_blank' rel='noreferrer noopener' ><AiFillFacebook /></a>
-            <a href="https://www.facebook.com/FCIH12" target='_blank' rel='noreferrer noopener' ><AiFillTwitterSquare/></a>
-            <a href="/" target='_blank' rel='noreferrer noopener' ><AiFillLinkedin/></a>
-            <a href="http://safcai.helwan.edu.eg/index.php/en/" target='_blank' rel='noreferrer noopener' ><GiEarthAfricaEurope /></a>
+            <a
+              href="https://www.facebook.com/FCIH12"
+              target="_blank"
+              rel="noreferrer noopener"
+            >
+              <AiFillFacebook />
+            </a>
+            <a
+              href="https://www.facebook.com/FCIH12"
+              target="_blank"
+              rel="noreferrer noopener"
+            >
+              <AiFillTwitterSquare />
+            </a>
+            <a href="/" target="_blank" rel="noreferrer noopener">
+              <AiFillLinkedin />
+            </a>
+            <a
+              href="http://safcai.helwan.edu.eg/index.php/en/"
+              target="_blank"
+              rel="noreferrer noopener"
+            >
+              <GiEarthAfricaEurope />
+            </a>
           </div>
         </article>
         <article>
@@ -49,7 +70,7 @@ const Footer = () => {
         <small>2023 Teachable &copy; All Copyrights Reserved</small>
       </div>
     </footer>
-  )
-}
+  );
+};
 
-export default Footer
+export default Footer;

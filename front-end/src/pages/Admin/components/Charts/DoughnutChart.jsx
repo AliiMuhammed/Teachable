@@ -1,5 +1,5 @@
-import {Doughnut} from 'react-chartjs-2'
-import {Chart as ChartJS} from "chart.js/auto"
+import { Doughnut } from "react-chartjs-2";
+import { Chart as ChartJS } from "chart.js/auto";
 import axios from "axios";
 import { useState, useEffect } from "react";
 
