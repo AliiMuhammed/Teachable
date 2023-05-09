@@ -1,0 +1,28 @@
+.studentTable{
+    width: 90%;
+    margin-inline:auto ;
+}
+.btn.setGrade-btn{
+        margin: 0;
+        padding: 0.6rem 1rem;
+}
+.btn.close-btn{
+    margin: 0;
+    margin-right: 1rem;
+}
+
+.studentImg{
+    width: 7rem;
+    margin: 0 auto;
+}
+.studentImg img{
+    border-radius: 10px;
+}
+.setGrade-form{
+    align-items: center;
+    margin-top: 1rem;
+    width: 100%;
+}
+.grades-input{
+    width: 100%;
+}

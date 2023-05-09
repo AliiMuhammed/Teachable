@@ -2,27 +2,26 @@ import React from 'react'
 import './style/profile.css'
 import Sidebar from './components/Sidebar';
 import { Outlet } from 'react-router';
-// import arr from '../login/components/LoginForm'
-// const arr = require('../login/components/LoginForm')
+import {getAuthUser} from "../../helper/Storage"
 const Profile = () => {
+const user =getAuthUser();
   return (
     <div>
       <section className="profile-section">
         <div className="container profile-container">
           <div className="profile-image">
-            <img src="https://picsum.photos/200" alt="profile" />
+            <img src={user.image_url} alt="profile" />
           </div>
           <div className="profile-info">
-            <h2>Josephine</h2>
-            <h3>Software Engineer</h3>
+            <h2>{user.name}</h2>
+            <h3>{user.type}</h3>
             <p>
-              <span>ID:</span>202000571
+              <span>ID:</span>{user.id}
             </p>
           </div>
         </div>
       </section>
       <div className="mainBody">
-        <Sidebar />
         <Outlet />
       </div>
     </div>

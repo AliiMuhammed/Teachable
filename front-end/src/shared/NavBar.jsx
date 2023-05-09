@@ -68,12 +68,21 @@ const NavBar = () => {
 
           <li>
             {/* Authenticated Routes */}
-            {auth && (
+            {auth && auth.type!=="admin"&&(
               <NavLink
-                to="/profile"
+                to={"/profile"+"/"+auth.type}
                 onClick={() => setIsNavShowing((prev) => !prev)}
               >
                 My Profile
+              </NavLink>
+            )}
+            {/* Authenticated Routes */}
+            {auth && auth.type==="admin"&&(
+              <NavLink
+                to={"/admin"}
+                onClick={() => setIsNavShowing((prev) => !prev)}
+              >
+                DashBoard
               </NavLink>
             )}
           </li>

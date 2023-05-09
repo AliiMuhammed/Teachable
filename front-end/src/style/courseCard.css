@@ -62,6 +62,12 @@
   margin-right: 5px;
 }
 
+
+.course-grade{
+  color: red;
+  margin: 1rem 0;
+  font-size: 1.1rem !important;
+}
 /*=============================V-card===================================*/
 
 .v-card.course-card {

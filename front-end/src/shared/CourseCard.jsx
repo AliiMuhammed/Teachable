@@ -9,6 +9,7 @@ const CourseCard = ({
   code,
   durations,
   courseImage,
+  grad=null,
   className,
 }) => {
   return (
@@ -30,6 +31,7 @@ const CourseCard = ({
             <strong> {durations}</strong>
             lecture
           </span>
+          {grad !==null && <span className="course-grade">Grade : {grad} / 100</span>}
         </div>
       </div>
     </div>

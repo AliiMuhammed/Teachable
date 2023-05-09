@@ -27,13 +27,7 @@ const LoginForm = () => {
       .then((resp) => {
         setLogin({ ...login, loading: false, err: [] });
         setAuthUser(resp.data);
-        if (resp.data.type === "student") {
-          navigate("/profile");
-        } else if (resp.data.type === "instractor") {
-          navigate("/");
-        } else {
-          navigate("/admin");
-        }
+        navigate("/");
       })
       .catch((errors) => {
         setLogin({

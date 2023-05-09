@@ -9,6 +9,7 @@ import { ImBooks } from "react-icons/im";
 import { IoIosPeople } from "react-icons/io";
 import { MdSchool } from "react-icons/md";
 import { RiDashboardFill } from "react-icons/ri";
+import { AiFillHome } from "react-icons/ai";
 import axios from "axios";
 function SideMenu({ name, ...props }) {
   const [show, setShow] = useState(false);
@@ -72,6 +73,12 @@ function SideMenu({ name, ...props }) {
                 <MdSchool />
               </div>
               Students
+            </Link>
+            <Link to={"/"} onClick={handleClose}>
+              <div className="icon">
+                <AiFillHome />
+              </div>
+              Home
             </Link>
           </div>
 

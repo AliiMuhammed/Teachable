@@ -1,0 +1,20 @@
+
+.gradeTable{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction: column;
+
+}
+.gradeTable h2{
+    margin-bottom: 2rem;
+}
+.instructor-table {
+    width: 90%;
+    margin-inline: auto;
+}
+
+.btn.instructorShow-btn {
+    margin: 0;
+    padding: 0.6rem 1rem;
+}
