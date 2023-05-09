@@ -1,8 +1,4 @@
-.mainBody{
-    display:grid;
-    grid-template-columns: 1fr 3fr;
 
-}
 
 .profile-section{
     margin:6rem 0;

@@ -89,9 +89,6 @@ const Home = () => {
         }
       >
         {activeCourses.slice(0,4).map((course) => {
-          let showCourse = 4;
-          if (course.status === 1 && showCourse >= 0) {
-            showCourse = showCourse - 1;
             return (
               <CourseCard
                 key={course.id}
@@ -104,7 +101,6 @@ const Home = () => {
                 className={"h-card"}
               />
             );
-          }
         })}
       </CoursesSection_H>
     );

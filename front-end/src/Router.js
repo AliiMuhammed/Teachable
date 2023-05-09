@@ -7,10 +7,9 @@ import About from "./pages/about/About";
 import NotFound from "./pages/notFound/NotFound";
 import ContactUs from "./pages/contactUs/ContactUs";
 import Profile from "./pages/profile/Profile";
-import MyCourses from "./pages/profile/components/MyCourses";
-import MyGrades from "./pages/profile/components/MyGrades";
 import App from "./App";
 import Guest from "./middleware/Guest";
+import GuestProfile from "./middleware/GuestProfile";
 import Admin from "./middleware/Admin";
 import DashBoard from "./pages/Admin/DashBoard";
 import AdminCourses from "./pages/Admin/components/Courses/AdminCourses";
@@ -26,6 +25,10 @@ import AddUser from "./pages/Admin/components/AddUser";
 import AssignInstarctorToCourse from "./pages/Admin/components/AssignInstarctorToCourse";
 import StudentsTable from "./pages/Admin/components/Students/StudentsTable";
 import UpdateStudent from "./pages/Admin/components/Students/UpdateStudent";
+import InstructorProfile from "./pages/profile/components/InstructorProfile";
+import StudentProfile from "./pages/profile/components/StudentProfile";
+import StudentsEnrolled from "./pages/profile/components/StudentsEnrolled";
+import SetGrade from "./pages/profile/components/SetGrade";
 
 export const router = createBrowserRouter([
   {
@@ -52,21 +55,34 @@ export const router = createBrowserRouter([
         path: "/courses/:id/:code",
         element: <CouresDetails />,
       },
+      //Guest Profile Middleware
       {
-        path: "/profile",
-        element: <Profile />,
+        element: <GuestProfile />,
         children: [
           {
-            path: "/profile/my-courses",
-            element: <MyCourses />,
-          },
-          {
-            path: "/profile/my-grades",
-            element: <MyGrades />,
+            path: "/profile",
+            element: <Profile />,
+            children: [
+              {
+                path: "/profile/student",
+                element: <StudentProfile />,
+              },
+              {
+                path: "/profile/instractor",
+                element: <InstructorProfile />,
+              },
+              {
+                path: "/profile/instractor/studentEnrolled/:id/:code",
+                element: <StudentsEnrolled />,
+              },
+              {
+                path: "/profile/instractor/studentEnrolled/grade/:student_id/:coures_id",
+                element: <SetGrade/>,
+              },
+            ],
           },
         ],
       },
-
       //Guest Middleware
       {
         element: <Guest />,
@@ -159,28 +175,6 @@ export const router = createBrowserRouter([
           },
         ],
       },
-
-      // {
-      //   path: "courses",
-      //   children: [
-      //     {
-      //       path: "/addCourse",
-      //       element: <AddCourse/>,
-      //     },
-      //     {
-      //       path: "update",
-      //       element: <div></div>,
-      //     },
-      //     {
-      //       path: "create",
-      //       element: <div></div>,
-      //     },
-      //     {
-      //       path: "delete",
-      //       element: <div></div>,
-      //     },
-      //   ],
-      // }
     ],
   },
 ]);

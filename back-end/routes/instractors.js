@@ -116,54 +116,37 @@ router.get("/:id", async (req, res) => {
 
 router.get("/view/:id", async (req, res) => {
   try {
-    let students = [];
+    let result = [];
     const query = util.promisify(conn.query).bind(conn);
-    const instractor = await query(
+    const instructor = await query(
       "SELECT course_id FROM instractors_courses WHERE instractor_id =?",
       [req.params.id]
     );
 
-    if (!instractor[0]) {
-      return res.status(400).json({ errors: ["Instractor not found"] });
+    if (!instructor[0]) {
+      return res
+        .status(400)
+        .json({ errors: ["You haven't been assigned to any courses."] });
     }
 
-    for (let i = 0; i < instractor.length; i++) {
-      const result = await query(
-        "SELECT name,image_url, student_id FROM courses, users_courses WHERE id = ? AND course_id = ?",
-        [instractor[i].course_id, instractor[i].course_id]
-      );
-      result[0].image_url =
-        "http://" + req.hostname + ":4002/" + result[0].image_url;
-      students.push(result);
+    for (let i = 0; i < instructor.length; i++) {
+      const course = await query("SELECT * FROM courses where id = ?", [
+        instructor[i].course_id,
+      ]);
+      course[0].image_url =
+        "http://" + req.hostname + ":4002/" + course[0].image_url;
+      result.push(course[0]);
     }
 
-    // Flatten the array of arrays of objects
-    students = students.flat();
-
-    // Remove duplicate course names
-    students = students.reduce((uniqueStudents, student) => {
-      const courseIndex = uniqueStudents.findIndex(
-        (s) => s.name === student.name
-      );
-      if (courseIndex === -1) {
-        uniqueStudents.push(student);
-      } else {
-        // Merge the student IDs for the duplicate course name
-        uniqueStudents[courseIndex].student_id += ", " + student.student_id;
-      }
-      return uniqueStudents;
-    }, []);
-
-    res.status(200).json(students);
+    res.status(200).json(result);
   } catch (err) {
     res.status(500).json(err);
   }
 });
 
 router.post(
-  "/setGrades",
-  body("course_id").isNumeric().withMessage("please enter a valid course id"),
-  body("student_id").isNumeric().withMessage("please enter a valid student id"),
+  "/setGrades/:student_id/:course_id",
+  upload.single(),
   body("grades").isNumeric().withMessage("please enter a valid Grade"),
   async (req, res) => {
     try {
@@ -173,13 +156,13 @@ router.post(
         return res.status(400).json({ errors: errors.array() });
       }
       const course = await query("select * from courses where id =?", [
-        req.body.course_id,
+        req.params.course_id,
       ]);
       if (!course[0]) {
         return res.status(400).json({ errors: ["Course not found"] });
       }
       const student = await query("SELECT * FROM users WHERE id =?", [
-        req.body.student_id,
+        req.params.student_id,
       ]);
       if (!student[0]) {
         return res.status(400).json({ errors: ["Student Not Found"] });
@@ -187,13 +170,11 @@ router.post(
         return res.status(400).json({ errors: ["User is not Student"] });
       }
       const gradesObj = {
-        student_id: student[0].id,
-        course_id: course[0].id,
         grades: req.body.grades,
       };
       await query(
         "update users_courses set grades =? where student_id =? and course_id = ?",
-        [req.body.grades, student[0].id, course[0].id]
+        [req.body.grades, req.params.student_id, req.params.course_id]
       );
       res.status(200).json({
         msg: "Grades Added",
@@ -203,4 +184,24 @@ router.post(
     }
   }
 );
+
+router.get("/student/:id", async (req, res) => {
+  try {
+    const query = util.promisify(conn.query).bind(conn);
+    const students = await query(
+      "SELECT u.id, u.name, u.email, u.image_url, uc.grades FROM users_courses uc JOIN users u ON uc.student_id = u.id WHERE uc.course_id = ?",
+      [req.params.id]
+    );
+
+    for (let i = 0; i < students.length; i++) {
+      students[i].image_url =
+        "http://" + req.hostname + ":4002/" + students[i].image_url;
+    }
+
+    res.status(200).json(students);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
 module.exports = router;

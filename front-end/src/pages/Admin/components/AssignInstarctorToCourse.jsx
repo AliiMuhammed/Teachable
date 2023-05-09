@@ -77,7 +77,7 @@ const AssignInstarctorToCourse = () => {
     setInstructor({ ...instructor, loading: true });
     const formData = new FormData();
     formData.append("course_id", course.id);
-    formData.append("instructor_id", instructor.id);
+    formData.append("instractor_id", instructor.id);
     axios
       .post("http://localhost:4002/courses/assign", formData, {
         headers: {
@@ -116,7 +116,7 @@ const AssignInstarctorToCourse = () => {
       });
   };
 
-  console.log(course.err === null);
+
 
   return (
     <>
@@ -153,7 +153,7 @@ const AssignInstarctorToCourse = () => {
                 setInstructor({ ...instructor, id: parseInt(e.target.value) })
               }
             >
-              <option defaultChecked>Select Instructor</option>
+              <option>Select Instructor</option>
               {instructor.results.map((Instructor) => {
                 return (
                   <option key={Instructor.id} value={Instructor.id}>

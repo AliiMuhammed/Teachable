@@ -63,6 +63,9 @@ a{
     color: var(--mainFontColor);
     text-decoration: none;
 }
+a:hover{
+    color: var(--mainColor);
+}
 img{
     display: block;
     object-fit: cover;

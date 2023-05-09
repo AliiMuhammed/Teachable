@@ -5,12 +5,12 @@ import { SlNotebook } from "react-icons/sl";
 import { useState, useEffect } from "react";
 import Spinner from "react-bootstrap/Spinner";
 import Alert from "react-bootstrap/Alert";
-
+import { getAuthUser } from "../../helper/Storage";
 import axios from "axios";
 const CouresDetails = () => {
   let { id } = useParams();
   let { code } = useParams();
-
+  const auth = getAuthUser();
   const [course, setCourse] = useState({
     loading: true,
     result: null,
@@ -38,6 +38,36 @@ const CouresDetails = () => {
       });
   }, []);
 
+  const [registerCourse, setRegisterCourse] = useState({
+    loading: false,
+    success: null,
+    err: null,
+  });
+
+  const RegisterCoures = (e) => {
+    e.preventDefault();
+    setRegisterCourse({ ...registerCourse, loading: true });
+    axios
+      .post(
+        "http://localhost:4002/students/registerCourses/" + auth.id + "/" + id
+      )
+      .then((resp) => {
+        setRegisterCourse({
+          ...registerCourse,
+          loading: false,
+          success: "Course Registered Successfully",
+          err: null,
+        });
+      })
+      .catch((error) => {
+        setRegisterCourse({
+          ...registerCourse,
+          loading: false,
+          err: error.response.data.errors,
+        });
+      });
+  };
+
   return (
     <>
       {/* Loader */}
@@ -53,6 +83,21 @@ const CouresDetails = () => {
       {course.loading === false && course.err === null && (
         <>
           <section className="details-section">
+            {registerCourse.err !== null &&
+              registerCourse.err.map((error, index) => {
+                return (
+                  <Alert key={index} variant="danger" className="registerAlert">
+                    {error.msg}
+                  </Alert>
+                );
+              })}
+            {registerCourse.err === null &&
+              registerCourse.success !==
+                null&&(
+                  <Alert variant="success" className="registerAlert">
+                    {registerCourse.success}
+                  </Alert>
+                )}
             <div className="container course-details_container">
               <div className="course-img">
                 <img src={course.result.image_url} alt={course.result.name} />
@@ -64,9 +109,20 @@ const CouresDetails = () => {
                   <SlNotebook />
                   {course.result.durations} lecture
                 </h5>
-                <span>
-                  Course Code:<strong>{course.result.code}</strong>
-                </span>
+                <div className="btn-container">
+                  <span>
+                    Course Code:<strong>{course.result.code}</strong>
+                  </span>
+                  {/* Authenticated Routes */}
+                  {auth && auth.type === "student" && (
+                    <button
+                      className="btn register-btn"
+                      onClick={RegisterCoures}
+                    >
+                      Register course
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
           </section>

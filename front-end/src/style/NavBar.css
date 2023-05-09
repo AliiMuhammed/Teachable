@@ -64,7 +64,12 @@ nav{
 }
 
 /*medium*/
-
+@media (min-width: 993px)and (max-width:1199px) {
+.nav-links{
+    gap: 2.5rem;
+    font-size: 1rem;
+}
+}
 @media (max-width:992px) {
 .nav-toggle-btn {
         display: inline-block;

@@ -98,7 +98,11 @@ router.post("/registerCourses/:student_id/:course_id", async (req, res) => {
       [student[0].id, course[0].id]
     );
     if (students.length > 0) {
-      res.status(400).json("student already registered");
+      res
+        .status(400)
+        .json({
+          errors: [{ msg: "You have already registered for that course." }],
+        });
     } else {
       const registerObj = {
         student_id: student[0].id,
@@ -130,7 +134,7 @@ router.get("/showGrades/:id", async (req, res) => {
 
     for (let i = 0; i < student.length; i++) {
       const course = await query(
-        "SELECT DISTINCT name, image_url, code, durations, grades FROM courses, users_courses WHERE id = ? AND student_id = ?",
+        "SELECT DISTINCT courses.name, courses.image_url, courses.code, courses.durations, courses.id, users_courses.grades FROM courses JOIN users_courses ON courses.id = users_courses.course_id WHERE courses.id = ? AND users_courses.student_id = ?",
         [student[i].course_id, stud_id]
       );
       course[0].image_url =
