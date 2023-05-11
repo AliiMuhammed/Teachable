@@ -112,7 +112,7 @@ const StudentsEnrolled = () => {
               </tr>
             </thead>
             <tbody>
-              {student.results.map((student) => {
+              {student.results.map((student) => { 
                 return (
                   <tr key={student.id}>
                     <td>{student.id}</td>

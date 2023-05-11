@@ -100,10 +100,10 @@ const CoursesTable = () => {
               })}
             </tbody>
           </Table>
+        </div>
           <Link to={"/admin/courses/assgin"} className="btn sm-btn assgin-btn">
             Assgin to instructors
           </Link>
-        </div>
       </>
     );
   };

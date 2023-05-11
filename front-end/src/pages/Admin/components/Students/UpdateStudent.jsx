@@ -19,7 +19,7 @@ const UpdateStudent = () => {
     loading: false,
     err: null,
     success: null,
-    reload: false,
+    reload: 0,
   });
 
   const UpdateStudent = (e) => {
@@ -44,6 +44,7 @@ const UpdateStudent = () => {
           ...user,
           success: "Student Updated Successfully !",
           loading: false,
+          reload: user.reload + 1,
         });
       })
       .catch((err) => {
@@ -76,8 +77,6 @@ const UpdateStudent = () => {
         });
       });
   }, [user.reload]);
-
-  console.log(user.err);
 
   return (
     <>

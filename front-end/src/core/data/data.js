@@ -26,50 +26,6 @@ export const features = [
   },
 ];
 
-export const courses = [
-  {
-    id: 1,
-    title: "Information About UI/UX Design Degree",
-    description: "Information about",
-    instructor: "William",
-    durations: "155 Lessons",
-    Image: require("../../assests/images/courses/c1.png"),
-  },
-  {
-    id: 2,
-    title: "Information About UI/UX Design Degree",
-    description: "Information about",
-    instructor: "William",
-    durations: "92 Lessons",
-    Image: require("../../assests/images/courses/c2.png"),
-  },
-  {
-    id: 3,
-    title: "Information About UI/UX Design Degree",
-    description: "Information about",
-    instructor: "William",
-    durations: "82 Lessons",
-    Image: require("../../assests/images/courses/c3.png"),
-  },
-  {
-    id: 4,
-    title: "Information About UI/UX Design Degree",
-    description: "Information about",
-    instructor: "William",
-    durations: "188 Lessons",
-    Image: require("../../assests/images/courses/c4.png"),
-  },
-  ,
-  {
-    id: 5,
-    title: "Information About UI/UX Design Degree",
-    description: "Information about",
-    instructor: "William",
-    durations: "188 Lessons",
-    Image: require("../../assests/images/courses/c4.png"),
-  },
-];
-
 export const team = [
   {
     id: 1,
@@ -93,7 +49,7 @@ export const team = [
     id: 4,
     name: "Dina Ziada",
     dep: "Cs Student",
-    image: require("../../assests/images/about page imgs/team/test.jpg"),
+    image: require("../../assests/images/about page imgs/team/dina.jpg"),
   },
   {
     id: 5,

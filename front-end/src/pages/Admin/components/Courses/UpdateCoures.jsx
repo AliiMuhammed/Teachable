@@ -21,7 +21,7 @@ const UpdateCoures = () => {
     loading: false,
     err: null,
     success: null,
-    reload: false,
+    reload: 0,
   });
 
   const UpdateCourse = (e) => {
@@ -48,6 +48,7 @@ const UpdateCoures = () => {
           ...course,
           success: "Course Updated Successfully !",
           loading: false,
+          reload: course.reload + 1,
         });
       })
       .catch((err) => {
@@ -56,6 +57,7 @@ const UpdateCoures = () => {
           loading: false,
           success: null,
           err: "Something went wrong, please try again later ! ",
+          
         });
       });
   };
