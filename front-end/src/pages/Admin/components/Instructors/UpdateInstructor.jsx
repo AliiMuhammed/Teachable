@@ -19,7 +19,7 @@ const UpdateInstructor = () => {
     loading: false,
     err: null,
     success: null,
-    reload: false,
+    reload: 0,
   });
 
   const UpdateInstructor = (e) => {
@@ -44,6 +44,7 @@ const UpdateInstructor = () => {
           ...user,
           success: "Instructor Updated Successfully !",
           loading: false,
+          reload:user.reload+1
         });
       })
       .catch((err) => {
