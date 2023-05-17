@@ -66,7 +66,7 @@ nav{
 /*medium*/
 @media (min-width: 993px)and (max-width:1199px) {
 .nav-links{
-    gap: 2.5rem;
+    gap: 2.4rem;
     font-size: 1rem;
 }
 }
@@ -150,6 +150,9 @@ nav{
     .nav-links li:nth-child(5){
         animation-delay: 800ms;
     }
+    .nav-links li:nth-child(6){
+        animation-delay: 1000ms;
+    }
 
     @keyframes navAnimation {
         to{
@@ -160,7 +163,12 @@ nav{
         .login-btn.bordered-btn{
         color: #fff;
         border-color: transparent;
-        
+        margin: 0 ;
+            height: 100%;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            padding: 1rem 5rem 1rem 3rem;
         }
         .login-btn:hover{
         color: var(--mainFontColor);
