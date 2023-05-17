@@ -16,7 +16,7 @@ const NavBar = () => {
 
   const LogOut = () => {
     axios
-      .post("http://localhost:4002/auth/logout/" + auth.id,)
+      .post("http://localhost:4002/auth/logout/" + auth.id)
       .then((resp) => {})
       .catch((err) => {});
     removeAuthUser();
@@ -66,31 +66,36 @@ const NavBar = () => {
             );
           })}
 
-          <li>
-            {/* Authenticated Routes */}
-            {auth && auth.type!=="admin"&&(
+          {/* Authenticated Routes */}
+          {auth && auth.type !== "admin" && (
+            <li>
               <NavLink
-                to={"/profile"+"/"+auth.type}
+                to={"/profile" + "/" + auth.type}
                 onClick={() => setIsNavShowing((prev) => !prev)}
               >
                 My Profile
               </NavLink>
-            )}
-            {/* Authenticated Routes */}
-            {auth && auth.type==="admin"&&(
+            </li>
+          )}
+          {/* Authenticated Routes */}
+          {auth && auth.type === "admin" && (
+            <li>
               <NavLink
                 to={"/admin"}
                 onClick={() => setIsNavShowing((prev) => !prev)}
               >
                 DashBoard
               </NavLink>
-            )}
-          </li>
+            </li>
+          )}
           <li>
             {auth && (
               <NavLink
-                className="login-btn bordered-btn"
-                onClick={(() => setIsNavShowing((prev) => !prev), LogOut)}
+                className={"login-btn bordered-btn"}
+                onClick={() => {
+                  setIsNavShowing((prev) => !prev);
+                  LogOut();
+                }}
                 to={"/"}
               >
                 log out
@@ -99,9 +104,9 @@ const NavBar = () => {
             {/* unAuthenticated Routes */}
             {!auth && (
               <NavLink
-                className="login-btn bordered-btn"
                 to="/login"
                 onClick={() => setIsNavShowing((prev) => !prev)}
+                className={"login-btn bordered-btn"}
               >
                 log in
               </NavLink>
