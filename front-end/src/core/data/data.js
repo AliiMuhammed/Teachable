@@ -37,7 +37,7 @@ export const team = [
     id: 2,
     name: "Shahdan Hegazy",
     dep: "Cs Student",
-    image: require("../../assests/images/about page imgs/team/test.jpg"),
+    image: require("../../assests/images/about page imgs/team/shadan.heic"),
   },
   {
     id: 3,
