@@ -160,7 +160,7 @@ nav{
             transform:rotateX(0);
         }
     }
-        .login-btn.bordered-btn{
+        .login-btn.bordered-btn.nav-btn{
         color: #fff;
         border-color: transparent;
         margin: 0 ;
@@ -170,7 +170,7 @@ nav{
             align-items: center;
             padding: 1rem 5rem 1rem 3rem;
         }
-        .login-btn:hover{
+        .login-btn.bordered-btn.nav-btn:hover{
         color: var(--mainFontColor);
         background-color: transparent ;
     }

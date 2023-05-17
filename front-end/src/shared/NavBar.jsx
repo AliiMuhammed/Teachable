@@ -80,18 +80,13 @@ const NavBar = () => {
           {/* Authenticated Routes */}
           {auth && auth.type === "admin" && (
             <li>
-              <NavLink
-                to={"/admin"}
-                onClick={() => setIsNavShowing((prev) => !prev)}
-              >
-                DashBoard
-              </NavLink>
+              <NavLink to={"/admin"}>DashBoard</NavLink>
             </li>
           )}
           <li>
             {auth && (
               <NavLink
-                className={"login-btn bordered-btn"}
+                className={"login-btn bordered-btn nav-btn  "}
                 onClick={() => {
                   setIsNavShowing((prev) => !prev);
                   LogOut();
@@ -106,7 +101,7 @@ const NavBar = () => {
               <NavLink
                 to="/login"
                 onClick={() => setIsNavShowing((prev) => !prev)}
-                className={"login-btn bordered-btn"}
+                className={"login-btn bordered-btn  nav-btn"}
               >
                 log in
               </NavLink>

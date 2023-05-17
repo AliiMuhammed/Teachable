@@ -93,13 +93,13 @@ const InstructorTable = () => {
               })}
             </tbody>
           </Table>
+        </div>
           <Link
             to={"/admin/instructors/assgin"}
             className="btn sm-btn assgin-btn"
           >
             Assgin to courses
           </Link>
-        </div>
       </>
     );
   };
