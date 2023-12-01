@@ -14,6 +14,8 @@ import zipImg from "../../assests/images/material imgs/zip.png";
 import rarImg from "../../assests/images/material imgs/rar.png";
 import documentImg from "../../assests/images/material imgs/document.png";
 import { AiOutlinePlusSquare } from "react-icons/ai";
+import Alert from "react-bootstrap/Alert";
+import Spinner from "react-bootstrap/Spinner";
 
 const CouresMateialTabel = () => {
   const user = getAuthUser();
@@ -26,7 +28,7 @@ const CouresMateialTabel = () => {
   });
 
   const [courseMateial, setCourseMateial] = useState({
-    loading: true,
+    loading: false,
     results: [],
     err: null,
     delErr: null,
@@ -73,83 +75,165 @@ const CouresMateialTabel = () => {
         return documentImg;
     }
   };
-  console.log(courseMateial.results);
-  return (
-    <section className="CouresMateial-section">
-      <PageHeader header={"Course Materials"}>
-        <ul className="navigate-links">
-          <li>
-            <Link to={"/"}>Home</Link>
-          </li>
-          <li>/</li>
-          <li>
-            <Link to={"/profile/instractor"}>My Profile</Link>
-          </li>
-          <li>/</li>
-          {!course.loading && course.result.name && (
-            <li>{`${course.result.name} course`}</li>
-          )}
-        </ul>
-      </PageHeader>
+  const displayCourses = () => {
+    return (
+      <div className="courseTable">
+        <Table bordered striped hover>
+          <thead>
+            <tr>
+              <th>Id</th>
+              <th>Name</th>
+              <th>Image</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {courseMateial.results.map((courseMateial) => {
+              return (
+                <tr key={courseMateial.id}>
+                  <td>{courseMateial.id}</td>
+                  <td>{courseMateial.name}</td>
 
-      <section className="CouresMateialTabel-section">
-        <div className="container">
-          <div className="table-header">
-            <h3>All Courses</h3>
-            <Link to={"add"} className="btn sm-btn Add-btn">
-              Add Course <AiOutlinePlusSquare />
-            </Link>
-          </div>
-          <div className="courseTable">
-            <Table bordered striped hover>
-              <thead>
-                <tr>
-                  <th>Id</th>
-                  <th>Name</th>
-                  <th>Image</th>
-                  <th>Action</th>
+                  <td className="table-img">
+                    <img src={getFileExtension(courseMateial.file)} alt="" />
+                  </td>
+                  <td>
+                    <div className="table-btns">
+                      <button
+                        to={"delete"}
+                        className="btn btn-sm btn-delete"
+                        onClick={""}
+                      >
+                        Delete
+                      </button>
+                      <Link to={""} className="btn btn-sm btn-Update">
+                        Update
+                      </Link>
+                    </div>
+                  </td>
                 </tr>
-              </thead>
-              <tbody>
-                {courseMateial.results.map((courseMateial) => {
-                  return (
-                    <tr key={courseMateial.id}>
-                      <td>{courseMateial.id}</td>
-                      <td>{courseMateial.name}</td>
+              );
+            })}
+          </tbody>
+        </Table>
+      </div>
+    );
+  };
 
-                      <td className="table-img">
-                        <img
-                          src={getFileExtension(courseMateial.file)}
-                          alt=""
-                        />
-                      </td>
-                      <td>
-                        <div className="table-btns">
-                          <button
-                            to={"delete"}
-                            className="btn btn-sm btn-delete"
-                            onClick={""}
-                          >
-                            Delete
-                          </button>
-                          <Link to={""} className="btn btn-sm btn-Update">
-                            Update
-                          </Link>
-                          <Link to={""} className="btn btn-sm btn-show">
-                            Show
-                          </Link>
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </Table>
+  return (
+    <div>
+      <section className="CouresMateial-section">
+        <PageHeader header={"Course Materials"}>
+          <ul className="navigate-links">
+            <li>
+              <Link to={"/"}>Home</Link>
+            </li>
+            <li>/</li>
+            <li>
+              <Link to={"/profile/instractor"}>My Profile</Link>
+            </li>
+            <li>/</li>
+            {!course.loading && course.result.name && (
+              <li>{`${course.result.name} course`}</li>
+            )}
+          </ul>
+        </PageHeader>
+
+        <section className="CouresMateialTabel-section">
+          <div className="container">
+            {/* delete action handeling */}
+            {courseMateial.loading === false &&
+              courseMateial.delErr == null &&
+              courseMateial.delSuccess != null && (
+                <Alert variant="success" className="AlertAddCoures">
+                  {courseMateial.delSuccess}
+                </Alert>
+              )}
+            {courseMateial.loading === false &&
+              courseMateial.delErr != null &&
+              courseMateial.delSuccess === null && (
+                <Alert variant="danger" className="AlertAddCoures">
+                  {courseMateial.delErr}
+                </Alert>
+              )}
+
+            <div className="table-header">
+              <h3>All Materials</h3>
+              <Link to={"add"} className="btn sm-btn Add-btn">
+                Add Material <AiOutlinePlusSquare />
+              </Link>
+            </div>
+            {/* Loader */}
+            {courseMateial.loading === true && (
+              <div className="pageSpinner">
+                <Spinner animation="border" className="spinner">
+                  <span className="visually-hidden">Loading...</span>
+                </Spinner>
+              </div>
+            )}
+            {/* displayCourses */}
+            {courseMateial.loading === false &&
+              courseMateial.err === null &&
+              courseMateial.results.length !== 0 && <>{displayCourses()}</>}
+          </div>
+        </section>
+      </section>
+      {/* add modal */}
+      {/* <Modal
+        show={selectedStudent.show}
+        onHide={handleClose}
+        backdrop="static"
+        centered
+        keyboard={false}
+      >
+         <Modal.Header closeButton>
+          <Modal.Title>Set Student Grade</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {grades.err === null && grades.succsse !== null && (
+            <Alert variant="success">{grades.succsse}</Alert>
+          )}
+
+          {grades.err !== null && grades.succsse === null && (
+            <Alert variant="danger">{grades.err}</Alert>
+          )}
+          <div className="studentImg">
+            <img src={selectedStudent.img} alt="" />
           </div>
 
-        </div>
-      </section>
-    </section>
+          <Form className="setGrade-form">
+            <fieldset disabled className="mb-3 grades-input">
+              <Form.Group>
+                <Form.Label>Student garde</Form.Label>
+                <Form.Control type="text" value={selectedStudent.grade} />
+              </Form.Group>
+            </fieldset>
+
+            <Form.Group className="mb-3 grades-input">
+              <Form.Label>new grade</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Set his new grade"
+                onChange={(e) =>
+                  setGrade({
+                    ...grades,
+                    grade: e.target.value,
+                  })
+                }
+              />
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <button className="btn-delete btn close-btn" onClick={handleClose}>
+            Close
+          </button>
+          <button className="btn setGrade-btn" onClick={""}>
+            set Grade
+          </button>
+        </Modal.Footer>
+      </Modal> */}
+    </div>
   );
 };
 
