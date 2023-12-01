@@ -6,7 +6,7 @@ import Spinner from "react-bootstrap/Spinner";
 import Alert from "react-bootstrap/Alert";
 import { getAuthUser } from "../../helper/Storage";
 import axios from "axios";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 const CouresDetails = () => {
   let { id } = useParams();
   let { code } = useParams();
@@ -121,9 +121,9 @@ const CouresDetails = () => {
                     </button>
                     <Link
                       className="btn material-btn"
-                      to={`/courses/material/${id}`}
+                      to={`/courses/material/${id}/${code}`}
                     >
-                     Coures Material
+                      Coures Material
                     </Link>
                   </div>
                 )}

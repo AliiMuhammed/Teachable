@@ -64,3 +64,11 @@ export const team = [
     image: require("../../assests/images/about page imgs/team/haneen.jpg"),
   },
 ];
+
+export const materials = [
+  { id: "1", name: "lec1", file: require("../../assests/materials/lec1.pdf") },
+  { id: "2", name: "lec2", file: require("../../assests/materials/lec2.docx") },
+  { id: "3", name: "lec3", file: require("../../assests/materials/lec3.pptx") },
+  { id: "4", name: "lec4", file: require("../../assests/materials/lec4.txt") },
+  { id: "5", name: "lec5", file: require("../../assests/materials/lec5.rar") },
+];
