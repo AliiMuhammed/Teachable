@@ -131,7 +131,7 @@ const InstructorProfile = () => {
       {/* displayCourses */}
       {course.loading === false &&
         course.err === null &&
-        course.results.length != 0 && <>{displayCourses()}</>}
+        course.results.length !== 0 && <>{displayCourses()}</>}
 
       {/* errors handling */}
       {course.loading === false && course.err != null && (

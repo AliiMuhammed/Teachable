@@ -1,8 +1,7 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./style/couresDetails.css";
 import { useParams } from "react-router";
 import { SlNotebook } from "react-icons/sl";
-import { useState, useEffect } from "react";
 import Spinner from "react-bootstrap/Spinner";
 import Alert from "react-bootstrap/Alert";
 import { getAuthUser } from "../../helper/Storage";
