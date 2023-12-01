@@ -6,6 +6,7 @@ import Spinner from "react-bootstrap/Spinner";
 import Alert from "react-bootstrap/Alert";
 import { getAuthUser } from "../../helper/Storage";
 import axios from "axios";
+import { Link } from 'react-router-dom';
 const CouresDetails = () => {
   let { id } = useParams();
   let { code } = useParams();
@@ -72,7 +73,7 @@ const CouresDetails = () => {
       {/* Loader */}
       {course.loading === true && (
         <div className="pageSpinner">
-          <Spinner animation="border" role="status" className="spinner">
+          <Spinner animation="border" className="spinner">
             <span className="visually-hidden">Loading...</span>
           </Spinner>
         </div>
@@ -111,13 +112,19 @@ const CouresDetails = () => {
                 </span>
                 {/* Authenticated Routes */}
                 {auth && auth.type === "student" && (
-                  <button
-                    className="btn register-btn"
-                    onClick={RegisterCoures}
-                    disabled={registerCourse.err !== null ? true : false}
-                  >
-                    Register course
-                  </button>
+                  <div>
+                    <button
+                      className="btn register-btn"
+                      onClick={RegisterCoures}
+                    >
+                      Register course
+                    </button>
+                    <Link
+                      className="btn material-btn"
+                    >
+                     Coures Material
+                    </Link>
+                  </div>
                 )}
               </div>
             </div>

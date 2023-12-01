@@ -1,128 +1,163 @@
-.details-section{
-    margin-top: 6rem; 
-    padding:  5rem 0;
+.details-section {
+    margin-top: 6rem;
+    padding: 5rem 0;
 }
-.course-details_container{
+
+.course-details_container {
     display: flex;
     align-items: center;
     justify-content: center;
-    
-}
-
-.course-img{
-        width: 50%;
-        margin-right: 4rem;
-        
 
 }
-.course-details_container:hover .course-img img{
+
+.course-img {
+    width: 50%;
+    margin-right: 4rem;
+
+
+}
+
+.course-details_container:hover .course-img img {
     border: 2px solid var(--mainColor);
 }
-.course-metaData h1{
-transition: var(--transition);
-}
-.course-details_container:hover .course-metaData h1{
-    color: var(--mainColor);
-}
-.course-img img{
-    border-radius: 10px;
-    border: 2px solid transparent;
-    
+
+.course-metaData h1 {
+    transition: var(--transition);
 }
 
-.course-metaData h5{
-    display: flex;
-        align-items: center;
-    
+.course-details_container:hover .course-metaData h1 {
+    color: var(--mainColor);
 }
-.course-metaData h5 svg{
+
+.course-img img {
+    border-radius: 10px;
+    border: 2px solid transparent;
+
+}
+
+.course-metaData h5 {
+    display: flex;
+    align-items: center;
+
+}
+
+.course-metaData h5 svg {
     margin-right: 0.5rem;
 }
-.course-metaData span strong{
+
+.course-metaData span strong {
     color: var(--mainColor);
     margin-left: 5px;
 }
 
 
-.alert-container.container.course-details_alert{
-    height:50vh;
+.alert-container.container.course-details_alert {
+    height: 50vh;
     margin-top: 6rem;
 }
-.btn-container{
+
+.btn-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
-.btn.register-btn{
+
+.btn-container div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn.register-btn {
+    margin: 0;
+    margin-right: 1rem;
+}
+
+.btn.material-btn {
     margin: 0;
 }
 
-
-.registerAlert{
+.registerAlert {
     width: 60%;
     margin: 0 auto;
 }
+
+
 /*===================responsive==================*/
 
 @media (max-width:767px) {
     .details-section {
-            padding: 5rem 0 0;
-           
-        }
-.container.course-details_container{
-    flex-direction: column;
-    text-align: center;
-}
-.course-img{
-    margin: 1rem 0;
+        padding: 5rem 0 0;
 
-}
-.course-metaData h5 {
-    justify-content: center;
-}
-.course-metaData h1{
-    font-size: 2rem;
-}
+    }
 
-.btn-container {
-flex-direction: column;
-}
-.btn-container span{
-    margin-bottom:1rem ;
-}
-
-.btn.register-btn {
-    width: 50%;
-    padding: 0.5rem;
-
-}
-}
-
-@media (min-width:768px) and (max-width:992px) {
-.course-details_container {
+    .container.course-details_container {
         flex-direction: column;
         text-align: center;
     }
-        .course-metaData h5 {
-            justify-content: center;
-        }
-        .course-img {
-            margin: 0;
-            margin-bottom: 2rem;
-            width: 70%;
-        }
 
-                .btn-container {
-                    flex-direction: column;
-                }
+    .course-img {
+        margin: 1rem 0;
+
+    }
+
+    .course-metaData h5 {
+        justify-content: center;
+    }
+
+    .course-metaData h1 {
+        font-size: 2rem;
+    }
+
+    .btn-container {
+        flex-direction: column;
+    }
+
+    .btn-container span {
+        margin-bottom: 1rem;
+    }
+
+    .btn.register-btn,
+    .btn.material-btn {
         
-                .btn-container span {
-                    margin-bottom: 1rem;
-                }
-        
-                .btn.register-btn {
-                    
-                    padding: 0.9rem;
-        
-                }
+        padding: 0.5rem;
+
+    }
+
+
+}
+
+@media (min-width:768px) and (max-width:992px) {
+    .course-details_container {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .course-metaData h5 {
+        justify-content: center;
+    }
+
+    .course-img {
+        margin: 0;
+        margin-bottom: 2rem;
+        width: 70%;
+    }
+
+    .btn-container {
+        flex-direction: column;
+    }
+
+    .btn-container div {
+        width: 100%;
+    }
+
+    .btn-container span {
+        margin-bottom: 1rem;
+    }
+
+    .btn.register-btn {
+
+        padding: 0.9rem;
+
+    }
 }
