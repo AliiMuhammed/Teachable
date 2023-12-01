@@ -1,23 +1,33 @@
-
-.gradeTable{
-    display:flex;
-    align-items:center;
-    justify-content:center;
+.gradeTable {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     flex-direction: column;
 
 }
-.gradeTable h2{
+
+.gradeTable h2 {
     margin-bottom: 2rem;
 }
-.container.table-container{
+
+.container.table-container {
     overflow: auto;
 }
+
 .instructor-table {
-    width: 90%;
     margin-inline: auto;
 }
 
 .btn.instructorShow-btn {
     margin: 0;
     padding: 0.6rem 1rem;
+    height: 100%;
+}
+
+.instructor-table .table-btns {
+    width: 225px;
+}
+
+.btn.instructorShow-btn:last-child {
+    margin-left: 1rem;
 }

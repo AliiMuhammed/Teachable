@@ -132,7 +132,7 @@ const CoursesTable = () => {
   };
 
   return (
-    <>
+   
       <section className="courses-dataSection">
         <SectionHeader
           title={"Courses Section"}
@@ -160,7 +160,7 @@ const CoursesTable = () => {
           {/* Loader */}
           {course.loading === true && (
             <div className="pageSpinner">
-              <Spinner animation="border" role="status" className="spinner">
+              <Spinner animation="border"  className="spinner">
                 <span className="visually-hidden">Loading...</span>
               </Spinner>
             </div>
@@ -174,7 +174,7 @@ const CoursesTable = () => {
           {/* displayCourses */}
           {course.loading === false &&
             course.err === null &&
-            course.results.length != 0 && <>{displayCourses()}</>}
+            course.results.length !== 0 && <>{displayCourses()}</>}
 
           {/* errors handling */}
           {course.loading === false && course.err != null && (
@@ -186,7 +186,7 @@ const CoursesTable = () => {
           )}
         </div>
       </section>
-    </>
+    
   );
 };
 

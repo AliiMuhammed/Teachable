@@ -72,7 +72,7 @@ const CouresMaterial = () => {
           </li>
           <li>/</li>
           <li>
-            <Link to={"/"}>Courses</Link>
+            <Link to={"/profile/student"}>My Profile</Link>
           </li>
           <li>/</li>
           {!course.loading && course.result.name && (

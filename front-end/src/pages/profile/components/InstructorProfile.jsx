@@ -5,38 +5,15 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { getAuthUser } from "../../../helper/Storage";
 import Spinner from "react-bootstrap/Spinner";
-
 import Alert from "react-bootstrap/Alert";
 
-const key = "Compact Table";
-
 const InstructorProfile = () => {
-  //   const [grades, setGrades] = useState({
-  //     loading: true,
-  //     results: [],
-  //     err: null,
-  //     reload: 0
-  // })
-
-  // useEffect(() => {
-  //   setGrades({...grades, loading: true})
-  //   axios.get("http://localhost:4002/students/18")
-  //   .then((resp) =>  {
-  //     console.log(resp);
-  //     setGrades({...grades, results: resp.data, loading: false, err: null})
-  //   })
-  //   .catch((err) => {
-  //     setGrades({...grades, loading: false, err:"Something failed"})
-
-  //   });
-  // }, [])
   const user = getAuthUser();
 
   const [course, setCourses] = useState({
     loading: true,
     results: [],
     id: null,
-    err: null,
     err: null,
     reload: 0,
   });
@@ -94,11 +71,29 @@ const InstructorProfile = () => {
                       <div className="table-btns">
                         <Link
                           to={
-                            "/profile/instractor/studentEnrolled/" + course.id+"/"+course.code
+                            "/profile/instractor/studentEnrolled/" +
+                            course.id +
+                            "/" +
+                            course.code
                           }
                           className="btn btn-sm instructorShow-btn"
                         >
                           Show
+                        </Link>
+                        <Link
+                          className="btn btn-sm instructorShow-btn"
+                          to={`/profile/instractor/materials/${course.id}/${course.code}`}
+                          // onClick={() =>
+                          //   setSelectedCourse({
+                          //     ...selectedCourse,
+                          //     name: course.name,
+                          //     id: course.id,
+                          //     img: course.image_url,
+                          //     show: true,
+                          //   })
+                          // }
+                        >
+                          Add materials
                         </Link>
                       </div>
                     </td>
@@ -118,30 +113,32 @@ const InstructorProfile = () => {
   };
 
   return (
-    <article className="gradeTable">
-      <h2>Assigned Courses</h2>
-      {/* Loader */}
-      {course.loading === true && (
-        <div className="pageSpinner">
-          <Spinner animation="border" role="status" className="spinner">
-            <span className="visually-hidden">Loading...</span>
-          </Spinner>
-        </div>
-      )}
-      {/* displayCourses */}
-      {course.loading === false &&
-        course.err === null &&
-        course.results.length !== 0 && <>{displayCourses()}</>}
+    <div>
+      <article className="gradeTable">
+        <h2>Assigned Courses</h2>
+        {/* Loader */}
+        {course.loading === true && (
+          <div className="pageSpinner">
+            <Spinner animation="border" className="spinner">
+              <span className="visually-hidden">Loading...</span>
+            </Spinner>
+          </div>
+        )}
+        {/* displayCourses */}
+        {course.loading === false &&
+          course.err === null &&
+          course.results.length !== 0 && <>{displayCourses()}</>}
 
-      {/* errors handling */}
-      {course.loading === false && course.err != null && (
-        <div className="alert-container container">
-          <Alert variant="danger" className="alret">
-            {course.err}
-          </Alert>
-        </div>
-      )}
-    </article>
+        {/* errors handling */}
+        {course.loading === false && course.err != null && (
+          <div className="alert-container container">
+            <Alert variant="danger" className="alret">
+              {course.err}
+            </Alert>
+          </div>
+        )}
+      </article>
+    </div>
   );
 };
 
