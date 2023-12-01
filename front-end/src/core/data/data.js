@@ -71,5 +71,5 @@ export const materials = [
   { id: "3", name: "lec3", file: require("../../assests/materials/lec3.pptx") },
   { id: "4", name: "lec4", file: require("../../assests/materials/lec4.txt") },
   { id: "5", name: "lec5", file: require("../../assests/materials/lec5.rar") },
-  { id: "5", name: "lec6", file: require("../../assests/materials/lec6.zip") },
+  { id: "6", name: "lec6", file: require("../../assests/materials/lec6.zip") },
 ];
