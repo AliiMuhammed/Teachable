@@ -32,7 +32,7 @@ router.post("/login", body("email"), body("password"), async (req, res) => {
       });
     }
 
-    await query("update users set status = 'active' where id = ?", [
+    await query("update users set status = '1' where id = ?", [
       user[0].id,
     ]);
 
@@ -112,7 +112,7 @@ router.post("/logout/:id", async (req, res) => {
   try {
     const query = util.promisify(conn.query).bind(conn);
     const user = await query(
-      "update users set status = 'in-active' where id =?",
+      "update users set status = '0' where id =?",
       [req.params.id]
     );
     if (user[0] == 0) {

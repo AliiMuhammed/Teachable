@@ -81,52 +81,49 @@ const CouresDetails = () => {
 
       {/* displayCourse */}
       {course.loading === false && course.err === null && (
-        <>
-          <section className="details-section">
-            {registerCourse.err !== null &&
-              registerCourse.err.map((error, index) => {
-                return (
-                  <Alert key={index} variant="danger" className="registerAlert">
-                    {error.msg}
-                  </Alert>
-                );
-              })}
-            {registerCourse.err === null &&
-              registerCourse.success !==
-                null&&(
-                  <Alert variant="success" className="registerAlert">
-                    {registerCourse.success}
-                  </Alert>
+        <section className="details-section">
+          {registerCourse.err !== null &&
+            registerCourse.err.map((error, index) => {
+              return (
+                <Alert key={index} variant="danger" className="registerAlert">
+                  {error.msg}
+                </Alert>
+              );
+            })}
+          {registerCourse.err === null && registerCourse.success !== null && (
+            <Alert variant="success" className="registerAlert">
+              {registerCourse.success}
+            </Alert>
+          )}
+          <div className="container course-details_container">
+            <div className="course-img">
+              <img src={course.result.image_url} alt={course.result.name} />
+            </div>
+            <div className="course-metaData">
+              <h1>{course.result.name}</h1>
+              <p>{course.result.description}</p>
+              <h5>
+                <SlNotebook />
+                {course.result.durations} lecture
+              </h5>
+              <div className="btn-container">
+                <span>
+                  Course Code:<strong>{course.result.code}</strong>
+                </span>
+                {/* Authenticated Routes */}
+                {auth && auth.type === "student" && (
+                  <button
+                    className="btn register-btn"
+                    onClick={RegisterCoures}
+                    disabled={registerCourse.err !== null ? true : false}
+                  >
+                    Register course
+                  </button>
                 )}
-            <div className="container course-details_container">
-              <div className="course-img">
-                <img src={course.result.image_url} alt={course.result.name} />
-              </div>
-              <div className="course-metaData">
-                <h1>{course.result.name}</h1>
-                <p>{course.result.description}</p>
-                <h5>
-                  <SlNotebook />
-                  {course.result.durations} lecture
-                </h5>
-                <div className="btn-container">
-                  <span>
-                    Course Code:<strong>{course.result.code}</strong>
-                  </span>
-                  {/* Authenticated Routes */}
-                  {auth && auth.type === "student" && (
-                    <button
-                      className="btn register-btn"
-                      onClick={RegisterCoures}
-                    >
-                      Register course
-                    </button>
-                  )}
-                </div>
               </div>
             </div>
-          </section>
-        </>
+          </div>
+        </section>
       )}
 
       {/* errors handling */}
