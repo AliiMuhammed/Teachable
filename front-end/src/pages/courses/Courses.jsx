@@ -1,9 +1,8 @@
-import React from "react";
 import Spinner from "react-bootstrap/Spinner";
 import Alert from "react-bootstrap/Alert";
 import Form from "react-bootstrap/Form";
 import { ImSearch } from "react-icons/im";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import CoursesSection_V from "../../shared/CoursesSection_V";
 import PageHeader from "../../shared/PageHeader";
 import CourseCard from "../../shared/CourseCard";

@@ -29,6 +29,8 @@ import InstructorProfile from "./pages/profile/components/InstructorProfile";
 import StudentProfile from "./pages/profile/components/StudentProfile";
 import StudentsEnrolled from "./pages/profile/components/StudentsEnrolled";
 import SetGrade from "./pages/profile/components/SetGrade";
+import GuestStudent from "./middleware/GuestStudent";
+import CouresMaterial from "./pages/couresMaterial/CouresMaterial";
 
 export const router = createBrowserRouter([
   {
@@ -77,9 +79,20 @@ export const router = createBrowserRouter([
               },
               {
                 path: "/profile/instractor/studentEnrolled/grade/:student_id/:coures_id",
-                element: <SetGrade/>,
+                element: <SetGrade />,
               },
             ],
+          },
+        ],
+      },
+      //Guest Profile Middleware
+
+      {
+        element: <GuestStudent />,
+        children: [
+          {
+            path: "/courses/material/:id/:code",
+            element: <CouresMaterial />,
           },
         ],
       },
