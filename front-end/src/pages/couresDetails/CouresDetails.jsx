@@ -20,7 +20,7 @@ const CouresDetails = () => {
   useEffect(() => {
     setCourse({ ...course, loading: true });
     axios
-      .get("http://localhost:4002/courses/" + id + "/" + code)
+      .get("http://localhost:3000/courses/" + id + "/" + code)
       .then((resp) => {
         setCourse({
           ...course,
@@ -49,7 +49,7 @@ const CouresDetails = () => {
     setRegisterCourse({ ...registerCourse, loading: true });
     axios
       .post(
-        "http://localhost:4002/students/registerCourses/" + auth.id + "/" + id
+        "http://localhost:3000/students/registerCourses/" + auth.id + "/" + id
       )
       .then((resp) => {
         setRegisterCourse({

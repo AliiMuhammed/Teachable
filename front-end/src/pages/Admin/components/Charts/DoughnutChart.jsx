@@ -16,7 +16,7 @@ const DoughnutChart = () => {
   useEffect(() => {
     setCourses({ ...course, loading: true });
     axios
-      .get("http://localhost:4002/courses")
+      .get("http://localhost:3000/courses")
       .then((resp) => {
         setCourses({
           ...course,
@@ -41,7 +41,7 @@ const DoughnutChart = () => {
   useEffect(() => {
     setInstructor({ ...instructor, loading: true });
     axios
-      .get("http://localhost:4002/instractors")
+      .get("http://localhost:3000/instractors")
       .then((resp) => {
         setInstructor({
           ...instructor,
@@ -66,7 +66,7 @@ const DoughnutChart = () => {
   useEffect(() => {
     setStudent({ ...student, loading: true });
     axios
-      .get("http://localhost:4002/students")
+      .get("http://localhost:3000/students")
       .then((resp) => {
         setStudent({
           ...student,

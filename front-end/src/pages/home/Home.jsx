@@ -21,7 +21,7 @@ const Home = () => {
   useEffect(() => {
     setCourses({ ...course, loading: true });
     axios
-      .get("http://localhost:4002/courses")
+      .get("http://localhost:3000/courses")
       .then((resp) => {
         setCourses({
           ...course,
@@ -46,8 +46,6 @@ const Home = () => {
     }
   });
 
-
-
   const displayNewCourses = () => {
     return (
       <CoursesSection_V
@@ -56,8 +54,7 @@ const Home = () => {
         smSectionTitle="NEW COURSES"
         sectionDes="We are excited to offer a range of new courses that cater to various interests and skill levels."
       >
-        {
-        activeCourses.slice(0,4).map((course) => {
+        {activeCourses.slice(0, 4).map((course) => {
           if (course.status === 1) {
             return (
               <CourseCard
@@ -88,19 +85,19 @@ const Home = () => {
           "A wide range of educational opportunities for individuals seeking to enhance their skills and knowledge."
         }
       >
-        {activeCourses.slice(0,4).map((course) => {
-            return (
-              <CourseCard
-                key={course.id}
-                id={course.id}
-                title={course.name}
-                code={course.code}
-                courseImage={course.image_url}
-                durations={course.durations}
-                description={course.description}
-                className={"h-card"}
-              />
-            );
+        {activeCourses.slice(0, 4).map((course) => {
+          return (
+            <CourseCard
+              key={course.id}
+              id={course.id}
+              title={course.name}
+              code={course.code}
+              courseImage={course.image_url}
+              durations={course.durations}
+              description={course.description}
+              className={"h-card"}
+            />
+          );
         })}
       </CoursesSection_H>
     );

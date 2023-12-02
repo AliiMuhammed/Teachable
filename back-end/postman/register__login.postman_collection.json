@@ -52,12 +52,12 @@
 					]
 				},
 				"url": {
-					"raw": "http://localhost:4002/auth/register",
+					"raw": "http://localhost:3000/auth/register",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "4002",
+					"port": "3000",
 					"path": [
 						"auth",
 						"register"
@@ -81,12 +81,12 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:4002/auth/login",
+					"raw": "http://localhost:3000/auth/login",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "4002",
+					"port": "3000",
 					"path": [
 						"auth",
 						"login"

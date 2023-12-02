@@ -23,7 +23,7 @@ const Courses = () => {
   useEffect(() => {
     setCourses({ ...course, loading: true });
     axios
-      .get("http://localhost:4002/courses", {
+      .get("http://localhost:3000/courses", {
         params: {
           search: search,
         },

@@ -37,12 +37,12 @@
 					]
 				},
 				"url": {
-					"raw": "http://localhost:4002/instractors/10",
+					"raw": "http://localhost:3000/instractors/10",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "4002",
+					"port": "3000",
 					"path": [
 						"instractors",
 						"10"
@@ -66,12 +66,12 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:4002/instractors/setGrades",
+					"raw": "http://localhost:3000/instractors/setGrades",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "4002",
+					"port": "3000",
 					"path": [
 						"instractors",
 						"setGrades"
@@ -112,12 +112,12 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:4002/instractors/9",
+					"raw": "http://localhost:3000/instractors/9",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "4002",
+					"port": "3000",
 					"path": [
 						"instractors",
 						"9"
@@ -132,12 +132,12 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:4002/instractors/10",
+					"raw": "http://localhost:3000/instractors/10",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "4002",
+					"port": "3000",
 					"path": [
 						"instractors",
 						"10"
@@ -152,12 +152,12 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:4002/instractors/10",
+					"raw": "http://localhost:3000/instractors/10",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "4002",
+					"port": "3000",
 					"path": [
 						"instractors",
 						"10"

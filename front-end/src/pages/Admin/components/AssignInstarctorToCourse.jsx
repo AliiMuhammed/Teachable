@@ -25,7 +25,7 @@ const AssignInstarctorToCourse = () => {
   useEffect(() => {
     setInstructor({ ...instructor, loading: true });
     axios
-      .get("http://localhost:4002/instractors")
+      .get("http://localhost:3000/instractors")
       .then((resp) => {
         setInstructor({
           ...instructor,
@@ -46,7 +46,7 @@ const AssignInstarctorToCourse = () => {
   useEffect(() => {
     setCourse({ ...course, loading: true });
     axios
-      .get("http://localhost:4002/courses")
+      .get("http://localhost:3000/courses")
       .then((resp) => {
         setCourse({
           ...course,
@@ -76,10 +76,10 @@ const AssignInstarctorToCourse = () => {
     setCourse({ ...course, loading: true });
     setInstructor({ ...instructor, loading: true });
     const formData = new FormData();
-    formData.append("course_id", course.id);
-    formData.append("instractor_id", instructor.id);
+    formData.append("courseId", course.id);
+    formData.append("instructorId", instructor.id);
     axios
-      .post("http://localhost:4002/courses/assign", formData, {
+      .post("http://localhost:3000/assign/assign-instructor", formData, {
         headers: {
           token: admin.token,
           "Content-Type": "multipart/form-data",
@@ -115,8 +115,6 @@ const AssignInstarctorToCourse = () => {
         });
       });
   };
-
-
 
   return (
     <>

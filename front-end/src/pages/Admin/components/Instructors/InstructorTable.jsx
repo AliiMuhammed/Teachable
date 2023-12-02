@@ -23,7 +23,7 @@ const InstructorTable = () => {
   useEffect(() => {
     setinstructors({ ...instructor, loading: true });
     axios
-      .get("http://localhost:4002/instractors")
+      .get("http://localhost:3000/instractors")
       .then((resp) => {
         setinstructors({
           ...instructor,
@@ -94,18 +94,18 @@ const InstructorTable = () => {
             </tbody>
           </Table>
         </div>
-          <Link
-            to={"/admin/instructors/assgin"}
-            className="btn sm-btn assgin-btn"
-          >
-            Assgin to courses
-          </Link>
+        <Link
+          to={"/admin/instructors/assgin"}
+          className="btn sm-btn assgin-btn"
+        >
+          Assgin to courses
+        </Link>
       </>
     );
   };
   const deleteinstructor = (id) => {
     axios
-      .delete("http://localhost:4002/instractors/" + id, {
+      .delete("http://localhost:3000/instractors/" + id, {
         headers: {
           token: admin.token,
         },

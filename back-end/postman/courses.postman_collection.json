@@ -42,12 +42,12 @@
 					]
 				},
 				"url": {
-					"raw": "http://localhost:4002/courses/6",
+					"raw": "http://localhost:3000/courses/6",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "4002",
+					"port": "3000",
 					"path": [
 						"courses",
 						"6"
@@ -92,12 +92,12 @@
 					]
 				},
 				"url": {
-					"raw": "http://localhost:4002/courses",
+					"raw": "http://localhost:3000/courses",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "4002",
+					"port": "3000",
 					"path": [
 						"courses"
 					]
@@ -120,12 +120,12 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:4002/courses/assign",
+					"raw": "http://localhost:3000/courses/assign",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "4002",
+					"port": "3000",
 					"path": [
 						"courses",
 						"assign"
@@ -140,12 +140,12 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:4002/courses/5",
+					"raw": "http://localhost:3000/courses/5",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "4002",
+					"port": "3000",
 					"path": [
 						"courses",
 						"5"
@@ -160,12 +160,12 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:4002/courses/6",
+					"raw": "http://localhost:3000/courses/6",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "4002",
+					"port": "3000",
 					"path": [
 						"courses",
 						"6"
@@ -180,12 +180,12 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:4002/courses",
+					"raw": "http://localhost:3000/courses",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "4002",
+					"port": "3000",
 					"path": [
 						"courses"
 					]

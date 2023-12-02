@@ -34,7 +34,7 @@ const AddCourses = () => {
       formData.append("image", image.current.files[0]);
     }
     axios
-      .post("http://localhost:4002/courses", formData, {
+      .post("http://localhost:3000/courses", formData, {
         headers: {
           token: admin.token,
           "Content-Type": "multipart/form-data",

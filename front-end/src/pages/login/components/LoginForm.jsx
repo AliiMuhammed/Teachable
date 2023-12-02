@@ -19,7 +19,7 @@ const LoginForm = () => {
     e.preventDefault(); //to prevent default behavior refreshing when user submitted
     setLogin({ ...login, loading: true, err: [] });
     axios
-      .post("http://localhost:4002/auth/login", {
+      .post("http://localhost:3000/auth/login", {
         email: login.email,
         password: login.password,
         type: login.type,

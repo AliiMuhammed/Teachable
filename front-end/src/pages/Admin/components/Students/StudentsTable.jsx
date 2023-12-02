@@ -23,7 +23,7 @@ const StudentsTable = () => {
   useEffect(() => {
     setstudents({ ...student, loading: true });
     axios
-      .get("http://localhost:4002/students")
+      .get("http://localhost:3000/students")
       .then((resp) => {
         setstudents({
           ...student,
@@ -99,7 +99,7 @@ const StudentsTable = () => {
   };
   const deletestudent = (id) => {
     axios
-      .delete("http://localhost:4002/students/delete/" + id, {
+      .delete("http://localhost:3000/students/delete/" + id, {
         headers: {
           token: admin.token,
         },

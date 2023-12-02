@@ -32,7 +32,7 @@ const AddUser = () => {
       formData.append("image", image.current.files[0]);
     }
     axios
-      .post("http://localhost:4002/auth/register", formData, {
+      .post("http://localhost:3000/auth/register", formData, {
         headers: {
           token: admin.token,
           "Content-Type": "multipart/form-data",

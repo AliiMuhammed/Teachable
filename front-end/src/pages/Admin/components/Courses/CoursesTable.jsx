@@ -22,7 +22,7 @@ const CoursesTable = () => {
   useEffect(() => {
     setCourses({ ...course, loading: true });
     axios
-      .get("http://localhost:4002/courses")
+      .get("http://localhost:3000/courses")
       .then((resp) => {
         setCourses({
           ...course,
@@ -101,16 +101,16 @@ const CoursesTable = () => {
             </tbody>
           </Table>
         </div>
-          <Link to={"/admin/courses/assgin"} className="btn sm-btn assgin-btn">
-            Assgin to instructors
-          </Link>
+        <Link to={"/admin/courses/assgin"} className="btn sm-btn assgin-btn">
+          Assgin to instructors
+        </Link>
       </>
     );
   };
 
   const deleteCourse = (id) => {
     axios
-      .delete("http://localhost:4002/courses/" + id, {
+      .delete("http://localhost:3000/courses/" + id, {
         headers: {
           token: admin.token,
         },
@@ -132,61 +132,59 @@ const CoursesTable = () => {
   };
 
   return (
-   
-      <section className="courses-dataSection">
-        <SectionHeader
-          title={"Courses Section"}
-          smTilte={`Hi ${admin.name}`}
-          description={"Here you can add, update, and delete courses"}
-          className={"adminCourse-header"}
-        />
-        <div className="container courses-table-container">
-          {/* delete action handeling */}
-          {course.loading === false &&
-            course.delErr == null &&
-            course.delSuccess != null && (
-              <Alert variant="success" className="AlertAddCoures">
-                {course.delSuccess}
-              </Alert>
-            )}
-          {course.loading === false &&
-            course.delErr != null &&
-            course.delSuccess === null && (
-              <Alert variant="danger" className="AlertAddCoures">
-                {course.delErr}
-              </Alert>
-            )}
-
-          {/* Loader */}
-          {course.loading === true && (
-            <div className="pageSpinner">
-              <Spinner animation="border"  className="spinner">
-                <span className="visually-hidden">Loading...</span>
-              </Spinner>
-            </div>
+    <section className="courses-dataSection">
+      <SectionHeader
+        title={"Courses Section"}
+        smTilte={`Hi ${admin.name}`}
+        description={"Here you can add, update, and delete courses"}
+        className={"adminCourse-header"}
+      />
+      <div className="container courses-table-container">
+        {/* delete action handeling */}
+        {course.loading === false &&
+          course.delErr == null &&
+          course.delSuccess != null && (
+            <Alert variant="success" className="AlertAddCoures">
+              {course.delSuccess}
+            </Alert>
           )}
-          <div className="table-header">
-            <h3>All Courses</h3>
-            <Link to={"add"} className="btn sm-btn Add-btn">
-              Add Course <AiOutlinePlusSquare />
-            </Link>
+        {course.loading === false &&
+          course.delErr != null &&
+          course.delSuccess === null && (
+            <Alert variant="danger" className="AlertAddCoures">
+              {course.delErr}
+            </Alert>
+          )}
+
+        {/* Loader */}
+        {course.loading === true && (
+          <div className="pageSpinner">
+            <Spinner animation="border" className="spinner">
+              <span className="visually-hidden">Loading...</span>
+            </Spinner>
           </div>
-          {/* displayCourses */}
-          {course.loading === false &&
-            course.err === null &&
-            course.results.length !== 0 && <>{displayCourses()}</>}
-
-          {/* errors handling */}
-          {course.loading === false && course.err != null && (
-            <div className="alert-container container">
-              <Alert variant="danger" className="alret">
-                {course.err}
-              </Alert>
-            </div>
-          )}
+        )}
+        <div className="table-header">
+          <h3>All Courses</h3>
+          <Link to={"add"} className="btn sm-btn Add-btn">
+            Add Course <AiOutlinePlusSquare />
+          </Link>
         </div>
-      </section>
-    
+        {/* displayCourses */}
+        {course.loading === false &&
+          course.err === null &&
+          course.results.length !== 0 && <>{displayCourses()}</>}
+
+        {/* errors handling */}
+        {course.loading === false && course.err != null && (
+          <div className="alert-container container">
+            <Alert variant="danger" className="alret">
+              {course.err}
+            </Alert>
+          </div>
+        )}
+      </div>
+    </section>
   );
 };
 
