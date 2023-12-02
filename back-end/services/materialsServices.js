@@ -11,14 +11,17 @@ exports.getMaterials = async (id) => {
   return await query("SELECT * FROM materials WHERE course_id = ?", [id]);
 };
 
-exports.updateMaterials = async (id) => {
+exports.getMaterial = async (id) => {
   const query = util.promisify(connection.query).bind(connection);
-  await query("UPDATE materials SET? WHERE id = ?", [id]);
+  return await query("SELECT * FROM materials WHERE id = ?", [id]);
+};
+
+exports.updateMaterials = async (data, id) => {
+  const query = util.promisify(connection.query).bind(connection);
+  await query("UPDATE materials SET? WHERE id = ?", [data, id]);
 };
 
 exports.deleteMaterials = async (id) => {
   const query = util.promisify(connection.query).bind(connection);
   await query("DELETE FROM materials WHERE id = ?", [id]);
 };
-
-
