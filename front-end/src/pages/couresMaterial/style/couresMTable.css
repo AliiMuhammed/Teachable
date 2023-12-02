@@ -10,3 +10,11 @@
     -o-border-radius: 0;
     width: 50px;
 }
+
+.modal-add-footer {
+    display: flex;
+    align-items: center;
+    
+    margin-top: 2rem;
+    width: 100%;
+}

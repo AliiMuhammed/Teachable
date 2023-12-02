@@ -162,16 +162,7 @@ const StudentsEnrolled = () => {
                         </div>
 
                         <Form className="setGrade-form">
-                          <fieldset className="mb-3 grades-input">
-                            <Form.Group>
-                              <Form.Label>Student garde</Form.Label>
-                              <Form.Control
-                                type="text"
-                                value={selectedStudent.grade || ""} // Provide a default value when it's undefined
-                                readOnly // Make the field read-only
-                              />
-                            </Form.Group>
-                          </fieldset>
+  
 
                           <Form.Group className="mb-3 grades-input">
                             <Form.Label>new grade</Form.Label>

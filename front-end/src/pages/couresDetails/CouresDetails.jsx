@@ -8,15 +8,17 @@ import { getAuthUser } from "../../helper/Storage";
 import axios from "axios";
 import { Link } from "react-router-dom";
 const CouresDetails = () => {
-  let { id } = useParams();
-  let { code } = useParams();
+  let { id, code } = useParams();
   const auth = getAuthUser();
   const [course, setCourse] = useState({
     loading: true,
     result: null,
     err: null,
   });
-  const [isRegister, setISRegister] = useState(true);
+  const [isRegister, setISRegister] = useState({
+    state: true,
+    reload: 0,
+  });
 
   useEffect(() => {
     setCourse({ ...course, loading: true });
@@ -70,15 +72,21 @@ const CouresDetails = () => {
   };
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:3000/students/check/${auth.id}/${id}`)
-      .then((res) => {
-        setISRegister(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
+    if (auth) {
+      axios
+        .get(`http://localhost:3000/students/check/${auth.id}/${id}`)
+        .then((res) => {
+          setISRegister({
+            ...isRegister,
+            state: res.data,
+            reload: isRegister.reload + 1,
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, [isRegister.reload]);
   return (
     <>
       {/* Loader */}
@@ -124,7 +132,7 @@ const CouresDetails = () => {
                 {/* Authenticated Routes */}
                 {auth && auth.type === "student" && (
                   <div>
-                    {isRegister ? (
+                    {isRegister.state ? (
                       <button
                         className="btn register-btn"
                         onClick={RegisterCoures}
