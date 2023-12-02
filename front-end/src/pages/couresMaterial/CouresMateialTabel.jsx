@@ -40,7 +40,7 @@ const CouresMateialTabel = () => {
     setCourse({ ...course, loading: true });
     setCourseMateial({ ...courseMateial, results: materials });
     axios
-      .get("http://localhost:4002/courses/" + id + "/" + code)
+      .get("http://localhost:3000/courses/" + id + "/" + code)
       .then((resp) => {
         setCourse({
           ...course,

@@ -21,7 +21,7 @@ const InstructorProfile = () => {
   useEffect(() => {
     setCourses({ ...course, loading: true });
     axios
-      .get("http://localhost:4002/instractors/view/" + user.id)
+      .get("http://localhost:3000/instractors/view/" + user.id)
       .then((resp) => {
         setCourses({
           ...course,

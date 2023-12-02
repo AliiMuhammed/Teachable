@@ -33,7 +33,7 @@ const UpdateStudent = () => {
       formData.append("image", image.current.files[0]);
     }
     axios
-      .put("http://localhost:4002/students/" + id, formData, {
+      .patch("http://localhost:3000/students/" + id, formData, {
         headers: {
           token: admin.token,
           "Content-Type": "multipart/form-data",
@@ -58,7 +58,7 @@ const UpdateStudent = () => {
   };
   useEffect(() => {
     axios
-      .get("http://localhost:4002/students/" + id)
+      .get("http://localhost:3000/students/" + id)
       .then((resp) => {
         setUser({
           ...user,

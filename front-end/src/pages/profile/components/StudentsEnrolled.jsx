@@ -43,7 +43,7 @@ const StudentsEnrolled = () => {
   useEffect(() => {
     setstudents({ ...student, loading: true });
     axios
-      .get("http://localhost:4002/instractors/student/" + id)
+      .get("http://localhost:3000/instractors/student/" + id)
       .then((resp) => {
         setstudents({
           ...student,
@@ -62,23 +62,23 @@ const StudentsEnrolled = () => {
   }, [grades.reload]);
 
   const UpdateGrade = (e) => {
-    console.log(grades.grade);
     e.preventDefault();
     setGrade({ ...grades, loading: true });
-    const formData = new FormData();
-    formData.append("grades", grades.grade);
+    const requestBody = {
+      grades: grades.grade,
+    };
 
     axios
       .post(
-        "http://localhost:4002/instractors/setGrades/" +
+        "http://localhost:3000/instractors/setGrades/" +
           selectedStudent.id +
           "/" +
           id,
-        formData,
+        requestBody,
         {
           headers: {
             token: auth.token,
-            "Content-Type": "multipart/form-data",
+            "Content-Type": "application/json",
           },
         }
       )
@@ -94,7 +94,7 @@ const StudentsEnrolled = () => {
         setGrade({ ...grades, loading: false, err: "Someting went wrong!" });
       });
   };
-
+  console.log(grades.grade);
   const displaystudents = () => {
     return (
       <div className="studentTable">
@@ -162,12 +162,13 @@ const StudentsEnrolled = () => {
                         </div>
 
                         <Form className="setGrade-form">
-                          <fieldset disabled className="mb-3 grades-input">
+                          <fieldset className="mb-3 grades-input">
                             <Form.Group>
                               <Form.Label>Student garde</Form.Label>
                               <Form.Control
                                 type="text"
-                                value={selectedStudent.grade}
+                                value={selectedStudent.grade || ""} // Provide a default value when it's undefined
+                                readOnly // Make the field read-only
                               />
                             </Form.Group>
                           </fieldset>

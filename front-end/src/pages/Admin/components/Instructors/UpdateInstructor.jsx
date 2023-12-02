@@ -33,7 +33,7 @@ const UpdateInstructor = () => {
       formData.append("image", image.current.files[0]);
     }
     axios
-      .put("http://localhost:4002/instractors/" + id, formData, {
+      .patch("http://localhost:3000/instractors/" + id, formData, {
         headers: {
           token: admin.token,
           "Content-Type": "multipart/form-data",
@@ -44,7 +44,7 @@ const UpdateInstructor = () => {
           ...user,
           success: "Instructor Updated Successfully !",
           loading: false,
-          reload:user.reload+1
+          reload: user.reload + 1,
         });
       })
       .catch((err) => {
@@ -58,7 +58,7 @@ const UpdateInstructor = () => {
   };
   useEffect(() => {
     axios
-      .get("http://localhost:4002/instractors/" + id)
+      .get("http://localhost:3000/instractors/" + id)
       .then((resp) => {
         setUser({
           ...user,

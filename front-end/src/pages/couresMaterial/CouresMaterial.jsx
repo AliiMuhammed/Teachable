@@ -28,7 +28,7 @@ const CouresMaterial = () => {
   useEffect(() => {
     setCourse({ ...course, loading: true });
     axios
-      .get("http://localhost:4002/courses/" + id + "/" + code)
+      .get("http://localhost:3000/courses/" + id + "/" + code)
       .then((resp) => {
         setCourse({
           ...course,

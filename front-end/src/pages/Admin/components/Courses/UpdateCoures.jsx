@@ -37,7 +37,7 @@ const UpdateCoures = () => {
       formData.append("image", image.current.files[0]);
     }
     axios
-      .put("http://localhost:4002/courses/" + id + "/" + code, formData, {
+      .patch("http://localhost:3000/courses/" + id + "/" + code, formData, {
         headers: {
           token: admin.token,
           "Content-Type": "multipart/form-data",
@@ -57,14 +57,13 @@ const UpdateCoures = () => {
           loading: false,
           success: null,
           err: "Something went wrong, please try again later ! ",
-          
         });
       });
   };
 
   useEffect(() => {
     axios
-      .get("http://localhost:4002/courses/" + id + "/" + code)
+      .get("http://localhost:3000/courses/" + id + "/" + code)
       .then((resp) => {
         setCourse({
           ...course,

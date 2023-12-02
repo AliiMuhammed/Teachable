@@ -21,7 +21,7 @@ const StudentProfile = () => {
   useEffect(() => {
     setRegisterCourse({ ...registerCourse, loading: true });
     axios
-      .get("http://localhost:4002/students/showGrades/" + user.id)
+      .get("http://localhost:3000/students/showGrades/" + user.id)
       .then((resp) => {
         setRegisterCourse({
           ...registerCourse,

@@ -16,7 +16,7 @@ const NavBar = () => {
 
   const LogOut = () => {
     axios
-      .post("http://localhost:4002/auth/logout/" + auth.id)
+      .post("http://localhost:3000/auth/logout/" + auth.id)
       .then((resp) => {})
       .catch((err) => {});
     removeAuthUser();
