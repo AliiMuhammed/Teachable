@@ -74,17 +74,17 @@ exports.getStudent = async (req, res) => {
 
 exports.enrollment = async (req, res) => {
   try {
-    const course = await coursesServices.getCourse(req.body.course_id);
+    const course = await coursesServices.getCourse(req.params.course_id);
     if (!course[0]) {
       return res.status(400).json({ errors: ["Course not found"] });
     }
 
-    const student = await studentService.getStudent(req.body.student_id);
+    const student = await studentService.getStudent(req.params.student_id);
     if (!student[0]) {
       return res.status(400).json({ errors: ["Student Not Found"] });
     }
 
-    await studentService.enrollment(req.body);
+    await studentService.enrollment(req.params);
 
     res.status(200).json({
       msg: "Course registered successfully",
@@ -116,10 +116,9 @@ exports.showGrade = async (req, res) => {
   try {
     const grades = await studentService.showGrade(req.params.id);
     if (grades.length > 0) {
-        grades.map((grade) => {
-            grade.image_url =
-              "http://" + req.hostname + ":3000/" + grade.image_url;
-          });
+      grades.map((grade) => {
+        grade.image_url = "http://" + req.hostname + ":3000/" + grade.image_url;
+      });
       return res.status(200).json(grades);
     }
   } catch (error) {
