@@ -11,9 +11,8 @@ router.get("/", student.getStudents);
 
 router.get("/:id", student.getStudent);
 
-router.post("/registerCourses", student.enrollment);
+router.post("/registerCourses/:course_id/:student_id", student.enrollment);
 
 router.get("/showGrades/:id", student.showGrade);
-
 
 module.exports = router;
