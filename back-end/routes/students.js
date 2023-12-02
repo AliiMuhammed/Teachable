@@ -15,4 +15,6 @@ router.post("/registerCourses/:course_id/:student_id", student.enrollment);
 
 router.get("/showGrades/:id", student.showGrade);
 
+router.get("/check/:studentId/:courseId", student.checkEnrollment);
+
 module.exports = router;
