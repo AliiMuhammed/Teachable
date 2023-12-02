@@ -16,6 +16,7 @@ const CouresDetails = () => {
     result: null,
     err: null,
   });
+  const [isRegister, setISRegister] = useState(true);
 
   useEffect(() => {
     setCourse({ ...course, loading: true });
@@ -49,7 +50,7 @@ const CouresDetails = () => {
     setRegisterCourse({ ...registerCourse, loading: true });
     axios
       .post(
-        "http://localhost:3000/students/registerCourses/" + auth.id + "/" + id
+        "http://localhost:3000/students/registerCourses/" + id + "/" + auth.id
       )
       .then((resp) => {
         setRegisterCourse({
@@ -68,6 +69,16 @@ const CouresDetails = () => {
       });
   };
 
+  useEffect(() => {
+    axios
+      .get(`http://localhost:3000/students/check/${auth.id}/${id}`)
+      .then((res) => {
+        setISRegister(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
   return (
     <>
       {/* Loader */}
@@ -113,13 +124,21 @@ const CouresDetails = () => {
                 {/* Authenticated Routes */}
                 {auth && auth.type === "student" && (
                   <div>
-                    <button
-                      className="btn register-btn"
-                      onClick={RegisterCoures}
-                    >
-                      Register course
-                    </button>
-
+                    {isRegister ? (
+                      <button
+                        className="btn register-btn"
+                        onClick={RegisterCoures}
+                      >
+                        Register course
+                      </button>
+                    ) : (
+                      <Link
+                        className="btn material-btn"
+                        to={`/courses/material/${id}/${code}`}
+                      >
+                        Coures Material
+                      </Link>
+                    )}
                   </div>
                 )}
               </div>
