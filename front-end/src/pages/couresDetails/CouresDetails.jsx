@@ -119,12 +119,7 @@ const CouresDetails = () => {
                     >
                       Register course
                     </button>
-                    <Link
-                      className="btn material-btn"
-                      to={`/courses/material/${id}/${code}`}
-                    >
-                      Coures Material
-                    </Link>
+
                   </div>
                 )}
               </div>

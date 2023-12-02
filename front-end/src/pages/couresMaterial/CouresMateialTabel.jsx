@@ -6,7 +6,6 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { useParams } from "react-router";
 import Table from "react-bootstrap/Table";
-import { materials } from "./../../core/data/data";
 import pdfImg from "../../assests/images/material imgs/pdf.png";
 import docxImg from "../../assests/images/material imgs/docx.png";
 import pptxImg from "../../assests/images/material imgs/pptx.png";
@@ -38,7 +37,7 @@ const CouresMateialTabel = () => {
 
   useEffect(() => {
     setCourse({ ...course, loading: true });
-    setCourseMateial({ ...courseMateial, results: materials });
+    setCourseMateial({ ...courseMateial, loading: true });
     axios
       .get("http://localhost:3000/courses/" + id + "/" + code)
       .then((resp) => {
@@ -52,6 +51,24 @@ const CouresMateialTabel = () => {
       .catch((err) => {
         setCourse({
           ...course,
+          loading: false,
+          err: "Error can't load Course",
+        });
+      });
+
+    axios
+      .get("http://localhost:3000/materials/" + 22)
+      .then((resp) => {
+        setCourseMateial({
+          ...courseMateial,
+          loading: false,
+          results: resp.data,
+          err: null,
+        });
+      })
+      .catch((err) => {
+        setCourseMateial({
+          ...courseMateial,
           loading: false,
           err: "Error can't load Course",
         });
@@ -75,6 +92,7 @@ const CouresMateialTabel = () => {
         return documentImg;
     }
   };
+
   const displayCourses = () => {
     return (
       <div className="courseTable">
@@ -95,7 +113,10 @@ const CouresMateialTabel = () => {
                   <td>{courseMateial.name}</td>
 
                   <td className="table-img">
-                    <img src={getFileExtension(courseMateial.file)} alt="" />
+                    <img
+                      src={getFileExtension(courseMateial.fileName)}
+                      alt=""
+                    />
                   </td>
                   <td>
                     <div className="table-btns">
@@ -142,14 +163,14 @@ const CouresMateialTabel = () => {
         <section className="CouresMateialTabel-section">
           <div className="container">
             {/* delete action handeling */}
-            {courseMateial.loading === false &&
+            {!courseMateial.loading &&
               courseMateial.delErr == null &&
               courseMateial.delSuccess != null && (
                 <Alert variant="success" className="AlertAddCoures">
                   {courseMateial.delSuccess}
                 </Alert>
               )}
-            {courseMateial.loading === false &&
+            {!courseMateial.loading &&
               courseMateial.delErr != null &&
               courseMateial.delSuccess === null && (
                 <Alert variant="danger" className="AlertAddCoures">
@@ -164,7 +185,7 @@ const CouresMateialTabel = () => {
               </Link>
             </div>
             {/* Loader */}
-            {courseMateial.loading === true && (
+            {courseMateial.loading  && (
               <div className="pageSpinner">
                 <Spinner animation="border" className="spinner">
                   <span className="visually-hidden">Loading...</span>
@@ -172,7 +193,7 @@ const CouresMateialTabel = () => {
               </div>
             )}
             {/* displayCourses */}
-            {courseMateial.loading === false &&
+            {!courseMateial.loading &&
               courseMateial.err === null &&
               courseMateial.results.length !== 0 && <>{displayCourses()}</>}
           </div>
