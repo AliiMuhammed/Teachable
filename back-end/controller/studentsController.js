@@ -103,7 +103,7 @@ exports.checkEnrollment = async (req, res) => {
     );
 
     if (check.length > 0) {
-      return res.status(409).json(false);
+      return res.status(200).json(false);
     }
     return res.status(200).json(true);
   } catch (error) {
@@ -121,6 +121,7 @@ exports.showGrade = async (req, res) => {
       });
       return res.status(200).json(grades);
     }
+    return res.status(404).json({ msg: "not found" });
   } catch (error) {
     console.log(error);
     res.status(500).json({ errors: "Internal Server Error" });

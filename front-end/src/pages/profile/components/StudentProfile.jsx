@@ -42,10 +42,10 @@ const StudentProfile = () => {
 
   console.log(registerCourse.result);
   const displayCourses = () => {
-    return registerCourse.result.map((course, id) => {
+    return registerCourse.result.map((course) => {
       return (
         <CourseCard
-          key={id}
+          key={course.id}
           id={course.id}
           title={course.name}
           courseImage={course.image_url}
@@ -61,7 +61,7 @@ const StudentProfile = () => {
   return (
     <article>
       {/* errors handling */}
-      {registerCourse.loading === false && registerCourse.err != null && (
+      {!registerCourse.loading && registerCourse.err != null && (
         <div className="alert-container">
           <Alert variant="danger" className="alret">
             {registerCourse.err}
@@ -70,15 +70,15 @@ const StudentProfile = () => {
       )}
       <div className="container myCourses-container">
         {/* Loader */}
-        {registerCourse.loading === true && (
+        {registerCourse.loading && (
           <div className="pageSpinner">
-            <Spinner animation="border" role="status" className="spinner">
+            <Spinner animation="border" className="spinner">
               <span className="visually-hidden">Loading...</span>
             </Spinner>
           </div>
         )}
         {/* displayCourses */}
-        {registerCourse.loading === false &&
+        {!registerCourse.loading &&
           registerCourse.err === null &&
           displayCourses()}
       </div>
