@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { getAuthUser } from "../../helper/Storage";
 import "./style/couresMTable.css";
 import PageHeader from "./../../shared/PageHeader";
@@ -15,7 +15,8 @@ import documentImg from "../../assests/images/material imgs/document.png";
 import { AiOutlinePlusSquare } from "react-icons/ai";
 import Alert from "react-bootstrap/Alert";
 import Spinner from "react-bootstrap/Spinner";
-
+import Modal from "react-bootstrap/Modal";
+import Form from "react-bootstrap/Form";
 const CouresMateialTabel = () => {
   const user = getAuthUser();
   let { id } = useParams();
@@ -34,7 +35,12 @@ const CouresMateialTabel = () => {
     delSuccess: null,
     reload: 0,
   });
-
+  const [newMaterial, setNewMaterial] = useState({
+    name: "",
+    file: null,
+    show: false,
+    reload: 0,
+  });
   useEffect(() => {
     setCourse({ ...course, loading: true });
     setCourseMateial({ ...courseMateial, loading: true });
@@ -57,7 +63,7 @@ const CouresMateialTabel = () => {
       });
 
     axios
-      .get("http://localhost:3000/materials/" + 22)
+      .get("http://localhost:3000/materials/" + id)
       .then((resp) => {
         setCourseMateial({
           ...courseMateial,
@@ -73,7 +79,7 @@ const CouresMateialTabel = () => {
           err: "Error can't load Course",
         });
       });
-  }, []);
+  }, [newMaterial.reload]);
 
   const getFileExtension = (fileUrl) => {
     const extension = fileUrl.split(".").pop().toLowerCase();
@@ -123,13 +129,20 @@ const CouresMateialTabel = () => {
                       <button
                         to={"delete"}
                         className="btn btn-sm btn-delete"
-                        onClick={""}
+                        onClick={() => {
+                          deleteMaterial(courseMateial.id);
+                        }}
                       >
                         Delete
                       </button>
-                      <Link to={""} className="btn btn-sm btn-Update">
+                      <button
+                        onClick={() => {
+                          handleUpdateShow(courseMateial);
+                        }}
+                        className="btn btn-sm btn-Update"
+                      >
                         Update
-                      </Link>
+                      </button>
                     </div>
                   </td>
                 </tr>
@@ -141,6 +154,113 @@ const CouresMateialTabel = () => {
     );
   };
 
+  const deleteMaterial = (id) => {
+    axios
+      .delete(`http://localhost:3000/materials/${id}`)
+      .then((res) => {
+        setErr(null);
+        setSuccsse("Material deleted succssfully");
+        setNewMaterial({
+          ...newMaterial,
+          reload: newMaterial.reload + 1,
+        });
+      })
+      .catch((err) => {
+        setErr("can't deleted material");
+        setSuccsse(null);
+      });
+  };
+
+  const [succsse, setSuccsse] = useState(null);
+  const [err, setErr] = useState(null);
+  const [updatedName, setUpdatedName] = useState("");
+  const [updatedFile, setUpdatedFile] = useState(null);
+  const fileInputRef = useRef(null);
+  const updateInputRef = useRef(null);
+  const handleAddMaterial = (e) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+    formData.append("name", newMaterial.name);
+    formData.append("file", newMaterial.file);
+
+    axios
+      .post(`http://localhost:3000/materials/add/${id}`, formData)
+      .then((resp) => {
+        setNewMaterial({
+          ...newMaterial,
+          reload: newMaterial.reload + 1,
+          show: false,
+        });
+        setSuccsse("Matrials added succssfully ");
+        setErr(null);
+      })
+      .catch((error) => {
+        setNewMaterial({
+          ...newMaterial,
+          show: false,
+        });
+        setErr("can't add the materials");
+        setSuccsse(null);
+      });
+  };
+  const handleAddShow = () => {
+    console.log("Open modal or perform actions before opening modal");
+
+    setNewMaterial({ ...newMaterial, show: true });
+  };
+  const handleClose = () => {
+    setNewMaterial({ ...newMaterial, show: false });
+  };
+
+  const [selectedMaterial, setSelectedMaterial] = useState(null);
+
+  const handleUpdateShow = (material) => {
+    setSelectedMaterial(material);
+  };
+
+  const handleUpdateClose = () => {
+    setSelectedMaterial(null);
+  };
+
+  const handleUpdateMaterial = (e) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+
+    if (updatedName && !updatedFile) {
+      formData.append("name", updatedName);
+    }
+
+    if (updatedFile && !updatedName) {
+      formData.append("file", updatedFile);
+    }
+
+    if (updatedName && updatedFile) {
+      formData.append("name", updatedName);
+      formData.append("file", updatedFile);
+    }
+
+    axios
+      .patch(
+        `http://localhost:3000/materials/update/${selectedMaterial.id}`,
+        formData
+      )
+      .then((resp) => {
+        setSuccsse("Material updated successfully");
+        setErr(null);
+        handleUpdateClose();
+        setNewMaterial({
+          ...newMaterial,
+          reload: newMaterial.reload + 1,
+        });
+      })
+      .catch((error) => {
+        setSuccsse(null);
+        setErr("can't update material ");
+        handleUpdateClose();
+      });
+  };
   return (
     <div>
       <section className="CouresMateial-section">
@@ -164,10 +284,10 @@ const CouresMateialTabel = () => {
           <div className="container">
             {/* delete action handeling */}
             {!courseMateial.loading &&
-              courseMateial.delErr == null &&
-              courseMateial.delSuccess != null && (
-                <Alert variant="success" className="AlertAddCoures">
-                  {courseMateial.delSuccess}
+              courseMateial.delErr != null &&
+              courseMateial.delSuccess === null && (
+                <Alert variant="danger" className="AlertAddCoures">
+                  {courseMateial.delErr}
                 </Alert>
               )}
             {!courseMateial.loading &&
@@ -177,21 +297,34 @@ const CouresMateialTabel = () => {
                   {courseMateial.delErr}
                 </Alert>
               )}
+            {err === null && succsse !== null && (
+              <Alert variant="success">{succsse}</Alert>
+            )}
 
+            {err !== null && succsse === null && (
+              <Alert variant="danger">{err}</Alert>
+            )}
             <div className="table-header">
               <h3>All Materials</h3>
-              <Link to={"add"} className="btn sm-btn Add-btn">
+              <button onClick={handleAddShow} className="btn sm-btn Add-btn">
                 Add Material <AiOutlinePlusSquare />
-              </Link>
+              </button>
             </div>
             {/* Loader */}
-            {courseMateial.loading  && (
+            {courseMateial.loading && (
               <div className="pageSpinner">
                 <Spinner animation="border" className="spinner">
                   <span className="visually-hidden">Loading...</span>
                 </Spinner>
               </div>
             )}
+            {!courseMateial.loading &&
+              courseMateial.results.length === 0 &&
+              courseMateial.err !== null && (
+                <Alert variant="danger" className="AlertAddCoures">
+                  {"There is no materials for this course"}
+                </Alert>
+              )}
             {/* displayCourses */}
             {!courseMateial.loading &&
               courseMateial.err === null &&
@@ -200,60 +333,108 @@ const CouresMateialTabel = () => {
         </section>
       </section>
       {/* add modal */}
-      {/* <Modal
-        show={selectedStudent.show}
-        onHide={handleClose}
-        backdrop="static"
-        centered
-        keyboard={false}
-      >
-         <Modal.Header closeButton>
-          <Modal.Title>Set Student Grade</Modal.Title>
+      <Modal show={newMaterial.show} centered size="lg">
+        <Modal.Header>
+          <Modal.Title>Add Material</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {grades.err === null && grades.succsse !== null && (
-            <Alert variant="success">{grades.succsse}</Alert>
-          )}
-
-          {grades.err !== null && grades.succsse === null && (
-            <Alert variant="danger">{grades.err}</Alert>
-          )}
-          <div className="studentImg">
-            <img src={selectedStudent.img} alt="" />
-          </div>
-
-          <Form className="setGrade-form">
-            <fieldset disabled className="mb-3 grades-input">
-              <Form.Group>
-                <Form.Label>Student garde</Form.Label>
-                <Form.Control type="text" value={selectedStudent.grade} />
-              </Form.Group>
-            </fieldset>
-
-            <Form.Group className="mb-3 grades-input">
-              <Form.Label>new grade</Form.Label>
+          <Form>
+            <Form.Group className="w-100" controlId="formMaterialName">
+              <Form.Label>Material Name</Form.Label>
               <Form.Control
                 type="text"
-                placeholder="Set his new grade"
+                placeholder="Enter material name"
+                value={newMaterial.name}
+                required
                 onChange={(e) =>
-                  setGrade({
-                    ...grades,
-                    grade: e.target.value,
-                  })
+                  setNewMaterial({ ...newMaterial, name: e.target.value })
                 }
               />
             </Form.Group>
+            <Form.Group className="w-100 mt-3" controlId="formMaterialFile">
+              <Form.Label>Upload File</Form.Label>
+              <Form.Control
+                type="file"
+                ref={fileInputRef}
+                required
+                onChange={(e) =>
+                  setNewMaterial({ ...newMaterial, file: e.target.files[0] })
+                }
+              />
+            </Form.Group>
+            <div className="modal-add-footer">
+              <button
+                className="btn-delete btn close-btn"
+                onClick={handleClose}
+              >
+                Close
+              </button>
+              <button className="btn setGrade-btn" onClick={handleAddMaterial}>
+                Add
+              </button>
+            </div>
           </Form>
         </Modal.Body>
-        <Modal.Footer>
-          <button className="btn-delete btn close-btn" onClick={handleClose}>
-            Close
-          </button>
-          <button className="btn setGrade-btn" onClick={""}>
-            set Grade
-          </button>
-        </Modal.Footer>
-      </Modal> */}
+      </Modal>
+
+      {/* Update Material Modal */}
+      <Modal
+        show={selectedMaterial !== null}
+        onHide={handleUpdateClose}
+        centered
+        size="lg"
+      >
+        <Modal.Header>
+          <Modal.Title>Update Material</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Group className="w-100" controlId="formMaterialName">
+              <Form.Label>Material Name</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter material name"
+                value={
+                  updatedName !== ""
+                    ? updatedName
+                    : selectedMaterial
+                    ? selectedMaterial.name
+                    : ""
+                }
+                required
+                onChange={(e) =>
+                  setUpdatedName(e.target.value !== "" ? e.target.value : null)
+                }
+              />
+            </Form.Group>
+            <Form.Group className="w-100 mt-3" controlId="formMaterialFile">
+              <Form.Label>Upload File</Form.Label>
+              <Form.Control
+                type="file"
+                ref={updateInputRef}
+                required
+                onChange={(e) => setUpdatedFile(e.target.files[0])}
+              />
+            </Form.Group>
+            <div className="modal-update-footer">
+              <div className="modal-add-footer">
+                <button
+                  className="btn-delete btn close-btn"
+                  onClick={handleUpdateClose}
+                >
+                  Close
+                </button>
+                <button
+                  className="btn setGrade-btn"
+                  onClick={handleUpdateMaterial}
+                >
+                  Update
+                </button>
+              </div>
+            </div>
+          </Form>
+        </Modal.Body>
+      </Modal>
     </div>
   );
 };

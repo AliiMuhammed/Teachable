@@ -83,17 +83,8 @@ const InstructorProfile = () => {
                         <Link
                           className="btn btn-sm instructorShow-btn"
                           to={`/profile/instractor/materials/${course.id}/${course.code}`}
-                          // onClick={() =>
-                          //   setSelectedCourse({
-                          //     ...selectedCourse,
-                          //     name: course.name,
-                          //     id: course.id,
-                          //     img: course.image_url,
-                          //     show: true,
-                          //   })
-                          // }
                         >
-                          Add materials
+                          Materials
                         </Link>
                       </div>
                     </td>
