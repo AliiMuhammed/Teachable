@@ -1,0 +1,5 @@
+# Backend environment secrets
+/back-end/.env
+/back-end/.env.*
+!/back-end/.env.example
+/back-end/teachable-back-end.env
