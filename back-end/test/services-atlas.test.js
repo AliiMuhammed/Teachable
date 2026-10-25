@@ -157,6 +157,79 @@ test('Phase 2.3 actual Atlas service operations and authorization races',{
       await services.materials.deleteMaterials(material.id,context(instructor.id));const raw=await models.Material.findOne({id:material.id}).select('+removedAt +removedBy');assert.ok(raw.removedAt instanceof Date);assert.ok(raw.removedBy.equals((await currentUser(instructor.id))._id));assert.equal(raw.asset.classification,'private');
       await denied(services.materials.getMaterial(material.id,context(student.id)),'NOT_FOUND');
     });
+    await run('Phase 2.4 HTTP user contracts, real authorization and persisted self edits',async()=>{
+      const {createApp}=require('../app');const {withHttp}=require('./helpers/http');
+      const tokens=new Map([['synthetic-admin',adminCtx],['synthetic-student',context(student.id)],['synthetic-instructor',context(instructor.id)]]);
+      const options={manager,authenticate,verifyAsset,verifyCounter,
+        authorizeRequest:async req=>tokens.get(req.headers['x-synthetic-session']),
+        resolveAssetUrl:async ({kind,id})=>`https://assets.example.invalid/${kind}/${id}`};
+      await withHttp(createApp(options),async request=>{
+        const sh={'x-synthetic-session':'synthetic-student'},ah={'x-synthetic-session':'synthetic-admin'};
+        const list=await request('/students',{headers:ah});assert.equal(list.status,200);
+        const u=list.body.find(x=>x.id===student.id);assert.equal(u.accountState,'active');assert.equal(u.type,'student');
+        assert.deepEqual(Object.keys(u).sort(),['id','name','email','phone','type','accountState','image_url'].sort());
+        assert.equal((await request('/students',{headers:sh})).status,403);
+        assert.equal((await request(`/students/${student.id}`,{headers:{'x-user-id':'1',authorization:'Bearer forged'}})).status,401);
+        const form=new FormData();form.set('name','HTTP Synthetic');form.set('phone','0009');
+        assert.equal((await request(`/students/${student.id}`,{method:'PATCH',headers:sh,body:form})).status,200);
+        const saved=await currentUser(student.id);assert.equal(saved.name,'HTTP Synthetic');assert.equal(saved.phone,'0009');
+        const bad=await request(`/students/${student.id}`,{method:'PATCH',headers:sh,body:{role:'admin'}});assert.equal(bad.status,400);assert.equal((await currentUser(student.id)).role,'student');
+        const catalog=await request(`/courses/${c.id}/wrong-code`);assert.equal(catalog.status,200);assert.equal(catalog.body.status,1);assert.equal(catalog.body.id,c.id);
+        const invalid=await request('/courses/9007199254740992/SYN');assert.equal(invalid.status,400);
+      });
+      await withHttp(createApp({manager,authenticate}),async request=>{
+        assert.equal((await request('/students')).body.code,'AUTH_UNAVAILABLE');
+        assert.equal((await request('/courses')).body.code,'ASSET_UNVERIFIED');
+      });
+    });
+    await run('Phase 2.4 HTTP assignment, enrollment, grades and denial preserve real integrity',async()=>{
+      const {createApp}=require('../app');const {withHttp}=require('./helpers/http');
+      const target=await makeCourse(),learner=await makeUser(),teacher=await makeUser('instructor');
+      const tokens=new Map([['a',adminCtx],['s',context(learner.id)],['i',context(teacher.id)]]);
+      const options={manager,authenticate,verifyCounter,authorizeRequest:async req=>tokens.get(req.headers['x-synthetic-session']),resolveAssetUrl:async({kind,id})=>`https://assets.example.invalid/${kind}/${id}`};
+      await withHttp(createApp(options),async request=>{
+        const ah={'x-synthetic-session':'a'},sh={'x-synthetic-session':'s'},ih={'x-synthetic-session':'i'};
+        const assignment=await request('/assign/assign-instructor',{method:'POST',headers:ah,body:{courseId:String(target.id),instructorId:String(teacher.id)}});assert.equal(assignment.status,200);
+        assert.ok(await services.instructor.checkAssign(target.id,teacher.id,adminCtx));
+        assert.equal((await request(`/students/check/${learner.id}/${target.id}`,{headers:sh})).body,true);
+        const results=await Promise.all([1,2].map(()=>request(`/students/registerCourses/${target.id}/${learner.id}`,{method:'POST',headers:sh,body:{}})));
+        assert.deepEqual(results.map(r=>r.status).sort(),[200,409]);
+        assert.equal((await request(`/students/check/${learner.id}/${target.id}`,{headers:sh})).body,false);
+        for(const grade of [0,null]){
+          assert.equal((await request(`/instractors/setGrades/${learner.id}/${target.id}`,{method:'POST',headers:ih,body:{grades:grade}})).status,200);
+          const response=await request(`/students/showGrades/${learner.id}`,{headers:sh});assert.equal(response.body[0].id,target.id);assert.equal(response.body[0].grades,grade);
+          const stored=await services.student.checkEnrollment(learner.id,target.id,context(learner.id));assert.equal(stored.grade,grade);
+        }
+        const roster=await request(`/instractors/student/${target.id}`,{headers:ih});assert.deepEqual(Object.keys(roster.body[0]).sort(),['id','name','ide','grades'].sort());
+        assert.equal((await request(`/instractors/setGrades/${learner.id}/${target.id}`,{method:'POST',headers:ah,body:{grades:90}})).status,403);
+        await changeUser(teacher.id,{accountState:'disabled'});
+        assert.equal((await request(`/instractors/setGrades/${learner.id}/${target.id}`,{method:'POST',headers:ih,body:{grades:90}})).status,403);
+        assert.equal((await services.student.checkEnrollment(learner.id,target.id,context(learner.id))).grade,null);
+      });
+      const other=await makeCourse();
+      await withHttp(createApp({...options,verifyCounter:undefined}),async request=>{
+        const r=await request(`/students/registerCourses/${other.id}/${learner.id}`,{method:'POST',headers:{'x-synthetic-session':'s'},body:{}});assert.equal(r.body.code,'COUNTER_UNVERIFIED');
+        assert.equal(await services.student.checkEnrollment(learner.id,other.id,context(learner.id)),null);
+      });
+    });
+    await run('Phase 2.4 HTTP material access, reversible removal and course archival',async()=>{
+      const {createApp}=require('../app');const {withHttp}=require('./helpers/http');
+      const target=await makeCourse(),learner=await makeUser();await services.student.enrollment({studentId:learner.id,courseId:target.id},context(learner.id));
+      const item=await services.materials.addmaterials({name:'HTTP private fixture',courseId:target.id,asset:asset()},adminCtx);
+      const tokens=new Map([['a',adminCtx],['s',context(learner.id)]]);
+      await withHttp(createApp({manager,authenticate,verifyCounter,authorizeRequest:async req=>tokens.get(req.headers['x-synthetic-session']),resolveAssetUrl:async({kind,id})=>`https://assets.example.invalid/${kind}/${id}`}),async request=>{
+        const ah={'x-synthetic-session':'a'},sh={'x-synthetic-session':'s'};
+        const r=await request(`/materials/${target.id}`,{headers:sh});assert.equal(r.status,200);assert.deepEqual(r.body,[{id:item.id,name:'HTTP private fixture',course_id:target.id,fileName:`https://assets.example.invalid/material/${item.id}`}]);
+        assert.equal((await request(`/materials/${item.id}`,{method:'DELETE',headers:sh})).status,403);
+        assert.equal((await request(`/materials/update/${item.id}`,{method:'PATCH',headers:ah,body:{name:'HTTP renamed'}})).status,200);
+        assert.equal((await request(`/materials/${item.id}`,{method:'DELETE',headers:ah})).status,200);
+        const raw=await models.Material.findOne({id:item.id}).select('+removedAt +removedBy');assert.ok(raw.removedAt);assert.equal(raw.name,'HTTP renamed');assert.ok(raw.asset);
+        assert.equal((await request(`/courses/${target.id}`,{method:'DELETE',headers:ah})).status,200);
+        assert.equal((await models.Course.findOne({id:target.id})).lifecycle,'archived');
+        assert.ok(await services.student.checkEnrollment(learner.id,target.id,context(learner.id)));
+        assert.equal((await request(`/courses/${target.id}/SYN`)).status,404);
+      });
+    });
     await run('archive preserves enrollment/assignment/material history and private historical access',async()=>{
       const retained=await services.materials.addmaterials({name:'Retained',courseId:c.id,asset:asset()},adminCtx);
       await services.courses.deleteCourse(c.id,adminCtx);await denied(services.courses.getCourse(c.id),'NOT_FOUND');

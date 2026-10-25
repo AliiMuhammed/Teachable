@@ -1,13 +1,10 @@
-var express = require("express");
-var router = express.Router();
-const upload = require("../middleware/uploadImages");
-const materials = require("../controller/materialsController");
-
-router.post("/add/:course_id", upload.single("file"), materials.addMaterial);
-
-router.get("/:course_id", materials.getMaterials);
-
-router.patch("/update/:id", upload.single("file"), materials.updateMaterial);
-
-router.delete("/:id", materials.deleteMaterials);
-module.exports = router;
+'use strict';
+const express = require('express');
+module.exports = function createRouter(controller) {
+  const router = express.Router();
+  router.post('/add/:course_id', controller.addMaterial);
+  router.get('/:course_id', controller.getMaterials);
+  router.patch('/update/:id', controller.updateMaterial);
+  router.delete('/:id', controller.deleteMaterials);
+  return router;
+};

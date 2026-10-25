@@ -1,12 +1,7 @@
-var express = require("express");
-var router = express.Router();
-const upload = require("../middleware/uploadImages");
-const assginController = require("../controller/assignController");
-
-router.post(
-  "/assign-instructor",
-  upload.single(),
-  assginController.assignCourse
-);
-
-module.exports = router;
+'use strict';
+const express = require('express');
+module.exports = function createRouter(controller) {
+  const router = express.Router();
+  router.post('/assign-instructor', controller.assignCourse);
+  return router;
+};
