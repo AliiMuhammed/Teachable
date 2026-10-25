@@ -171,6 +171,54 @@ test('Phase 2.5 synthetic Atlas migration and restore rehearsal', {
       assert.equal(await reserveId(models.Counter, 'users'), 1002);
       assert.equal(await models.User.countDocuments(), 3);
     });
+    await run('Phase 2.6 migrated relationships support service CRUD and replay preserves subsequent writes', async () => {
+      const contexts = new WeakMap();
+      const context = id => { const token = Object.freeze({}); contexts.set(token, id); return token; };
+      const options = {
+        models, authenticate: async token => contexts.get(token),
+        verifyCounter: async scope => scope === 'materials' && await ownership(),
+        verifyAsset: async value => value.environment === 'synthetic' && value.assetId === 'synthetic'
+      };
+      const student = require('../services/studentServices').createService(options);
+      const instructor = require('../services/instructorServices').createService(options);
+      const materials = require('../services/materialsServices').createService(options);
+      const learner = context(2), teacher = context(1);
+      assert.deepEqual(await student.checkEnrollment(2, 10, learner), { id: 30, studentId: 2, courseId: 10, grade: 0 });
+      assert.equal((await student.checkEnrollment(3, 10, context(3))).grade, null);
+      assert.equal((await instructor.showRelatedCourses(1, teacher))[0].id, 10);
+      await student.updateStudent({ name: 'Post-migration edit', phone: '000456' }, 2, learner);
+      for (const grade of [null, 0]) {
+        assert.equal((await instructor.setGrades(grade, 2, 10, teacher)).grade, grade);
+        assert.equal((await student.showGrade(2, learner))[0].grade, grade);
+      }
+      const stored = await models.Enrollment.collection.findOne({ id: 30 });
+      assert.ok(stored.gradeUpdatedBy.equals((await models.User.findOne({ id: 1 }))._id));
+      assert.ok(stored.gradeUpdatedAt instanceof Date);
+      const created = await materials.addmaterials({ name: 'After migration', courseId: 10, asset: input.resolutions.materials[0].asset }, teacher);
+      assert.equal(created.id, 1001);
+      await materials.updateMaterials({ name: 'Edited material' }, created.id, teacher);
+      assert.equal((await materials.getMaterial(created.id, learner)).name, 'Edited material');
+      await materials.deleteMaterials(created.id, teacher);
+      await deny(materials.getMaterial(created.id, learner), 'NOT_FOUND');
+      assert.equal((await materials.getMaterials(10, learner))[0].id, 40);
+      const removed = await models.Material.collection.findOne({ id: created.id });
+      assert.ok(removed.removedAt instanceof Date);assert.ok(removed.removedBy.equals(stored.gradeUpdatedBy));
+      assert.deepEqual(removed.asset, input.resolutions.materials[0].asset);
+      for (const [name, rows] of Object.entries(originalRows)) {
+        for (const row of rows) {
+          const current = await models[name].collection.findOne({ _id: row._id });
+          assert.ok(current);assert.equal(current.id, row.id);
+          for (const key of ['student', 'course', 'instructor']) if (row[key]) assert.ok(current[key].equals(row[key]));
+        }
+      }
+      const before = {};
+      for (const [name, Model] of Object.entries(models)) before[name] = await Model.collection.find({}).sort({ _id: 1 }).toArray();
+      assert.equal(before.Session.length, 0);
+      assert.equal(before.User.find(row => row.id === 2).name, 'Post-migration edit');
+      assert.equal(before.User.find(row => row.id === 2).phone, '000456');
+      await deny(apply(), 'MIGRATION_CONFLICT');
+      for (const [name, Model] of Object.entries(models)) assert.deepEqual(await Model.collection.find({}).sort({ _id: 1 }).toArray(), before[name]);
+    });
   } catch (e) { throw safeFailure(e); }
   finally {
     try {

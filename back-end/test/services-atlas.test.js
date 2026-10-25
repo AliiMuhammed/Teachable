@@ -239,6 +239,104 @@ test('Phase 2.3 actual Atlas service operations and authorization races',{
       await denied(services.instructor.setGrades(90,student.id,c.id,context(instructor.id)),'WORKFLOW_REQUIRED');
       const draft=await services.courses.addCourse(catalog(),adminCtx);await denied(services.courses.deleteCourse(draft.id,adminCtx),'RETENTION_REQUIRED');
     });
+    await run('Phase 2.6 persisted self profiles reject privileged edits and ineligible actors',async()=>{
+      for(const role of ['student','instructor']){
+        const user=await makeUser(role),ctx=context(user.id);
+        const service=role==='student'?services.student:services.instructor;
+        const update=role==='student'?service.updateStudent:service.updateInstructor;
+        const read=role==='student'?service.getStudent:service.getInstructor;
+        const before=await models.User.collection.findOne({id:user.id});
+        await update({name:'Edited synthetic profile',phone:'00042'},user.id,ctx);
+        assert.deepEqual(await read(user.id,ctx),{...user,name:'Edited synthetic profile',phone:'00042'});
+        const saved=await models.User.collection.findOne({id:user.id});
+        assert.deepEqual(saved,{...before,name:'Edited synthetic profile',phone:'00042',integrityVersion:before.integrityVersion+1,__v:before.__v+1});
+        for(const data of [{role:'admin'},{accountState:'disabled'},{email:'other@example.invalid'},{id:1},{passwordHash:'replacement'}]){
+          await denied(update(data,user.id,ctx),'INVALID_INPUT');
+          assert.deepEqual(await models.User.collection.findOne({id:user.id}),saved);
+        }
+        await denied(update({name:'Cross-user edit'},user.id,context(role==='student'?student.id:instructor.id)),'DENIED');
+        assert.deepEqual(await models.User.collection.findOne({id:user.id}),saved);
+        for(const accountState of ['pending','disabled']){
+          await changeUser(user.id,{accountState});
+          const inactive=await models.User.collection.findOne({id:user.id});
+          await denied(update({name:'Forbidden edit'},user.id,ctx),'DENIED');
+          await denied(read(user.id,ctx),'DENIED');
+          assert.deepEqual(await models.User.collection.findOne({id:user.id}),inactive);
+        }
+      }
+    });
+    await run('Phase 2.6 live catalog search treats metacharacters literally and excludes drafts',async()=>{
+      const marker=`${randomUUID()} [a.*]`;
+      const published=await services.courses.addCourse({...catalog(),name:marker},adminCtx);
+      const draft=await services.courses.addCourse({...catalog(),name:marker},adminCtx);
+      const decoy=await services.courses.addCourse({...catalog(),name:marker.replace('[a.*]','aaa')},adminCtx);
+      await services.courses.updateCourse({lifecycle:'published'},published.id,adminCtx);
+      await services.courses.updateCourse({lifecycle:'published'},decoy.id,adminCtx);
+      assert.deepEqual((await services.courses.searchCourses({text:marker})).map(row=>row.id),[published.id]);
+      assert.equal((await services.courses.getCourse(draft.id,adminCtx)).lifecycle,'draft');
+      await denied(services.courses.getCourse(draft.id),'NOT_FOUND');
+      await services.courses.deleteCourse(published.id,adminCtx);
+      assert.deepEqual(await services.courses.searchCourses({text:marker}),[]);
+    });
+    await run('Phase 2.6 missing and ineligible relationship parents leave the database unchanged',async()=>{
+      const target=await makeCourse(),learner=await makeUser(),teacher=await makeUser('instructor');
+      const pending=await services.users.insertUser({...account(`${randomUUID()}@example.invalid`,'instructor'),accountState:'pending'},adminCtx);
+      const before={};
+      for(const [name,Model] of Object.entries(models))before[name]=await Model.collection.find({}).sort({_id:1}).toArray();
+      const missing=900000;
+      await denied(services.instructor.assgin({courseId:missing,instructorId:teacher.id},adminCtx),'NOT_FOUND');
+      await denied(services.instructor.assgin({courseId:target.id,instructorId:missing},adminCtx),'NOT_FOUND');
+      await denied(services.instructor.assgin({courseId:target.id,instructorId:learner.id},adminCtx),'NOT_FOUND');
+      await denied(services.instructor.assgin({courseId:target.id,instructorId:pending.id},adminCtx),'DENIED');
+      await denied(services.student.enrollment({studentId:learner.id,courseId:missing},context(learner.id)),'NOT_FOUND');
+      await denied(services.student.enrollment({studentId:missing,courseId:target.id},context(missing)),'DENIED');
+      await denied(services.materials.addmaterials({name:'Missing parent',courseId:missing,asset:asset()},adminCtx),'NOT_FOUND');
+      for(const [name,Model] of Object.entries(models))assert.deepEqual(await Model.collection.find({}).sort({_id:1}).toArray(),before[name]);
+    });
+    await run('Phase 2.6 failed enrollment insert rolls back parents and record but never reuses its ID',async()=>{
+      const target=await makeCourse(),learner=await makeUser(),ctx=context(learner.id);
+      const userBefore=await models.User.collection.findOne({id:learner.id});
+      const courseBefore=await models.Course.collection.findOne({id:target.id});
+      const counterBefore=await models.Counter.collection.findOne({scope:'enrollments'});
+      const original=models.Enrollment.prototype.save;
+      let inserted=false;
+      models.Enrollment.prototype.save=async function(options){
+        await original.call(this,options);inserted=true;throw new Error('synthetic-private-secret');
+      };
+      try{
+        await assert.rejects(services.student.enrollment({studentId:learner.id,courseId:target.id},ctx),error=>
+          error.code==='UNAVAILABLE' && error.message==='Database operation unavailable' && !error.cause);
+      }finally{models.Enrollment.prototype.save=original;}
+      assert.equal(inserted,true,'fault must follow an actual transactional insert');
+      assert.equal(await models.Enrollment.countDocuments({student:userBefore._id,course:courseBefore._id}),0);
+      assert.deepEqual(await models.User.collection.findOne({id:learner.id}),userBefore);
+      assert.deepEqual(await models.Course.collection.findOne({id:target.id}),courseBefore);
+      assert.equal((await models.Counter.collection.findOne({scope:'enrollments'})).lastAllocated,counterBefore.lastAllocated+1);
+      const created=await services.student.enrollment({studentId:learner.id,courseId:target.id},ctx);
+      assert.equal(created.id,counterBefore.lastAllocated+2);assert.equal(created.grade,null);
+      assert.equal(await models.Enrollment.countDocuments({student:userBefore._id,course:courseBefore._id}),1);
+    });
+    await run('Phase 2.6 forbidden lifecycle and deletion paths preserve academic records and assets',async()=>{
+      const target=await makeCourse(),learner=await makeUser(),teacher=await makeUser('instructor');
+      const assigned=await services.instructor.assgin({courseId:target.id,instructorId:teacher.id},adminCtx);
+      const enrolled=await services.student.enrollment({studentId:learner.id,courseId:target.id},context(learner.id));
+      await services.instructor.setGrades(0,learner.id,target.id,context(teacher.id));
+      const item=await services.materials.addmaterials({name:'Retained fixture',courseId:target.id,asset:asset()},adminCtx);
+      const relations=[['InstructorAssignment',assigned.id],['Enrollment',enrolled.id],['Material',item.id]];
+      const before=await Promise.all(relations.map(([name,id])=>models[name].collection.findOne({id})));
+      await services.courses.deleteCourse(target.id,adminCtx);
+      const archived=await models.Course.collection.findOne({id:target.id});
+      await denied(services.courses.updateCourse({lifecycle:'published'},target.id,adminCtx),'WORKFLOW_REQUIRED');
+      await denied(services.courses.updateCourse({lifecycle:'draft'},target.id,adminCtx),'WORKFLOW_REQUIRED');
+      await denied(services.student.deleteStudent(learner.id,adminCtx),'WORKFLOW_REQUIRED');
+      await denied(services.instructor.deleteInstructor(teacher.id,adminCtx),'WORKFLOW_REQUIRED');
+      await denied(services.materials.updateMaterials({name:'Forbidden'},item.id,adminCtx),'WORKFLOW_REQUIRED');
+      assert.deepEqual(await models.Course.collection.findOne({id:target.id}),archived);
+      assert.deepEqual(await Promise.all(relations.map(([name,id])=>models[name].collection.findOne({id}))),before);
+      assert.ok(await currentUser(learner.id));assert.ok(await currentUser(teacher.id));
+      assert.equal((await services.student.showGrade(learner.id,context(learner.id)))[0].grade,0);
+      assert.equal((await services.materials.getMaterials(target.id,context(learner.id)))[0].id,item.id);
+    });
     await run('missing trusted identity, wrong role, missing counters and legacy exports fail safely',async()=>{
       await denied(services.users.getUserById(1,{id:1,role:'admin'}),'TRUST_REQUIRED');
       for(const n of names)for(const [method,fn]of Object.entries(require(`../services/${n}Services`)))if(method!=='createService')await denied(fn(),'TRUST_REQUIRED');
