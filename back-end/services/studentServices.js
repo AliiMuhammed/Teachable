@@ -1,54 +1,36 @@
-const connection = require("../db/dbConnection");
-const util = require("util");
-
-exports.getStudent = async (id) => {
-  const query = util.promisify(connection.query).bind(connection);
-  console.log(id);
-  return await query("SELECT * FROM users WHERE id = ? AND type = 'student'", [
-    id,
-  ]);
-};
-
-exports.viewStudents = async (id) => {
-  const query = util.promisify(connection.query).bind(connection);
-  return await query(
-    "SELECT u.id, u.name, u.email, u.image_url, uc.grades FROM users_courses uc JOIN users u ON uc.student_id = u.id WHERE uc.course_id = ?",
-    [id]
-  );
-};
-
-exports.updateStudent = async (data, id) => {
-  const query = util.promisify(connection.query).bind(connection);
-  await query("UPDATE users SET ? WHERE id = ?", [data, id]);
-};
-
-exports.showStudents = async () => {
-  const query = util.promisify(connection.query).bind(connection);
-  return await query("select * from users where type = 'student'");
-};
-
-exports.deleteStudent = async (id) => {
-  const query = util.promisify(connection.query).bind(connection);
-  await query("DELETE FROM users WHERE id = ?", [id]);
-};
-
-exports.checkEnrollment = async (studentId, courseId) => {
-  const query = util.promisify(connection.query).bind(connection);
-  return query(
-    "SELECT * FROM users_courses where student_id =? and course_id =?",
-    [studentId, courseId]
-  );
-};
-
-exports.enrollment = async (data) => {
-  const query = util.promisify(connection.query).bind(connection);
-  await query("INSERT INTO users_courses SET ?", [data]);
-};
-
-exports.showGrade = async (studentId) => {
-  const query = util.promisify(connection.query).bind(connection);
-  return await query(
-    "SELECT DISTINCT courses.name, courses.image_url, courses.code, courses.durations, courses.id, users_courses.grades FROM courses JOIN users_courses ON courses.id = users_courses.course_id WHERE users_courses.student_id = ?",
-    [studentId]
-  );
-};
+'use strict';
+const { support, expose, fail, fields, id, userDTO, courseDTO, enrollmentDTO, profile, editProfile }=require('./serviceSupport');
+function createService(dependencies) {
+  const {run}=support(dependencies);
+  return Object.freeze({
+    getStudent:(target,ctx)=>run(ctx,s=>profile(s,target,'student')),
+    updateStudent:(data,target,ctx)=>run(ctx,s=>editProfile(s,data,target,'student')),
+    showStudents:ctx=>run(ctx,async s=>{s.role('admin');return (await s.many('User',{role:'student'})).map(userDTO);}),
+    deleteStudent:async()=>fail('WORKFLOW_REQUIRED'),
+    viewStudents:(courseId,ctx)=>run(ctx,async s=>{
+      id(courseId); s.role('admin','instructor'); const c=await s.required('Course',{id:courseId}); if(s.actor.role==='instructor') await s.assignment(c);
+      const result=[]; for(const e of await s.many('Enrollment',{course:c._id})) {
+        const u=await s.required('User',{_id:e.student,role:'student'}); result.push({id:u.id,name:u.name,enrollmentId:e.id,grade:e.grade});
+      } return result;
+    }),
+    checkEnrollment:(studentId,courseId,ctx)=>run(ctx,async s=>{
+      id(studentId); id(courseId); s.role('student'); s.self(studentId);
+      const c=await s.required('Course',{id:courseId}); const e=await s.one('Enrollment',{student:s.actor._id,course:c._id});
+      return e?enrollmentDTO(e,studentId,courseId):null;
+    }),
+    enrollment:(data,ctx)=>run(ctx,async s=>{
+      s.role('student'); fields(data,['studentId','courseId'],['studentId','courseId']); id(data.studentId); id(data.courseId); s.self(data.studentId);
+      const c=await s.required('Course',{id:data.courseId}); if(c.lifecycle!=='published') fail('DENIED');
+      if(await s.one('Enrollment',{student:s.actor._id,course:c._id})) fail('CONFLICT');
+      await s.lockActor(); await s.touch(c);
+      const e=await s.validate('Enrollment',{id:await s.allocate('enrollments'),student:s.actor._id,course:c._id,grade:null});
+      await e.save({session:s.session}); return enrollmentDTO(e,s.actor.id,c.id);
+    }),
+    showGrade:(studentId,ctx)=>run(ctx,async s=>{
+      id(studentId); s.role('student'); s.self(studentId); const result=[];
+      for(const e of await s.many('Enrollment',{student:s.actor._id})) result.push({id:e.id,grade:e.grade,course:courseDTO(await s.required('Course',{_id:e.course}))});
+      return result;
+    })
+  });
+}
+module.exports=expose(createService,['getStudent','viewStudents','updateStudent','showStudents','deleteStudent','checkEnrollment','enrollment','showGrade']);
