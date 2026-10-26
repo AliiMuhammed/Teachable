@@ -10,20 +10,22 @@ function fixture(overrides={}) {
   const Intent=connection.model('UploadIntent',schema);const intents=[];
   let now=Date.parse('2026-10-26T00:00:00Z');const events=[];const remote=new Map();
   Intent.listIndexes=async()=>schema.indexes().map(([key,options])=>({key,...options}));
+  const at=(d,k)=>k.split('.').reduce((v,p)=>v?.[p],d);
   const matches=(d,filter)=>Object.entries(filter).every(([k,v])=>{
+    if(k==='$or')return v.some(q=>matches(d,q));
     if(v && typeof v==='object' && !(v instanceof Date)) {
       if('$gte' in v)return d[k]>=v.$gte;
       if('$lte' in v)return d[k]<=v.$lte;
       if('$in' in v)return v.$in.includes(d[k]);
     }
-    return String(d[k])===String(v);
+    return String(at(d,k))===String(v);
   });
   const query=(filter,one)=>{
     let limit=100;
     const q={session:()=>q,maxTimeMS:()=>q,limit:n=>(limit=n,q),then:(yes,no)=>Promise.resolve().then(()=>{const a=intents.filter(d=>matches(d,filter)).slice(0,limit);return one?a[0]||null:a;}).then(yes,no)};return q;
   };
   Intent.find=filter=>query(filter,false);Intent.findOne=filter=>query(filter,true);
-  Intent.prototype.save=async function(){await this.validate();if(!intents.includes(this))intents.push(this);return this;};
+  Intent.prototype.save=async function(options={}){await this.validate();this.$session(options.session||this.$session()||await connection.startSession());await require('../../assets/referenceFence').fenceDocument(this,['asset','previousAsset','publicId','environment','cloudName']);if(!intents.includes(this))intents.push(this);this.$isNew=false;this.$__reset();return this;};
   const env={CLOUDINARY_ENV:'development',CLOUDINARY_CLOUD_NAME:'synthetic-cloud',CLOUDINARY_API_KEY:'synthetic-key',CLOUDINARY_API_SECRET:'synthetic-secret'};
   const provider={
     upload:async(bytes,options)=>{

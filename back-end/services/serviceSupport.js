@@ -78,6 +78,8 @@ function support(dependencies = {}) {
       try {
         return await session.withTransaction(async () => {
           if (++attempts > 3) fail('RETRY_EXHAUSTED');
+          // Let a competing reference transaction commit before spending the remaining bounded attempts.
+          if (attempts > 1) await new Promise(resolve => setTimeout(resolve, 1000 * (attempts - 1)));
           const one = (name, filter) => models[name].findOne(filter).select(hidden[name] || '').session(session).maxTimeMS(5000);
           const many = async (name, filter, limit) => {
             const rows = await models[name].find(filter).select(hidden[name] || '').session(session).sort({ id: 1 }).limit(limit ?? 101).maxTimeMS(5000);

@@ -7,10 +7,11 @@ const course = id => ({ id, name: 'Literal [x]', code: 'SYN', description: 'Desc
 // Offline adapter uses real schemas/async validation; it is not MongoDB or atomicity proof.
 function fixture() {
   const connection = mongoose.createConnection();
-  const schemas = { User: require('../../models/User'), Course: require('../../models/Course'), InstructorAssignment: require('../../models/InstructorAssignment'), Enrollment: require('../../models/Enrollment'), Material: require('../../models/Material'), Counter: require('../../models/Counter').counterSchema, Session: require('../../models/Session') };
+  const schemas = { User: require('../../models/User'), Course: require('../../models/Course'), InstructorAssignment: require('../../models/InstructorAssignment'), Enrollment: require('../../models/Enrollment'), Material: require('../../models/Material'), Counter: require('../../models/Counter').counterSchema, Session: require('../../models/Session'), AssetLifecycle: require('../../models/AssetLifecycle') };
   const models = Object.fromEntries(Object.entries(schemas).map(([n,s]) => [n, connection.model(n,s)]));
   const rows = Object.fromEntries(Object.keys(models).map(n => [n, []]));
-  const matches = (d,f) => Object.entries(f).every(([k,v]) => k === '$or' ? v.some(x => matches(d,x)) : v instanceof RegExp ? v.test(d[k]) : v && v.$regex ? new RegExp(v.$regex,v.$options).test(d[k]) : String(d[k]) === String(v));
+  const at=(d,k)=>k.split('.').reduce((v,p)=>v?.[p],d);
+  const matches = (d,f) => Object.entries(f).every(([k,v]) => k === '$or' ? v.some(x => matches(d,x)) : v?.$in ? v.$in.includes(at(d,k)) : v instanceof RegExp ? v.test(at(d,k)) : v && v.$regex ? new RegExp(v.$regex,v.$options).test(d[k]) : String(at(d,k)) === String(v));
   for (const [n,M] of Object.entries(models)) {
     M.listIndexes=async()=>M.schema.indexes().filter(([,o])=>o.unique).map(([key,options])=>({key,...options}));
     const query = (f,one) => {
@@ -18,9 +19,11 @@ function fixture() {
       const q = { select:()=>q, session:()=>q, maxTimeMS:()=>q, sort:v=>(sort=v,q), limit:v=>(limit=v,q), then:(yes,no)=>Promise.resolve().then(()=> { let found=rows[n].filter(d=>matches(d,f)); if(sort) found.sort((a,b)=>a.id-b.id); return one ? found[0] || null : found.slice(0,limit); }).then(yes,no) }; return q;
     };
     M.findOne=f=>query(f,true); M.find=f=>query(f,false); M.exists=f=>query(f,true);
-    M.prototype.save=async function() { await this.validate(); if (!rows[n].includes(this)) rows[n].push(this); return this; };
+    M.prototype.save=async function(options={}) { await this.validate(); if(['User','Course','Material'].includes(n)){this.$session(options.session||this.$session()||await connection.startSession());await require('../../assets/referenceFence').fenceDocument(this,[n==='User'?'profileImage':n==='Course'?'coverImage':'asset']);} if (!rows[n].includes(this)) rows[n].push(this); this.$isNew=false; this.$__reset(); return this; };
   }
-  connection.startSession=async()=>({ withTransaction:async fn=>fn(), endSession:async()=>{} });
+  const client={options:{tls:true,srvHost:'teachable-testing.ntguusj.mongodb.net'}};connection.getClient=()=>client;connection.name='teachable_21b_bc3e0f91742f90ce056b';
+  connection.startSession=async()=>({client,inTransaction:()=>true,withTransaction:async fn=>fn(),endSession:async()=>{}});
+  const guard=new models.AssetLifecycle({key:'reference-fence',kind:'guard',revision:0});guard.$isNew=false;rows.AssetLifecycle.push(guard);
   const contexts = new WeakMap();
   const context = id => { const token = Object.freeze({}); contexts.set(token,id); return token; };
   const dependencies = { models, authenticate:async ctx=>contexts.get(ctx), verifyAsset:async()=>true, verifyCounter:async()=>true };

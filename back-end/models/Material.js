@@ -17,4 +17,5 @@ materialSchema.pre('validate', function() {
   }
 });
 
+require('../assets/referenceFence').protect(materialSchema,["asset"]);
 module.exports = materialSchema;

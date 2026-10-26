@@ -223,6 +223,9 @@ test('B2/B3 actual MongoDB indexes, allocator concurrency and transaction integr
     const second = await connect();
     const A = bind(first);
     const B = bind(second);
+    await require('./helpers/referenceFixture').createReferenceFixture(first,ownedCollections);
+    require('./helpers/referenceFixture').transactionalSeeds(A);
+    require('./helpers/referenceFixture').transactionalSeeds(B);
     const version = await first.db.admin().command({ buildInfo: 1 });
     t.diagnostic(JSON.stringify({
       fixture: dbName, hostname: atlas ? hostname : 'loopback', replicaSet, node: process.version, mongoose: mongoose.version,

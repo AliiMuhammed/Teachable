@@ -23,4 +23,5 @@ courseSchema.pre('validate', function() {
   }
 });
 
+require('../assets/referenceFence').protect(courseSchema,["coverImage"]);
 module.exports = courseSchema;

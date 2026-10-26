@@ -41,4 +41,5 @@ schema.index({ environment: 1, cloudName: 1, publicId: 1 }, { unique: true });
 schema.index({ purpose: 1, targetId: 1 }, { unique: true, partialFilterExpression: { outstanding: true } });
 schema.index({ actorId: 1, createdAt: 1 });
 schema.index({ actorId: 1, outstanding: 1 });
+require('../assets/referenceFence').protect(schema,["asset", "previousAsset", "publicId", "environment", "cloudName"]);
 module.exports = schema;

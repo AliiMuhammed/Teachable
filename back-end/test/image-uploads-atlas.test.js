@@ -40,6 +40,8 @@ test('Phase 3.2 synthetic Atlas upload intents and atomic attachment (no Cloudin
       await connection.db.createCollection(name,{validator});const entry=await connection.db.listCollections({name}).next();assert.ok(entry?.info?.uuid);assert.deepEqual(entry.options.validator,validator);owned.set(name,{uuid:entry.info.uuid,validator});
       for(const [key,options] of M.schema.indexes()) if(M===Intent||options.unique)await M.collection.createIndex(key,options);
     }
+    await require('./helpers/referenceFixture').createReferenceFixture(connection,owned);
+    require('./helpers/referenceFixture').transactionalSeeds({...models,...(connection.models.UploadIntent?{UploadIntent:connection.models.UploadIntent}:{})});
     for(const [id,role] of [[1,'admin'],[2,'student'],[3,'admin'],[4,'admin']])await new models.User(user(id,role)).save();
     for(const id of [10,11,12,13])await new models.Course({...course(id),lifecycle:'draft'}).save();
     const deps={manager,authenticate:async ctx=>tokens.get(ctx),authorizeRequest:async req=>req.context,verifyAsset:async()=>true,environment:'development',env,clock:()=>new Date(time),createProvider:()=>provider};
@@ -51,6 +53,7 @@ test('Phase 3.2 synthetic Atlas upload intents and atomic attachment (no Cloudin
     });
     await step('three simultaneous intents across service instances cannot exceed two per actor',async()=>{
       const results=await Promise.allSettled([10,11,12].map((targetId,n)=>services[n%2].issue({purpose:'course',targetId},request(1))));
+      t.diagnostic(JSON.stringify({quotaResults:results.map(r=>r.status==='fulfilled'?'fulfilled':['RETRY_EXHAUSTED','CONFLICT','LIMIT_EXCEEDED','UNAVAILABLE'].includes(r.reason?.code)?r.reason.code:'rejected')}));
       assert.equal(results.filter(r=>r.status==='fulfilled').length,2);assert.equal(await Intent.countDocuments({actorId:1,outstanding:true}),2);
       for(const i of await Intent.find({actorId:1,outstanding:true})){i.state='rejected';i.outstanding=false;await i.save();}
     });

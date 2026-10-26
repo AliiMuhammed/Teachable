@@ -76,6 +76,8 @@ test('Phase 2.3 actual Atlas service operations and authorization races',{
       for(const [keys,options] of M.schema.indexes())if(options.unique)await M.collection.createIndex(keys,options);
       const indexes=await M.collection.listIndexes().toArray();for(const [keys,options] of M.schema.indexes())if(options.unique)assert.ok(indexes.some(i=>i.unique&&JSON.stringify(i.key)===JSON.stringify(keys)));
     }
+    await require('./helpers/referenceFixture').createReferenceFixture(connection,owned);
+    require('./helpers/referenceFixture').transactionalSeeds({...models,...(connection.models.UploadIntent?{UploadIntent:connection.models.UploadIntent}:{})});
     for(const scope of ['users','courses','instructorAssignments','enrollments','materials']){await new models.Counter({scope,lastAllocated:1000}).save();initializedScopes.add(scope);}
     await new models.User({id:1,...account('synthetic-owner@example.invalid','admin')}).save();
     services=Object.fromEntries(names.map(n=>[n,require(`../services/${n}Services`).createService({manager,authenticate,verifyAsset,verifyCounter})]));

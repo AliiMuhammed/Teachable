@@ -52,6 +52,8 @@ test('Phase 2.5 synthetic Atlas migration and restore rehearsal', {
       owned.set(name, { uuid: entry.info.uuid, validator });
       for (const [key, options] of Model.schema.indexes()) if (options.unique) await Model.collection.createIndex(key, options);
     }
+    await require('./helpers/referenceFixture').createReferenceFixture(connection,owned);
+    require('./helpers/referenceFixture').transactionalSeeds(models);
   }
   async function run(name, fn) {
     let failed;

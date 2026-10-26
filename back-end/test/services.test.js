@@ -153,6 +153,17 @@ test('transaction callback retry cap and safe error categories',async()=>{
     f.models.User.db.startSession=async()=>{throw error;};await assert.rejects(f.services.users.getUserById(1,f.context(1)),e=>e.code===code&&!e.message.includes('secret')&&!e.cause);
   }
 });
+test('transaction retries back off before fresh reads while preserving the attempt cap',async t=>{
+  const f=fixture();let runs=0;
+  t.mock.timers.enable({apis:['setTimeout']});
+  f.models.User.db.startSession=async()=>({withTransaction:async fn=>{await fn();await fn();await fn();return fn();},endSession:async()=>{}});
+  const work=require('../services/serviceSupport').support({models:f.models}).run(undefined,async()=>++runs,true);
+  await new Promise(setImmediate);assert.equal(runs,1);
+  t.mock.timers.tick(999);await new Promise(setImmediate);assert.equal(runs,1);
+  t.mock.timers.tick(1);await new Promise(setImmediate);assert.equal(runs,2);
+  t.mock.timers.tick(1999);await new Promise(setImmediate);assert.equal(runs,2);
+  t.mock.timers.tick(1);await rejects(work,'RETRY_EXHAUSTED');assert.equal(runs,3);
+});
 test('successful creates reserve IDs from the approved allocator and save explicit references',async()=>{
   const f=fixture();const allocated={users:100,courses:200,instructorAssignments:300,enrollments:400,materials:500};
   f.models.Counter.collection.findOneAndUpdate=async filter=>({lastAllocated:++allocated[filter.scope]});

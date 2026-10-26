@@ -38,4 +38,5 @@ userSchema.pre('validate', function() {
 });
 userSchema.index({ emailKey: 1 }, { unique: true, collation: { locale: 'simple' } });
 
+require('../assets/referenceFence').protect(userSchema,["profileImage"]);
 module.exports = userSchema;

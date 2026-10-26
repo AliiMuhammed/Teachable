@@ -48,6 +48,8 @@ test('Phase 3.3 synthetic Atlas material lifecycle and private grant boundaries 
       await connection.db.createCollection(name,{validator});const entry=await connection.db.listCollections({name}).next();assert.ok(entry?.info?.uuid);assert.deepEqual(entry.options.validator,validator);owned.set(name,{uuid:entry.info.uuid,validator});
       for(const [key,options] of M.schema.indexes())if(M===Intent||options.unique)await M.collection.createIndex(key,options);
     }
+    await require('./helpers/referenceFixture').createReferenceFixture(connection,owned);
+    require('./helpers/referenceFixture').transactionalSeeds({...models,...(connection.models.UploadIntent?{UploadIntent:connection.models.UploadIntent}:{})});
     for(const [id,role] of [[1,'admin'],[2,'student'],[3,'instructor']])await new models.User(user(id,role)).save();
     const c=await new models.Course(course(10)).save(),u=await models.User.findOne({id:3}),student=await models.User.findOne({id:2});
     assignment={id:20,course:c._id,instructor:u._id};await new models.InstructorAssignment(assignment).save();
